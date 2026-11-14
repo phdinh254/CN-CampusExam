@@ -1,0 +1,74 @@
+/* Đăng nhập, đổi mật khẩu, màn hình chờ khôi phục phiên. */
+
+.session-loading { display: grid; place-content: center; justify-items: center; gap: 14px; min-height: 100vh; color: var(--muted); font-size: 14px; background: var(--canvas); }
+.session-spinner { width: 34px; height: 34px; border: 3px solid #dfe3f0; border-top-color: var(--primary); border-radius: 50%; animation: session-spin .8s linear infinite; }
+@keyframes session-spin { to { transform: rotate(360deg); } }
+@media (prefers-reduced-motion: reduce) { .session-spinner { animation-duration: 2.4s; } }
+
+.form-alert { display: flex; align-items: flex-start; gap: 9px; margin-bottom: 18px; padding: 11px 13px; border: 1px solid #F8D6D6; border-radius: 9px; color: #A93333; background: var(--danger-soft); font-size: 14px; line-height: 1.5; }
+.form-alert svg { flex: none; margin-top: 1px; }
+
+.field-hint { margin: -10px 0 16px; color: var(--muted); font-size: 13px; line-height: 1.5; }
+
+.field-error { margin: 0 0 12px; color: var(--danger); font-size: 13px; line-height: 1.5; }
+
+.link-button { display: inline-flex; align-items: center; gap: 6px; padding: 6px 8px; border: 0; border-radius: 7px; color: var(--muted); background: transparent; font-size: 14px; font-weight: 700; cursor: pointer; }
+.link-button:hover { color: var(--primary); background: #f1f2fd; }
+
+.topbar-actions .icon-button { width: 38px; height: 38px; color: #5d6779; }
+.topbar-actions .icon-button:hover { color: var(--primary); }
+
+/* ===== Trang đổi mật khẩu ===== */
+.dmk-page { min-height: 100vh; background: var(--canvas); }
+.dmk-band { display: flex; align-items: center; gap: 14px; min-height: 80px; padding: 0 max(16px, calc((100vw - 1160px) / 2)); color: #fff; background: var(--primary); }
+.dmk-mark { display: grid; place-items: center; width: 46px; height: 46px; border: 1px solid rgba(255,255,255,.28); border-radius: 10px; background: rgba(255,255,255,.12); }
+.dmk-brand { display: grid; gap: 2px; }
+.dmk-brand strong { font-size: 24px; line-height: 1.1; }
+.dmk-brand small { color: rgba(255,255,255,.75); font-size: 13px; }
+
+.dmk-main { display: flex; justify-content: center; padding: 40px 16px 56px; }
+.dmk-card { width: min(520px, 100%); padding: 32px; border: 1px solid var(--line); border-radius: 10px; background: var(--surface); box-shadow: 0 10px 30px rgba(32,43,60,.06); }
+.dmk-head { display: flex; align-items: center; gap: 14px; margin-bottom: 22px; padding-bottom: 20px; border-bottom: 1px solid var(--line); }
+.dmk-icon { display: grid; flex: none; place-items: center; width: 48px; height: 48px; border-radius: 10px; color: var(--primary); background: var(--primary-soft); }
+.dmk-head h1 { margin: 0 0 4px; font-size: 26px; letter-spacing: -.01em; }
+.dmk-head p { margin: 0; color: var(--muted); font-size: 15px; }
+.dmk-head p strong { color: var(--ink); }
+
+.dmk-field { display: grid; gap: 8px; margin-bottom: 18px; }
+.dmk-field label { font-size: 15px; font-weight: 600; }
+.dmk-input { display: flex; align-items: center; gap: 10px; min-height: 50px; padding: 0 6px 0 14px; border: 1px solid #CBD3DD; border-radius: 8px; background: var(--surface); color: var(--muted); }
+.dmk-input:focus-within { border-color: var(--blue); box-shadow: 0 0 0 3px rgba(40,120,199,.18); }
+.dmk-input.loi { border-color: var(--danger); }
+.dmk-input input { flex: 1; min-width: 0; height: 48px; border: 0; outline: 0; color: var(--ink); background: transparent; font: inherit; font-size: 16px; }
+.dmk-input button { padding: 8px 10px; border: 0; border-radius: 6px; color: var(--primary); background: transparent; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
+.dmk-input button:hover { background: var(--primary-soft); }
+.dmk-field .field-error { margin: 0; font-size: 14px; }
+.dmk-hint { margin: 0; font-size: 14px; }
+.dmk-hint.dat { color: #0F7A4E; }
+.dmk-hint.chua { color: #A93333; }
+
+.dmk-rules { display: grid; gap: 8px; margin: -6px 0 20px; padding: 14px 16px; border-radius: 8px; background: var(--canvas); list-style: none; }
+.dmk-rules li { display: flex; align-items: center; gap: 10px; color: var(--muted); font-size: 15px; }
+.dmk-rules li.dat { color: #0F7A4E; }
+.dmk-rule-dot { display: grid; flex: none; place-items: center; width: 18px; height: 18px; border: 1.5px solid #B5BDC8; border-radius: 50%; color: #fff; }
+.dmk-rules li.dat .dmk-rule-dot { border-color: var(--success); background: var(--success); }
+
+.dmk-submit { width: 100%; min-height: 50px; margin-top: 6px; border: 0; border-radius: 8px; color: #fff; background: var(--primary); font: inherit; font-size: 17px; font-weight: 600; cursor: pointer; }
+.dmk-submit:hover:not(:disabled) { background: var(--primary-hover); }
+.dmk-submit:disabled { opacity: .6; cursor: progress; }
+.dmk-foot { display: flex; justify-content: center; margin-top: 18px; }
+.dmk-foot .link-button { font-size: 15px; }
+
+@media (max-width: 620px) {
+  .dmk-band { min-height: 68px; }
+  .dmk-mark { width: 40px; height: 40px; }
+  .dmk-brand strong { font-size: 20px; }
+  .dmk-main { padding: 20px 10px 32px; }
+  .dmk-card { padding: 22px 16px; }
+  .dmk-head h1 { font-size: 22px; }
+}
+
+/* Nút hiện/ẩn mật khẩu dạng icon con mắt. */
+.dmk-input button, .photo-input button { display: grid; place-items: center; width: 40px; height: 40px; padding: 0; color: var(--muted); }
+.dmk-input button:hover, .photo-input button:hover { color: var(--primary); }
+.dmk-input button[aria-pressed="true"] { color: var(--primary); }
