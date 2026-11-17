@@ -1,12 +1,26 @@
 namespace CampusExam.Domain.Entities;
 
 /// <summary>
-/// Câu hỏi nằm trong đề gốc (bảng GOM_CAU). Hiện chỉ ánh xạ khóa để đếm số đề đã dùng
-/// một câu hỏi; các cột bản sao nội dung sẽ ánh xạ khi làm phần sinh đề.
+/// Câu hỏi nằm trong đề gốc (GOM_CAU): bản sao nội dung tại lúc sinh đề. Thi và chấm dùng bản sao
+/// này, không phụ thuộc ngân hàng câu hỏi.
 /// </summary>
 public class GomCau
 {
     public int MaDe { get; set; }
 
     public int MaCH { get; set; }
+
+    public int ThuTuTrongDeGoc { get; set; }
+
+    public string NoiDung { get; set; } = string.Empty;
+
+    public string PhuongAnA { get; set; } = string.Empty;
+
+    public string PhuongAnB { get; set; } = string.Empty;
+
+    public string PhuongAnC { get; set; } = string.Empty;
+
+    public string PhuongAnD { get; set; } = string.Empty;
+
+    public string DapAnDungGoc { get; set; } = string.Empty;
 }

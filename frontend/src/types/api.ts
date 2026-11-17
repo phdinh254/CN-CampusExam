@@ -312,3 +312,335 @@ export type XemTruocNhapThiSinh = {
   maXemTruoc: string | null;
   hetHan: string | null;
 };
+
+/** MATRAN.TRANGTHAIMATRAN. */
+export type TrangThaiMaTran = "dang_soan" | "su_dung" | "ngung_su_dung";
+
+export type MaTranTomTat = {
+  maMT: number;
+  tenMT: string;
+  tongSoCau: number;
+  thoiGianLam: number;
+  trangThai: TrangThaiMaTran;
+  soKQHT: number;
+  daSinhDe: boolean;
+  ngayTao: string;
+  ngayCapNhat: string | null;
+};
+
+export type OCauTruc = {
+  maMD: MaMucDo;
+  soCau: number;
+  /** % của mức độ trong KQHT. */
+  tyLe: number | null;
+};
+
+export type KqhtTrongMaTran = {
+  maKQHT: number;
+  kyHieu: string;
+  tenKQHT: string;
+  dangSuDung: boolean;
+  soCau: number;
+  mucDo: OCauTruc[];
+};
+
+export type MaTranChiTiet = Omit<MaTranTomTat, "soKQHT"> & {
+  phienBan: string;
+  kqht: KqhtTrongMaTran[];
+};
+
+/** Số câu đang sử dụng trong ngân hàng của một ô KQHT × mức độ. */
+export type DoPhu = {
+  maKQHT: number;
+  maMD: MaMucDo;
+  coSan: number;
+};
+
+export type DongCauTruc = {
+  maKQHT: number;
+  maMD: MaMucDo;
+  soCau: number;
+  tyLe: number | null;
+};
+
+/** Mỗi KQHT gửi đủ ba dòng mức độ 1, 2, 3. */
+export type LuuMaTranRequest = {
+  tenMT: string;
+  thoiGianLam: number;
+  cauTruc: DongCauTruc[];
+};
+
+export type SuaMaTranRequest = LuuMaTranRequest & { phienBan: string };
+
+export type TruyVanMaTran = TruyVanTrang & {
+  trangThai?: TrangThaiMaTran;
+};
+
+export type SinhDeRequest = {
+  maMT: number;
+  /** Để trống thì hệ thống đặt dạng DG-0007. */
+  maDeGocHienThi?: string;
+  soDeCon: number;
+};
+
+export type KetQuaSinhDe = {
+  maDe: number;
+  maDeGocHienThi: string;
+  tongSoCau: number;
+  /** Số câu đã từng nằm trong các đề gốc trước. */
+  soCauTrung: number;
+  soDeCon: number;
+};
+
+export type DeGocTomTat = {
+  maDe: number;
+  maDeGocHienThi: string;
+  maMT: number;
+  tenMT: string;
+  tongSoCau: number;
+  soDeCon: number;
+  daGanKyThi: boolean;
+  ngayTao: string;
+};
+
+export type TruyVanDeThi = TruyVanTrang & {
+  maMT?: number;
+  chuaGanKyThi?: boolean;
+};
+
+export type HinhTrongDe = {
+  /** Vị trí gốc của hình. */
+  viTri: ViTriHinhAnh;
+  thuTu: number;
+  url: string;
+  altText: string | null;
+};
+
+export type CauTrongDeGoc = {
+  thuTu: number;
+  maCH: number;
+  maCauHoi: string;
+  kyHieu: string;
+  maMD: MaMucDo;
+  noiDung: string;
+  phuongAnA: string;
+  phuongAnB: string;
+  phuongAnC: string;
+  phuongAnD: string;
+  dapAnDung: DapAn;
+  coDinhDapAn: boolean;
+  hinhAnh: HinhTrongDe[];
+};
+
+export type DeConTomTat = { maDeCon: number; tenDeCon: string };
+
+export type DeGocChiTiet = Omit<DeGocTomTat, "soDeCon"> & {
+  deCon: DeConTomTat[];
+  cauHoi: CauTrongDeGoc[];
+};
+
+export type PhuongAnHienThi = {
+  nhan: DapAn;
+  /** Phương án gốc đang hiển thị ở nhãn này; hình của phương án theo nhãn gốc. */
+  nhanGoc: DapAn;
+  noiDung: string;
+};
+
+export type CauTrongDeCon = {
+  ttCau: number;
+  thuTuGoc: number;
+  maCauHoi: string;
+  noiDung: string;
+  phuongAn: PhuongAnHienThi[];
+  dapAnDungHienThi: DapAn;
+  hinhAnh: HinhTrongDe[];
+};
+
+export type DeConChiTiet = {
+  maDeCon: number;
+  tenDeCon: string;
+  maDe: number;
+  maDeGocHienThi: string;
+  cauHoi: CauTrongDeCon[];
+};
+
+/* ---------- Kỳ thi (/ky-thi) ---------- */
+
+/** Trạng thái hiển thị; ba trạng thái giữa tính theo giờ bắt đầu và thời lượng. */
+export type TrangThaiKyThi = "nhap" | "da_phat_hanh" | "dang_thi" | "da_ket_thuc" | "da_huy";
+
+export type CachPhanDe = "ngau_nhien" | "can_bang";
+
+export type TrangThaiThiSinhKyThi = "chua_thi" | "dang_thi" | "da_nop" | "he_thong_thu";
+
+export type KyThiTomTat = {
+  maKT: number;
+  tenKT: string;
+  monThi: string;
+  /** ISO UTC. */
+  tgBatDau: string;
+  thoiLuong: number;
+  trangThai: TrangThaiKyThi;
+  soThiSinh: number;
+  soDaNop: number;
+  daGanDe: boolean;
+  maDeGocHienThi: string | null;
+};
+
+export type DeGocCuaKyThi = {
+  maDe: number;
+  maDeGocHienThi: string;
+  tenMT: string;
+  tongSoCau: number;
+  soDeCon: number;
+};
+
+export type KyThiChiTiet = {
+  maKT: number;
+  tenKT: string;
+  monThi: string;
+  tgBatDau: string;
+  thoiLuong: number;
+  soPhutChoVaoTre: number;
+  hienDiem: boolean;
+  choXemLai: boolean;
+  cachPhanDe: CachPhanDe;
+  trangThai: TrangThaiKyThi;
+  ngayTao: string;
+  ngayPhatHanh: string | null;
+  phienBan: string;
+  deGoc: DeGocCuaKyThi | null;
+  soThiSinh: number;
+  soDaVaoThi: number;
+};
+
+export type ThiSinhKyThi = {
+  msts: string;
+  hoTen: string;
+  lop: string | null;
+  soMay: string | null;
+  tenDeCon: string;
+  trangThai: TrangThaiThiSinhKyThi;
+};
+
+export type TruyVanKyThi = TruyVanTrang & { trangThai?: TrangThaiKyThi };
+
+export type LuuKyThiRequest = {
+  tenKT: string;
+  monThi: string;
+  /** ISO UTC. */
+  tgBatDau: string;
+  thoiLuong: number;
+  soPhutChoVaoTre: number;
+  hienDiem: boolean;
+  choXemLai: boolean;
+  cachPhanDe: CachPhanDe;
+};
+
+export type SuaKyThiRequest = LuuKyThiRequest & { phienBan: string };
+
+export type KetQuaPhanCong = { soThem: number; boQua: string[] };
+
+export type KiemTraPhatHanh = { phatHanhDuoc: boolean; conThieu: string[] };
+
+/* ---------- Thí sinh làm bài (/toi/ky-thi) ---------- */
+
+export type TrangThaiBaiCuaToi = "chua_vao" | "dang_lam" | "da_nop" | "he_thong_thu" | "vang_thi";
+
+export type KyThiCuaToiApi = {
+  maKT: number;
+  tenKT: string;
+  monThi: string;
+  tgBatDau: string;
+  thoiLuong: number;
+  soCau: number;
+  soMay: string | null;
+  moCongLuc: string;
+  dongCongLuc: string;
+  ketThucLuc: string;
+  trangThaiBaiLam: TrangThaiBaiCuaToi;
+  duocVaoThi: boolean;
+};
+
+export type DanhSachKyThiCuaToi = { gioServer: string; duLieu: KyThiCuaToiApi[] };
+
+export type HinhLamBai = { viTri: ViTriHinhAnh; thuTu: number; url: string; altText: string | null };
+
+export type CauLamBai = {
+  ttCau: number;
+  noiDung: string;
+  phuongAn: { nhan: DapAn; noiDung: string }[];
+  hinhAnh: HinhLamBai[];
+};
+
+export type BaiLam = {
+  maBL: number;
+  trangThai: TrangThaiBaiCuaToi;
+  gioServer: string;
+  hanNop: string;
+  kyThi: { tenKT: string; monThi: string; tenDeCon: string; soCau: number; thoiLuong: number };
+  cauHoi: CauLamBai[];
+  traLoi: { ttCau: number; dapAnChon: DapAn | null; danhDau: boolean }[];
+};
+
+/** `dapAnChon`: "" bỏ chọn, bỏ trống là không đổi. */
+export type ThayDoiTraLoi = { ttCau: number; dapAnChon?: DapAn | ""; danhDau?: boolean };
+
+export type LoTraLoi = { soThuTuLo: number; thayDoi: ThayDoiTraLoi[] };
+
+export type KetQuaLuu = { loDaLuu: number; luuLuc: string; hanNop: string };
+
+export type KetQuaNop = {
+  trangThai: TrangThaiBaiCuaToi;
+  tgNop: string;
+  hienDiem: boolean;
+  diem: number | null;
+  soCauDung: number | null;
+  tongSoCau: number;
+};
+
+/* ---------- Theo dõi thi (/ky-thi/{maKT}/giam-sat) ---------- */
+
+export type ThiSinhGiamSat = {
+  msts: string;
+  hoTen: string;
+  lop: string | null;
+  soMay: string | null;
+  tenDeCon: string;
+  trangThai: TrangThaiThiSinhKyThi;
+  maBL: number | null;
+  tgVaoThi: string | null;
+  tgNop: string | null;
+  lanHoatDongCuoi: string | null;
+  soCauDaLam: number;
+  phutCongThem: number;
+  hanNop: string | null;
+  soCauDung: number | null;
+  diem: number | null;
+};
+
+export type GiamSatKyThi = {
+  maKT: number;
+  tenKT: string;
+  monThi: string;
+  trangThai: TrangThaiKyThi;
+  gioServer: string;
+  tgBatDau: string;
+  dongCongLuc: string;
+  ketThucLuc: string;
+  tongSoCau: number;
+  soLuong: { duocPhanCong: number; chuaVao: number; dangLam: number; daNop: number; heThongThu: number };
+  thiSinh: ThiSinhGiamSat[];
+};
+
+/* ---------- Nhật ký hoạt động (/nhat-ky) ---------- */
+
+export type NhatKy = {
+  maNhatKy: number;
+  nhom: string;
+  hanhDong: string;
+  doiTuong: string;
+  chiTiet: string | null;
+  thoiGian: string;
+  nguoiThucHien: string | null;
+};

@@ -324,3 +324,13 @@
 @media (max-width: 620px) {
   .pt-dialog-actions .pt-btn { flex: 1; min-width: 0; padding: 0 10px; }
 }
+
+/* Trạng thái tự lưu trên thanh đầu phòng thi. */
+.pt-save { display: inline-flex; align-items: center; gap: 6px; padding: 5px 10px; border-radius: 999px; font-size: 13px; font-weight: 600; white-space: nowrap; }
+.pt-save-da_luu { color: #0F7A4E; background: #ECF8F2; }
+.pt-save-dang_luu, .pt-save-cho_luu { color: var(--pt-muted); background: rgba(127, 137, 154, .12); }
+.pt-save-mat_ket_noi { color: #A93333; background: #FDEFEF; }
+.pt-result-icon-info { color: #B4701A; background: #FDF5E8; }
+.pt-dialog-error { margin: 0 0 12px; padding: 9px 12px; border-radius: 8px; color: #A93333; background: #FDEFEF; font-size: 14px; }
+.pt-answer-text .question-image, .pt-question h1 .question-image { display: block; max-width: min(100%, 520px); margin: 8px 0; }
+@media (max-width: 720px) { .pt-save { display: none; } }

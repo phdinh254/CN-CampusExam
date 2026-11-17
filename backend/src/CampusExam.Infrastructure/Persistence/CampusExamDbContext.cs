@@ -35,7 +35,23 @@ public sealed class CampusExamDbContext : DbContext
 
     public DbSet<BaiLam> BaiLams => Set<BaiLam>();
 
+    public DbSet<TraLoi> TraLois => Set<TraLoi>();
+
     public DbSet<LanImport> LanImports => Set<LanImport>();
+
+    public DbSet<MaTran> MaTrans => Set<MaTran>();
+
+    public DbSet<CauTruc> CauTrucs => Set<CauTruc>();
+
+    public DbSet<DeGoc> DeGocs => Set<DeGoc>();
+
+    public DbSet<DeCon> DeCons => Set<DeCon>();
+
+    public DbSet<HoanVi> HoanVis => Set<HoanVi>();
+
+    public DbSet<TaiNguyenGomCau> TaiNguyenGomCaus => Set<TaiNguyenGomCau>();
+
+    public DbSet<KyThi> KyThis => Set<KyThi>();
 
     protected override void ConfigureConventions(ModelConfigurationBuilder configurationBuilder)
     {

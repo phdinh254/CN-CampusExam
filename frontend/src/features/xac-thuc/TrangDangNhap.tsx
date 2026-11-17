@@ -16,7 +16,6 @@ export default function TrangDangNhap() {
   const [cheDo, setCheDo] = useState<CheDo>("admin");
   const [tenDN, setTenDN] = useState("");
   const [matKhau, setMatKhau] = useState("");
-  const [ghiNho, setGhiNho] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [dangGui, setDangGui] = useState(false);
   const [loi, setLoi] = useState<string | null>(null);
@@ -36,7 +35,7 @@ export default function TrangDangNhap() {
     setDangGui(true);
     setLoi(null);
     try {
-      const daDangNhap = await dangNhap({ tenDN: tenDN.trim(), matKhau, ghiNho });
+      const daDangNhap = await dangNhap({ tenDN: tenDN.trim(), matKhau, ghiNho: false });
       navigate(duongDanSauDangNhap(daDangNhap, trangYeuCau), { replace: true });
     } catch (error) {
       setLoi(thongBaoLoiDangNhap(error));
@@ -106,11 +105,6 @@ export default function TrangDangNhap() {
               <button aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"} onClick={() => setShowPassword((value) => !value)} title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"} type="button"><BieuTuong name={showPassword ? "eye-off" : "eye"} size={19} /></button>
             </div>
             {laThiSinh && <p className="photo-field-hint">Lần đầu đăng nhập: mật khẩu là ngày sinh dạng ddMMyyyy.</p>}
-
-            <label className="photo-remember">
-              <input checked={ghiNho} onChange={(event) => setGhiNho(event.target.checked)} type="checkbox" />
-              <span>Ghi nhớ đăng nhập trên thiết bị này (7 ngày)</span>
-            </label>
 
             <button className="button button-primary photo-login-submit" disabled={dangGui} type="submit">
               {dangGui ? <><span className="button-spinner" /> Đang đăng nhập…</> : <>Đăng nhập <BieuTuong name="arrow-right" size={18} /></>}

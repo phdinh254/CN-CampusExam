@@ -45,7 +45,7 @@ export default function TrangTaiKhoan() {
     <div className="student-dashboard">
       <section className="cand-page-head">
         <h1>Tài khoản cá nhân</h1>
-        <p>Hồ sơ thí sinh và mật khẩu đăng nhập.</p>
+        <p>Hồ sơ và mật khẩu đăng nhập.</p>
       </section>
 
       {/* Thẻ định danh: chữ cái đầu, họ tên, mã số thí sinh, lớp. */}

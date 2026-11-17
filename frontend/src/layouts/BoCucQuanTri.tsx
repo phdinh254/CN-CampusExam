@@ -19,16 +19,15 @@ const nhomMenu: NhomMenu[] = [
     muc: [
       { label: "Danh mục KQHT", to: "/admin/learning-outcomes" },
       { label: "Danh sách câu hỏi", to: "/admin/questions" },
-      { label: "Mức độ câu hỏi", to: "/admin/levels" },
     ],
   },
   {
     tieuDe: "Xây dựng đề thi",
     icon: "layers",
     muc: [
-      { label: "Ma trận đề", to: "/admin/exam-matrices", sapCo: true },
-      { label: "Sinh đề thi", to: "/admin/exam-generation", sapCo: true },
-      { label: "Danh sách đề thi", to: "/admin/exam-papers", sapCo: true },
+      { label: "Ma trận đề", to: "/admin/exam-matrices" },
+      { label: "Sinh đề thi", to: "/admin/exam-generation" },
+      { label: "Danh sách đề thi", to: "/admin/exam-papers" },
     ],
   },
   {
@@ -36,8 +35,8 @@ const nhomMenu: NhomMenu[] = [
     icon: "calendar",
     muc: [
       { label: "Quản lý kỳ thi", to: "/admin/exams" },
-      { label: "Gán đề và thí sinh", to: "/admin/exam-assignments", sapCo: true },
-      { label: "Theo dõi thi", to: "/admin/exam-monitoring", sapCo: true },
+      { label: "Gán đề và thí sinh", to: "/admin/exam-assignments" },
+      { label: "Theo dõi thi", to: "/admin/exam-monitoring" },
     ],
   },
   {
@@ -120,7 +119,7 @@ export default function BoCucQuanTri() {
                     onClick={() => setNhomMo(mo ? null : nhom.tieuDe)}
                     type="button"
                   >
-                    <BieuTuong name={nhom.icon} size={16} /> {nhom.tieuDe} <span aria-hidden="true" className="cand-caret">▾</span>
+                    <BieuTuong name={nhom.icon} size={16} /> {nhom.tieuDe} <span aria-hidden="true" className="cand-caret"><BieuTuong name="chevron-down" size={15} /></span>
                   </button>
                   {mo && <div className="cand-submenu" id={id}>{nhom.muc.map((item) => <MucCon item={item} key={item.to} />)}</div>}
                 </li>

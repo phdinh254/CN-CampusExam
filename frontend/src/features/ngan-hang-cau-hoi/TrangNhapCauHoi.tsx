@@ -104,7 +104,7 @@ export default function TrangNhapCauHoi() {
         <div>
           <span className="page-kicker"><Link to="/admin/questions">NGÂN HÀNG CÂU HỎI</Link></span>
           <h2>Nhập câu hỏi từ Word</h2>
-          <p>Tệp .docx theo mẫu bảng IU03: mã câu hỏi, nội dung kèm 4 phương án, đáp án đúng.</p>
+          <p>Tệp .docx theo mẫu bảng IU03.</p>
         </div>
         <div className="heading-actions">
           <input accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="sr-only" onChange={(event) => void chonTep(event)} ref={inputRef} tabIndex={-1} type="file" />
@@ -134,10 +134,10 @@ export default function TrangNhapCauHoi() {
       {xemTruoc && (
         <>
           <section className="mini-stats-grid">
-            <div><span className="mini-stat-icon indigo"><BieuTuong name="file" /></span><p><small>TỔNG DÒNG</small><strong>{xemTruoc.tongDong}</strong></p><em>{tep ? dinhDangDungLuong(tep.size) : ""}</em></div>
-            <div><span className="mini-stat-icon teal"><BieuTuong name="check" /></span><p><small>HỢP LỆ</small><strong>{xemTruoc.soDongHopLe}</strong></p></div>
-            <div><span className="mini-stat-icon orange"><BieuTuong name="alert" /></span><p><small>CÓ LỖI</small><strong>{xemTruoc.soDongLoi}</strong></p>{canhBao > 0 && <em>{canhBao} cảnh báo</em>}</div>
-            <div><span className="mini-stat-icon purple"><BieuTuong name="layers" /></span><p><small>HÌNH ẢNH</small><strong>{xemTruoc.tongHinhAnh}</strong></p></div>
+            <div><p><small>TỔNG DÒNG</small><strong>{xemTruoc.tongDong}</strong></p><em>{tep ? dinhDangDungLuong(tep.size) : ""}</em></div>
+            <div><p><small>HỢP LỆ</small><strong>{xemTruoc.soDongHopLe}</strong></p></div>
+            <div><p><small>CÓ LỖI</small><strong>{xemTruoc.soDongLoi}</strong></p>{canhBao > 0 && <em>{canhBao} cảnh báo</em>}</div>
+            <div><p><small>HÌNH ẢNH</small><strong>{xemTruoc.tongHinhAnh}</strong></p></div>
           </section>
 
           <section className="panel import-confirm">

@@ -53,9 +53,9 @@
 
 @media (max-width: 620px) {
   .cand-exam-list li { flex-wrap: wrap; }
-  .cand-schedule-copy { flex-basis: calc(100% - 86px); }
+  .cand-schedule-copy { flex-basis: 100%; }
   .cand-schedule-copy strong { white-space: normal; }
-  .cand-exam-list li .cand-status { margin-left: 86px; }
+  .cand-exam-list li .cand-status { margin-left: 0; }
   .cand-exam-list li > a { margin-left: auto; }
   .cand-facts > div { grid-template-columns: 110px minmax(0, 1fr); }
   .cand-action-bar .cand-btn { width: 100%; }
@@ -291,8 +291,8 @@
   .student-shell .cand-schedule-copy span { font-size: 14px; }
   .student-shell .cand-date { width: 68px; }
   .student-shell .cand-date strong { font-size: 20px; }
-  .student-shell .cand-exam-list li .cand-status { margin-left: 84px; }
-  .student-shell .cand-schedule-copy { flex-basis: calc(100% - 84px); }
+  .student-shell .cand-exam-list li .cand-status { margin-left: 0; }
+  .student-shell .cand-schedule-copy { flex-basis: 100%; }
   .student-shell .data-table td { font-size: 15px; }
   .student-shell .cand-rules { padding: 0 16px 18px 36px; font-size: 15px; }
   .student-shell .cand-action-bar { padding: 16px; font-size: 15px; }

@@ -1,0 +1,88 @@
+/* Quản lý kỳ thi, gán đề và thí sinh. */
+.exam-status.warning, .exam-subject-icon.warning { color: #B4701A; background: var(--warning-soft); }
+.exam-status.danger, .exam-subject-icon.danger { color: var(--danger); background: var(--danger-soft); }
+.exam-status.indigo, .exam-subject-icon.indigo { color: var(--primary); background: var(--primary-soft); }
+
+.exam-overview-link { display: inline-flex; align-items: center; gap: 6px; margin-top: 10px; padding: 6px 12px; border-radius: 6px; color: #fff; background: rgba(255, 255, 255, .14); font-size: var(--fs-caption); font-weight: 600; text-decoration: none; }
+.exam-overview-link:hover { background: rgba(255, 255, 255, .24); }
+
+.form-dialog .checkbox-field { margin-bottom: 10px; }
+
+/* Thông báo có nút đóng (dùng chung kiểu success-banner). */
+.assign-page > .form-alert { justify-content: space-between; margin-bottom: 0; }
+.assign-page > .form-alert > span { display: flex; align-items: center; gap: 9px; }
+.assign-page > .form-alert button { display: grid; place-items: center; padding: 4px; border: 0; border-radius: 6px; color: inherit; background: transparent; cursor: pointer; }
+
+.assign-exam-select { min-width: 280px; max-width: 100%; padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font: inherit; font-size: var(--fs-body); }
+
+.assign-summary { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; }
+.assign-summary-main h3 { margin: 8px 0 2px; color: var(--ink); font-size: var(--fs-section-title); }
+.assign-summary-main p { margin: 0; color: var(--muted); font-size: var(--fs-body); }
+.assign-facts { display: flex; flex-wrap: wrap; gap: 10px; margin: 0; }
+.assign-facts > div { min-width: 110px; padding: 10px 14px; border-radius: 8px; background: var(--primary-soft); }
+.assign-facts dt { color: var(--muted); font-size: var(--fs-caption); }
+.assign-facts dd { margin: 2px 0 0; color: var(--ink); font-size: var(--fs-emphasis); font-weight: 700; }
+
+.assign-grid { display: grid; grid-template-columns: minmax(0, 3fr) minmax(280px, 2fr); gap: 16px; }
+.assign-step { padding: 20px; }
+.assign-paper { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: center; gap: 14px; }
+.assign-paper > .field-help { grid-column: 1 / -1; }
+.assign-paper-code { display: flex; align-items: center; gap: 8px; padding: 10px 14px; border-radius: 8px; color: var(--primary); background: var(--primary-soft); }
+.assign-paper-code strong { font-size: var(--fs-emphasis); }
+.assign-paper-info { display: grid; gap: 2px; min-width: 0; }
+.assign-paper-info span { overflow: hidden; color: var(--ink); font-size: var(--fs-emphasis); font-weight: 600; text-overflow: ellipsis; white-space: nowrap; }
+.assign-paper-info small { color: var(--muted); font-size: var(--fs-caption); }
+.assign-paper-actions { display: flex; gap: 8px; }
+.assign-pick-paper { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; }
+.assign-pick-paper select { flex: 1 1 260px; min-width: 0; padding: 9px 12px; border: 1px solid var(--line); border-radius: 6px; background: var(--surface); font: inherit; font-size: var(--fs-body); }
+
+.assign-checklist { display: grid; gap: 8px; margin: 0 0 16px; padding: 0; list-style: none; color: var(--danger); font-size: var(--fs-body); }
+.assign-checklist li { display: flex; align-items: center; gap: 8px; }
+.assign-checklist li.is-done { color: var(--success); }
+.assign-publish { width: 100%; justify-content: center; }
+.assign-published { display: flex; align-items: flex-start; gap: 12px; color: var(--success); }
+.assign-published > div { display: grid; gap: 3px; }
+.assign-published strong { color: var(--ink); font-size: var(--fs-emphasis); }
+.assign-published small { color: var(--muted); font-size: var(--fs-caption); }
+
+.assign-students-head { flex-wrap: wrap; gap: 12px; }
+.seat-input { width: 84px; padding: 5px 8px; border: 1px solid transparent; border-radius: 6px; background: transparent; font: inherit; font-size: var(--fs-body); text-transform: uppercase; }
+.seat-input:hover, .seat-input:focus { border-color: var(--line); background: var(--surface); }
+.seat-input-error { border-color: var(--danger); background: var(--danger-soft); }
+
+/* Hộp thoại chọn thí sinh. */
+.pick-students-dialog { width: min(760px, 100%); }
+.pick-toolbar { padding: 0 0 12px; border: 0; }
+.pick-list { max-height: 50vh; overflow-y: auto; border: 1px solid var(--line); border-radius: 8px; }
+.pick-list thead th { position: sticky; top: 0; z-index: 1; background: var(--surface); }
+.pick-list tbody tr { cursor: pointer; }
+.pick-list tbody tr:hover { background: var(--primary-soft); }
+.pick-list input[type="checkbox"] { accent-color: var(--primary); }
+.pick-row-disabled { opacity: .6; cursor: default !important; }
+.pick-note { display: block; color: var(--muted); font-size: var(--fs-caption); }
+.pick-count { margin-right: auto; color: var(--muted); font-size: var(--fs-body); align-self: center; }
+
+@media (max-width: 900px) {
+  .assign-grid { grid-template-columns: 1fr; }
+}
+@media (max-width: 600px) {
+  .assign-paper { grid-template-columns: 1fr; }
+  .assign-exam-select { min-width: 0; width: 100%; }
+}
+
+/* Theo dõi thi. */
+.monitor-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 18px; padding: 18px 20px; }
+.monitor-head-main h3 { margin: 8px 0 2px; color: var(--ink); font-size: var(--fs-section-title); }
+.monitor-head-main p { margin: 0; color: var(--muted); font-size: var(--fs-body); }
+.monitor-clock { display: grid; justify-items: end; gap: 2px; padding: 10px 16px; border-radius: 8px; background: var(--primary-soft); }
+.monitor-clock span { color: var(--muted); font-size: var(--fs-caption); font-weight: 700; letter-spacing: .04em; }
+.monitor-clock strong { color: var(--ink); font-size: var(--fs-stat); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.monitor-clock small { color: var(--muted); font-size: var(--fs-caption); }
+.monitor-stats .monitor-stat { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font: inherit; text-align: left; cursor: pointer; }
+.monitor-stats .monitor-stat:hover { border-color: #B9C6D6; }
+.monitor-stats .monitor-stat.is-active { border-color: var(--primary); box-shadow: 0 0 0 2px var(--primary-soft); }
+.monitor-stats .monitor-stat p { display: grid; gap: 3px; margin: 0; }
+.monitor-table td { vertical-align: middle; }
+.monitor-row-idle { background: var(--warning-soft); }
+.monitor-idle { display: inline-flex; align-items: center; gap: 4px; color: #B4701A; font-weight: 600; }
+.monitor-extra { display: block; color: var(--primary); font-size: var(--fs-caption); font-weight: 600; }

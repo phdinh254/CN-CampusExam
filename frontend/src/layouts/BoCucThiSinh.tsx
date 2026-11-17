@@ -75,7 +75,7 @@ export default function BoCucThiSinh() {
                 onClick={() => setMoMenuThi((value) => !value)}
                 type="button"
               >
-                <BieuTuong name="file" size={16} /> Thi trực tuyến <span aria-hidden="true" className="cand-caret">▾</span>
+                <BieuTuong name="file" size={16} /> Thi trực tuyến <span aria-hidden="true" className="cand-caret"><BieuTuong name="chevron-down" size={15} /></span>
               </button>
               {moMenuThi && (
                 <div className="cand-submenu" id="menu-thi-truc-tuyen">

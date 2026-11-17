@@ -10,6 +10,8 @@
 /* Khung quản trị: dải đầu trang và menu ngang dùng chung class cand-* với cổng thí sinh. */
 .admin-shell { min-height: 100vh; background: #f5f7fb; }
 .admin-content { padding: 24px 16px 40px; }
+.admin-shell .cand-navbar a, .admin-shell .cand-navbar li > button { font-size: 16px; }
+.admin-shell .cand-caret { font-size: 16px; }
 .admin-shell .cand-navbar a.sap-co:not(.active) { color: var(--muted); }
 .admin-shell .cand-nav-dropdown:nth-child(5) .cand-submenu { right: 0; left: auto; }
 @media (max-width: 620px) {

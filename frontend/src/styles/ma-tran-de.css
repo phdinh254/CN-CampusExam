@@ -1,0 +1,55 @@
+/* Ma trận đề: danh sách và trang soạn. */
+.matrix-name { color: var(--ink); text-decoration: none; }
+.matrix-name:hover strong { color: var(--primary); }
+
+.back-link { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 6px; color: var(--muted); font-size: var(--fs-caption); text-decoration: none; }
+.back-link:hover { color: var(--primary); }
+
+/* Trang soạn: bước 1 chọn KQHT, bước 2 tỷ lệ chung, bước 3 bảng số câu, thanh lưu. */
+.matrix-setup { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; }
+.matrix-step { padding: 18px 20px; }
+.matrix-step > header, .matrix-step-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.matrix-step-title { display: block; padding: 18px 20px 4px; margin-bottom: 0; }
+.matrix-step h3, .matrix-step-title h3 { margin: 0; color: var(--ink); font-size: var(--fs-section-title); }
+.matrix-step p, .matrix-step-title p, .matrix-muted { margin: 4px 0 0; color: var(--muted); font-size: var(--fs-caption); }
+.matrix-chips { display: flex; flex-wrap: wrap; gap: 8px; }
+.matrix-chip { display: inline-flex; align-items: center; gap: 6px; max-width: 100%; padding: 7px 12px; border: 1px dashed var(--line); border-radius: 999px; color: var(--ink); background: var(--surface); font: inherit; font-size: var(--fs-caption); cursor: pointer; }
+.matrix-chip:hover { border-color: var(--primary); border-style: solid; color: var(--primary); background: var(--primary-soft); }
+.matrix-chip strong { color: var(--primary); }
+.matrix-chip span { max-width: 220px; overflow: hidden; text-overflow: ellipsis; white-space: nowrap; }
+.matrix-ratio { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; }
+.matrix-ratio label { display: grid; gap: 4px; color: var(--muted); font-size: var(--fs-caption); }
+.matrix-ratio .matrix-input { width: 100%; }
+.matrix-pct { display: inline-flex; align-items: center; gap: 4px; color: var(--muted); }
+.matrix-presets { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; margin-top: 12px; color: var(--muted); font-size: var(--fs-caption); }
+.matrix-preset { padding: 4px 9px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); background: transparent; font: inherit; cursor: pointer; }
+.matrix-preset:hover, .matrix-preset.is-active { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+.matrix-sum { flex: 0 0 auto; padding: 3px 8px; border-radius: 6px; font-size: var(--fs-caption); font-weight: 700; }
+.matrix-sum-ok { color: var(--success); background: var(--success-soft); }
+.matrix-sum-bad { color: var(--danger); background: var(--danger-soft); }
+.matrix-tag { display: inline-block; width: fit-content; margin-top: 4px; padding: 2px 6px; border-radius: 5px; color: var(--primary); background: var(--primary-soft); font-size: var(--fs-micro); font-weight: 700; }
+.matrix-count { display: block; margin-top: 2px; color: var(--ink); }
+.matrix-cell .matrix-pct .matrix-input { width: 68px; }
+.matrix-savebar { position: sticky; bottom: 0; z-index: 5; display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 14px 20px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); box-shadow: var(--shadow); }
+.matrix-savebar > div { display: grid; gap: 3px; min-width: 0; }
+.matrix-savebar small { font-size: var(--fs-caption); }
+.matrix-warn { color: var(--warning); font-weight: 600; }
+.matrix-ok { color: var(--success); font-weight: 600; }
+
+.matrix-grid td, .matrix-grid th { vertical-align: top; }
+.matrix-grid tfoot th { padding-top: 12px; border-top: 1px solid var(--line); text-align: left; }
+.matrix-input { width: 72px; padding: 6px 8px; border: 1px solid var(--line); border-radius: 7px; font: inherit; }
+.matrix-input:disabled { color: var(--ink); background: transparent; border-color: transparent; }
+.matrix-available { display: block; margin-top: 4px; color: var(--muted); font-size: var(--fs-caption); }
+.matrix-cell-short { background: var(--danger-soft); }
+.matrix-cell-short .matrix-available { color: var(--danger); font-weight: 600; }
+.matrix-row-inactive { opacity: .75; }
+
+
+@media (max-width: 900px) {
+  .matrix-setup { grid-template-columns: 1fr; }
+}
+@media (max-width: 720px) {
+  .matrix-step > header { flex-direction: column; }
+  .matrix-savebar { flex-direction: column; align-items: stretch; }
+}

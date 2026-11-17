@@ -19,10 +19,6 @@
 .panel-heading h3 { font-size: 15px; }
 .panel-heading p { font-size: 13px; }
 .panel-heading > a { font-size: 13px; }
-.chart-summary strong { font-size: 24px; }
-.chart-summary span,
-.chart-summary small { font-size: 12px; }
-.bar-column small { font-size: 12px; }
 .exam-list-copy > strong { font-size: 14px; }
 .exam-list-copy > span { font-size: 12px; }
 .tag { padding: 4px 7px; font-size: 12px; }
@@ -30,11 +26,12 @@
 .activity-item strong { font-size: 13px; }
 .activity-item small { font-size: 12px; }
 
-.mini-stats-grid > div { min-height: 78px; padding: 16px; }
-.mini-stat-icon { width: 42px; height: 42px; }
-.mini-stats-grid small { font-size: 12px; }
-.mini-stats-grid strong { font-size: 20px; }
-.mini-stats-grid em { font-size: 12px; }
+.mini-stats-grid > div { min-height: 92px; gap: 14px; padding: 18px; }
+.mini-stat-icon { width: 52px; height: 52px; border-radius: 12px; }
+.mini-stat-icon svg { width: 26px; height: 26px; }
+.mini-stats-grid small { font-size: 13px; }
+.mini-stats-grid strong { font-size: 26px; }
+.mini-stats-grid em { font-size: 13px; }
 .table-toolbar { padding: 13px 16px; }
 .search-box { height: 42px; }
 .search-box.small { min-width: 280px; height: 38px; }

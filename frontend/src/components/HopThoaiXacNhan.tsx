@@ -31,6 +31,7 @@ export function HopThoaiXacNhan({ title, children, confirmLabel, danger, busy, e
             <span className={`dialog-icon${danger ? " danger" : ""}`}><BieuTuong name="alert" size={20} /></span>
             <h3 id="confirm-dialog-title">{title}</h3>
           </div>
+          <button aria-label="Đóng" className="dialog-close" disabled={busy} onClick={onCancel} type="button"><BieuTuong name="x" size={19} /></button>
         </header>
         <div className="dialog-body">
           {error && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{error}</span></div>}
@@ -38,7 +39,7 @@ export function HopThoaiXacNhan({ title, children, confirmLabel, danger, busy, e
         </div>
         <footer>
           <button autoFocus className="button button-secondary" disabled={busy} onClick={onCancel} type="button">Hủy</button>
-          <button className={`button ${danger ? "button-danger" : "button-primary"}`} disabled={busy} onClick={onConfirm} type="button">
+          <button aria-busy={busy} className={`button ${danger ? "button-danger" : "button-primary"}`} disabled={busy} onClick={onConfirm} type="button">
             {busy ? "Đang xử lý…" : confirmLabel}
           </button>
         </footer>

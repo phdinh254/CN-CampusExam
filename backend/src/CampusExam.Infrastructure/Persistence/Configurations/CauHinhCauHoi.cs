@@ -47,9 +47,17 @@ internal sealed class CauHinhGomCau : IEntityTypeConfiguration<GomCau>
         entity.ToTable("GOM_CAU", "dbo");
 
         entity.HasKey(x => new { x.MaDe, x.MaCH }).HasName("PK_GOM_CAU");
+        entity.HasAlternateKey(x => new { x.MaDe, x.ThuTuTrongDeGoc }).HasName("AK_AK_GOMCAU_DEGOC_TH_GOM_CAU");
         entity.HasIndex(x => x.MaCH).HasDatabaseName("GOM_CAU2_FK");
 
         entity.Property(x => x.MaDe).HasColumnName("MADE");
         entity.Property(x => x.MaCH).HasColumnName("MACH");
+        entity.Property(x => x.ThuTuTrongDeGoc).HasColumnName("THUTUTRONGDEGOC");
+        entity.Property(x => x.NoiDung).HasColumnName("NOIDUNGTAILUCTAO").HasColumnType("nvarchar(4000)").HasMaxLength(4000).IsRequired();
+        entity.Property(x => x.PhuongAnA).HasColumnName("PHUONGANATAILUCTAO").HasColumnType("nvarchar(1000)").HasMaxLength(1000).IsRequired();
+        entity.Property(x => x.PhuongAnB).HasColumnName("PHUONGANBTAILUCTAO").HasColumnType("nvarchar(1000)").HasMaxLength(1000).IsRequired();
+        entity.Property(x => x.PhuongAnC).HasColumnName("PHUONGANCTAILUCTAO").HasColumnType("nvarchar(1000)").HasMaxLength(1000).IsRequired();
+        entity.Property(x => x.PhuongAnD).HasColumnName("PHUONGANDTAILUCTAO").HasColumnType("nvarchar(1000)").HasMaxLength(1000).IsRequired();
+        entity.Property(x => x.DapAnDungGoc).HasColumnName("DAPANDUNGGOC").HasColumnType("char(1)").HasMaxLength(1).IsFixedLength().IsUnicode(false).IsRequired();
     }
 }

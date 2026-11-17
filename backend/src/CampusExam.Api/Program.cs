@@ -18,6 +18,7 @@ var connectionString =
 builder.Services.AddDbContext<CampusExamDbContext>(options =>
     options.UseSqlServer(connectionString));
 builder.Services.AddInfrastructure();
+builder.Services.AddHostedService<CampusExam.Api.Common.TacVuThuBai>();
 
 // Ảnh câu hỏi và tệp nhập tạm. Mặc định App_Data/storage cạnh ứng dụng;
 // triển khai thật nên trỏ Storage:Root tới ổ dữ liệu có sao lưu.

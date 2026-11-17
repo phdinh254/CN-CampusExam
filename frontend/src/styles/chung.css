@@ -3,6 +3,10 @@
 @import "./trang-quan-tri.css";
 @import "./ket-qua-hoc-tap.css";
 @import "./ngan-hang-cau-hoi.css";
+@import "./ma-tran-de.css";
+@import "./de-thi.css";
+@import "./ky-thi.css";
+@import "./tong-quan.css";
 @import "./tinh-chinh.css";
 @import "./xac-thuc.css";
 @import "./dap-ung.css";
@@ -41,13 +45,17 @@
   --orange: var(--warning);
   --purple: var(--blue);
 
-  /* Thang cỡ chữ. */
+  /* Thang cỡ chữ: lấy trang Tổng quan làm chuẩn cho mọi trang. */
   --fs-page-title: 26px;
+  --fs-page-subtitle: 15px;
   --fs-section-title: 18px;
+  --fs-emphasis: 15px;
   --fs-body: 14px;
   --fs-table: 14px;
-  --fs-caption: 12px;
+  --fs-caption: 13px;
+  --fs-micro: 12px;
   --fs-button: 14px;
+  --fs-stat: 28px;
 }
 
 * { box-sizing: border-box; }
@@ -113,8 +121,7 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .photo-input > svg { flex: none; }.photo-input input { min-width: 0; flex: 1; border: 0; outline: 0; color: var(--ink); background: transparent; font-size: 13px; }.photo-input input::placeholder { color: #abb1bd; }
 .photo-input button { padding: 6px; border: 0; border-radius: 6px; color: #2878C7; background: transparent; font-size: 12px; font-weight: 800; cursor: pointer; }.photo-input button:hover { background: #efeeff; }
 .photo-field-hint { margin: -5px 0 12px; color: #7b8392; font-size: 12px; line-height: 1.5; }
-.photo-remember { display: flex; align-items: center; gap: 8px; margin: 2px 0 18px; color: #5d6679; font-size: 13px; cursor: pointer; }
-.photo-remember input { width: 15px; height: 15px; margin: 0; accent-color: #2878C7; }
+.photo-login-submit { margin-top: 10px; }
 .photo-login-submit { width: 100%; min-height: 45px; border-radius: 10px; background: linear-gradient(135deg, #2878C7, #2878C7); box-shadow: 0 10px 22px rgba(40,120,199,.24); }
 .photo-login-submit:hover { background: linear-gradient(135deg, #2878C7, #2878C7); }
 .photo-login-submit:disabled { opacity: .7; cursor: progress; transform: none; }
@@ -170,13 +177,12 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 
 .icon-button { border-radius: 6px; }
 
-.panel, .stat-card, .date-chip, .form-dialog, .placeholder-page, .exam-overview, .mini-stats-grid > div, .outcome-summary article { border-radius: 8px; box-shadow: none; }
+.panel, .stat-card, .date-chip, .form-dialog, .placeholder-page, .exam-overview, .mini-stats-grid > div { border-radius: 8px; box-shadow: none; }
 .button, .select-button, .search-box, .table-toolbar select { border-radius: 6px; }
 .stats-grid .stat-icon { border-radius: 6px; color: var(--primary); background: var(--primary-soft); }
 .date-chip small { text-transform: none; letter-spacing: 0; }
 
 /* Khối nổi bật trong trang quản trị: nền đơn sắc thay cho chuyển màu, không bóng đổ. */
-.outcome-summary-main { background: var(--primary) !important; box-shadow: none !important; }
 .exam-overview { background: var(--primary); box-shadow: none; }
 .dialog-icon { border-radius: 8px; background: var(--primary); }
 .button-primary, .button-primary:hover { box-shadow: none; }
@@ -187,17 +193,24 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .stat-link > svg:last-child { flex: none; margin-left: auto; color: #A3ADBA; }
 .stat-link:hover > svg:last-child { color: var(--primary); }
 .stat-card-main > span { display: flex; flex-wrap: wrap; align-items: center; gap: 6px; }
-.demo-tag { display: inline-flex; padding: 1px 6px; border: 1px dashed #C3CCD8; border-radius: 4px; color: var(--muted); font-size: 11px; font-weight: 500; letter-spacing: 0; text-transform: none; vertical-align: middle; }
+.demo-tag { display: inline-flex; padding: 1px 6px; border: 1px dashed #C3CCD8; border-radius: 4px; color: var(--muted); font-size: var(--fs-micro); font-weight: 500; letter-spacing: 0; text-transform: none; vertical-align: middle; }
 .panel-heading h3 .demo-tag { margin-left: 6px; }
 
-/* Biểu đồ chiếm hết chiều cao khung thay vì để trống phía dưới. */
+/*
+ * Lượt thi: tổng cạnh tiêu đề. Biểu đồ cao cố định, không co giãn theo khối kỳ thi bên cạnh
+ * (lọc danh sách kỳ thi làm hàng lưới thấp đi, cột biểu đồ trông như bị cập nhật).
+ */
 .performance-panel { display: flex; flex-direction: column; }
-.performance-panel .bar-chart { flex: 1; height: auto; min-height: 200px; align-items: stretch; padding-top: 12px; background-image: none; }
-.bar-column { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; justify-items: center; gap: 6px; }
+.attempt-total { display: flex; align-items: baseline; gap: 6px; }
+.attempt-total strong { font-size: 28px; letter-spacing: -.03em; }
+.attempt-total span { color: var(--muted); font-size: 15px; }
+.performance-panel .bar-chart { flex: none; height: 260px; min-height: 0; align-items: stretch; padding-top: 12px; background-image: none; }
+.bar-column { display: grid; grid-template-rows: auto minmax(0, 1fr) auto; justify-items: center; gap: 8px; }
+.bar-column small { color: var(--muted); font-size: 15px; font-weight: 600; }
 .bar-track { display: flex; align-items: flex-end; justify-content: center; width: 100%; height: 100%; border-bottom: 1px solid var(--line); }
-.bar { width: min(28px, 70%); border-radius: 4px 4px 0 0; background: #C9DBEE; box-shadow: none; }
+.bar { width: min(36px, 70%); border-radius: 5px 5px 0 0; background: #C9DBEE; box-shadow: none; }
 .bar.peak { background: var(--blue); box-shadow: none; }
-.bar-value { color: var(--muted); font-size: 12px; font-variant-numeric: tabular-nums; }
+.bar-value { color: var(--ink); font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; }
 
 /* Kỳ thi sắp diễn ra: bộ lọc gọn, mỗi dòng chỉ tên, giờ, số thí sinh, trạng thái, chi tiết. */
 .upcoming-filters { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 10px; padding: 0 20px 12px; }
@@ -212,15 +225,14 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 .exam-list-empty { margin: 0; padding: 24px 0; border-top: 1px solid #eef1f5; color: var(--muted); font-size: 14px; text-align: center; }
 
 /* Trang mức độ câu hỏi */
-.level-code { display: inline-grid; place-items: center; width: 28px; height: 28px; border-radius: 6px; color: var(--primary); background: var(--primary-soft); font-weight: 700; }
 .cell-action { text-align: right; }
 .cell-action a { display: inline-flex; align-items: center; gap: 4px; color: var(--primary); font-weight: 600; white-space: nowrap; }
 .cell-loading { color: var(--muted); text-align: center; }
 
 @media (max-width: 620px) {
   .exam-list-item { flex-wrap: wrap; }
-  .exam-list-copy { flex-basis: calc(100% - 60px); }
-  .exam-list-item .tag { margin-left: 55px; }
+  .exam-list-copy { flex-basis: 100%; }
+  .exam-list-item .tag { margin-left: 0; }
   .row-link { margin-left: auto; }
 }
 
@@ -248,3 +260,145 @@ button:focus-visible, a:focus-visible, input:focus-visible, select:focus-visible
 /* Nút hiện/ẩn mật khẩu (icon con mắt): màu xám, đậm lên khi rê chuột. */
 .photo-input button { display: grid; place-items: center; width: 36px; height: 36px; padding: 0; color: var(--muted); }
 .photo-input button:hover { color: var(--primary); }
+
+/*
+ * Trang Tổng quan: một thang chữ chung cho mọi khối, khớp navbar 16px và các ô thống kê.
+ * Tiêu đề khối 18 · nội dung chính 15–16 · chữ phụ 13–14 · số lớn 26–28. Nút lọc cùng một kiểu.
+ */
+.dashboard-page .page-heading-row p { font-size: 15px; }
+.dashboard-page .date-chip small { font-size: 13px; }
+.dashboard-page .date-chip strong { font-size: 15px; }
+
+.dashboard-page .stat-icon { width: 52px; height: 52px; border-radius: 12px; }
+.dashboard-page .stat-icon svg { width: 26px; height: 26px; }
+.dashboard-page .stat-card-main > span { font-size: 15px; }
+.dashboard-page .stat-card-main > strong { font-size: 28px; }
+.dashboard-page .stat-card-main small { font-size: 13px; }
+
+.dashboard-page .panel-heading h3 { font-size: 18px; }
+.dashboard-page .panel-heading > a { font-size: 14px; }
+.dashboard-page .demo-tag { font-size: 12px; }
+.dashboard-page .attempt-total strong { font-size: 26px; }
+
+.dashboard-page .segmented button { min-height: 34px; padding: 0 14px; font-size: 14px; }
+.dashboard-page .row-link { padding: 6px 12px; font-size: 14px; }
+
+.dashboard-page .performance-panel .bar-chart { grid-template-columns: none; grid-auto-flow: column; grid-auto-columns: 1fr; }
+.dashboard-page .bar-chart-dense { gap: 4px; padding-inline: 20px; }
+.dashboard-page .bar-chart-dense .bar { width: 100%; border-radius: 3px 3px 0 0; }
+.dashboard-page .bar-chart-dense .bar-column small { overflow: visible; font-size: 13px; white-space: nowrap; }
+
+.dashboard-page .date-tile { width: 50px; height: 54px; }
+.dashboard-page .date-tile strong { font-size: 18px; }
+.dashboard-page .date-tile small { font-size: 12px; }
+.dashboard-page .exam-list-item { gap: 14px; padding: 14px 0; }
+.dashboard-page .exam-list-copy > strong { font-size: 16px; }
+.dashboard-page .exam-list-copy > span { font-size: 14px; }
+.dashboard-page .tag { padding: 5px 9px; font-size: 13px; }
+.dashboard-page .exam-list-empty { font-size: 15px; }
+/* Danh sách kỳ thi cao cố định (khoảng 4 dòng, dư thì cuộn): lọc ít/nhiều kỳ thi không làm cả hàng
+   co giãn, nên biểu đồ bên cạnh và khối hoạt động phía dưới đứng yên. */
+.dashboard-page .exam-list { height: 336px; overflow-y: auto; }
+
+.dashboard-page .activity-item { gap: 14px; padding: 14px 0; }
+.dashboard-page .activity-item strong { font-size: 15px; }
+.dashboard-page .activity-item small { font-size: 13px; }
+
+/*
+ * Thang chữ chung theo trang Tổng quan: tiêu đề trang 26, mô tả 15, tiêu đề khối 18,
+ * chữ nhấn 15, nội dung 14, chú thích 13, nhãn nhỏ 12, số thống kê 28.
+ * Đặt cuối tệp để thắng các quy tắc cũ cùng độ ưu tiên ở trang-quan-tri.css, tinh-chinh.css.
+ */
+.welcome-row p, .page-heading-row p { font-size: var(--fs-page-subtitle); }
+.panel-heading p { font-size: var(--fs-caption); }
+.panel-heading > a { font-size: var(--fs-body); }
+.date-chip small { font-size: var(--fs-caption); }
+.date-chip strong { font-size: var(--fs-emphasis); }
+
+/* Thẻ thống kê ở đầu các trang danh sách. */
+.mini-stats-grid small { font-size: var(--fs-caption); }
+.mini-stats-grid strong { font-size: var(--fs-stat); line-height: 1.1; }
+.mini-stats-grid em { font-size: var(--fs-caption); }
+
+/* Thanh công cụ, bảng, phân trang. */
+.search-box input, .table-toolbar select { font-size: var(--fs-body); }
+.data-table th { font-size: var(--fs-caption); }
+.data-table td { font-size: var(--fs-table); }
+.question-cell strong, .exam-name-cell strong, .student-name-cell strong, .date-cell strong, .outcome-name strong, .matrix-name strong { font-size: var(--fs-emphasis); }
+.question-cell small, .date-cell small, .exam-name-cell small, .student-name-cell small, .outcome-name small, .question-code { font-size: var(--fs-caption); }
+.outcome-badge, .level-badge, .status-dot, .exam-status, .tag, .order-chip { font-size: var(--fs-caption); }
+.table-footer, .pagination button { font-size: var(--fs-caption); }
+.empty-state strong { font-size: var(--fs-emphasis); }
+.empty-state span { font-size: var(--fs-body); }
+
+/* Biểu mẫu và hộp thoại. */
+.form-dialog h3, .placeholder-page h2 { font-size: var(--fs-section-title); }
+.form-dialog header small, .placeholder-page p { font-size: var(--fs-body); }
+.dialog-field > span, .checkbox-field { font-size: var(--fs-body); }
+.dialog-field input, .dialog-field textarea, .dialog-field select { font: inherit; font-size: var(--fs-body); font-weight: 500; }
+.field-hint, .field-error, .field-help, .field-counter, .dialog-field .field-error { font-size: var(--fs-caption); }
+.form-alert, .form-warning, .success-banner, .confirm-message p { font-size: var(--fs-body); }
+.readonly-code strong { font-size: var(--fs-emphasis); }
+.readonly-code small { font-size: var(--fs-caption); }
+
+/* Ô nội dung riêng của các trang. */
+.outcomes-table code { font-family: inherit; font-size: var(--fs-micro); line-height: 1.2; }
+.page-kicker { font-size: var(--fs-micro); }
+.exam-overview-main > p { font-size: var(--fs-body); }
+.exam-overview-main h3 { font-size: var(--fs-section-title); }
+.exam-overview-main .button { font-size: var(--fs-button); }
+.live-stats strong { font-size: var(--fs-stat); line-height: 1.1; }
+.live-stats span, .live-clock > span, .live-clock small { font-size: var(--fs-caption); }
+.progress-cell strong, .candidate-count, .password-hint { font-size: var(--fs-caption); }
+.issue-list, .question-images > span, .question-image-fallback { font-size: var(--fs-caption); }
+.import-empty span, .import-confirm span { font-size: var(--fs-body); }
+.outcome-letter { font-size: var(--fs-emphasis); }
+
+/*
+ * Thẻ thống kê không có icon: phần chữ chiếm trọn thẻ, nhãn ở trên, số và dòng phụ ở dưới,
+ * các thẻ cùng hàng cao bằng nhau. Mũi tên (thẻ bấm được) nằm giữa mép phải.
+ */
+.stats-grid .stat-card { align-items: stretch; gap: 12px; min-height: 124px; padding: 30px 18px 18px 20px; }
+.stats-grid .stat-card-main { flex: 1; align-content: space-between; gap: 6px; }
+.stats-grid .stat-card-main > span { margin-bottom: 0; color: var(--muted); font-weight: 600; }
+.stats-grid .stat-card-main > strong { margin-bottom: 0; color: var(--ink); line-height: 1.1; }
+.stats-grid .stat-link > svg:last-child { align-self: center; }
+
+.mini-stats-grid > div, .mini-stats-grid > .monitor-stat { align-items: stretch; min-height: 96px; padding: 16px 18px; }
+.mini-stats-grid > div > p, .mini-stats-grid > .monitor-stat > p { flex: 1; align-content: space-between; gap: 8px; }
+.mini-stats-grid strong { color: var(--ink); }
+
+/* Ô tên trong bảng kỳ thi chỉ còn chữ. */
+.exam-name-cell > div { min-width: 0; }
+
+/*
+ * Tiêu đề và mô tả trang (thống nhất toàn hệ thống): tiêu đề lớn, đậm, màu tối; mô tả ngay bên dưới,
+ * cách 5px, chữ nhỏ hơn màu xám xanh, một dòng, không nền, không viền, không bo góc.
+ */
+:root { --page-subtitle: #5B6B80; }
+.page-heading-row h2, .welcome-row h2, .cand-page-head h1,
+.student-shell .cand-page-head h1, .dashboard-page .page-heading-row h2 {
+  margin: 0;
+  color: var(--ink);
+  font-size: var(--fs-page-title);
+  font-weight: 700;
+  letter-spacing: -.02em;
+  line-height: 1.25;
+}
+.page-heading-row h2 + p, .welcome-row h2 + p, .cand-page-head h1 + p,
+.student-shell .cand-page-head h1 + p, .outcomes-page .page-heading-row h2 + p, .dashboard-page .page-heading-row h2 + p {
+  overflow: hidden;
+  max-width: 100%;
+  margin: 5px 0 0;
+  padding: 0;
+  border: 0;
+  border-radius: 0;
+  color: var(--page-subtitle);
+  background: none;
+  font-size: var(--fs-page-subtitle);
+  font-weight: 400;
+  line-height: 1.45;
+  text-overflow: ellipsis;
+  white-space: nowrap;
+}
+.page-heading-row > div { min-width: 0; }

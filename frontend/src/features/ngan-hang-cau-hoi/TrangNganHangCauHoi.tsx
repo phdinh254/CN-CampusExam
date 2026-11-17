@@ -4,7 +4,7 @@ import { Link, useSearchParams } from "react-router-dom";
 import { HopThoaiXacNhan } from "../../components/HopThoaiXacNhan";
 import { BieuTuong } from "../../components/BieuTuong";
 import { LoiApiHttp } from "../../services/khachHttp";
-import type { CauHoiChiTiet, CauHoiTomTat, KqhtDto, MaMucDo, ThongKeCauHoi, TrangDuLieu, TrangThaiSuDung } from "../../types/api";
+import type { CauHoiChiTiet, CauHoiTomTat, KqhtDto, MaMucDo, TrangDuLieu, TrangThaiSuDung } from "../../types/api";
 import { kqhtApi } from "../ket-qua-hoc-tap/api";
 import { cauHoiApi } from "./api";
 import { HinhCauHoi } from "./HinhCauHoi";
@@ -44,7 +44,6 @@ type Editor =
 
 export default function TrangNganHangCauHoi() {
   const [kqhtList, setKqhtList] = useState<KqhtDto[]>([]);
-  const [thongKe, setThongKe] = useState<ThongKeCauHoi | null>(null);
   const [query, setQuery] = useState("");
   const [tuKhoa, setTuKhoa] = useState("");
   const [maKQHT, setMaKQHT] = useState<number | "">("");
@@ -86,12 +85,6 @@ export default function TrangNganHangCauHoi() {
     kqhtApi.danhSach(controller.signal).then(setKqhtList).catch(() => undefined);
     return () => controller.abort();
   }, []);
-
-  useEffect(() => {
-    const controller = new AbortController();
-    cauHoiApi.thongKe(controller.signal).then(setThongKe).catch(() => undefined);
-    return () => controller.abort();
-  }, [reloadKey]);
 
   useEffect(() => {
     const controller = new AbortController();
@@ -212,7 +205,6 @@ export default function TrangNganHangCauHoi() {
     }
   }
 
-  const tyLe = (value: number) => (thongKe && thongKe.tongSo > 0 ? `${((value / thongKe.tongSo) * 100).toFixed(1)}%` : "—");
   const editingDetail = editor?.mode === "edit" ? editor.chiTiet : null;
   const editorLoading = editor?.mode === "edit" && !editor.chiTiet && !submitError;
 
@@ -234,13 +226,6 @@ export default function TrangNganHangCauHoi() {
           <button aria-label="Đóng thông báo" onClick={() => setSuccess(null)} type="button"><BieuTuong name="x" size={16} /></button>
         </div>
       )}
-
-      <section className="mini-stats-grid">
-        <div><span className="mini-stat-icon indigo"><BieuTuong name="book" /></span><p><small>TỔNG CÂU HỎI</small><strong>{thongKe ? thongKe.tongSo.toLocaleString("vi-VN") : "—"}</strong></p></div>
-        <div><span className="mini-stat-icon teal"><BieuTuong name="check" /></span><p><small>ĐANG SỬ DỤNG</small><strong>{thongKe ? thongKe.dangSuDung.toLocaleString("vi-VN") : "—"}</strong></p><em>{thongKe ? tyLe(thongKe.dangSuDung) : ""}</em></div>
-        <div><span className="mini-stat-icon orange"><BieuTuong name="lock" /></span><p><small>NGỪNG SỬ DỤNG</small><strong>{thongKe ? thongKe.ngungSuDung.toLocaleString("vi-VN") : "—"}</strong></p><em>{thongKe ? tyLe(thongKe.ngungSuDung) : ""}</em></div>
-        <div><span className="mini-stat-icon purple"><BieuTuong name="layers" /></span><p><small>KQHT ĐANG DÙNG</small><strong>{thongKe ? thongKe.soKQHT.toString().padStart(2, "0") : "—"}</strong></p></div>
-      </section>
 
       <section className="panel table-panel">
         <div className="table-toolbar">
@@ -303,9 +288,9 @@ export default function TrangNganHangCauHoi() {
             <div className="table-footer">
               <span>{loading && !data ? "Đang tải…" : <><strong>{data?.tongSoDong.toLocaleString("vi-VN") ?? 0}</strong> câu hỏi</>}</span>
               <div className="pagination">
-                <button aria-label="Trang trước" disabled={loading || trang <= 1} onClick={() => setTrang((value) => value - 1)} type="button"><BieuTuong name="arrow-left" size={15} /></button>
+                <button aria-label="Trang trước" disabled={loading || trang <= 1} onClick={() => setTrang((value) => value - 1)} type="button"><BieuTuong name="chevron-left" size={15} /></button>
                 <span>Trang {data && data.tongSoTrang > 0 ? data.trang : 0} / {data?.tongSoTrang ?? 0}</span>
-                <button aria-label="Trang sau" disabled={loading || !data || trang >= data.tongSoTrang} onClick={() => setTrang((value) => value + 1)} type="button"><BieuTuong name="arrow-right" size={15} /></button>
+                <button aria-label="Trang sau" disabled={loading || !data || trang >= data.tongSoTrang} onClick={() => setTrang((value) => value + 1)} type="button"><BieuTuong name="chevron-right" size={15} /></button>
               </div>
             </div>
           </>
@@ -318,7 +303,7 @@ export default function TrangNganHangCauHoi() {
             <header>
               <div>
                 <span className="dialog-icon"><BieuTuong name="book" size={20} /></span>
-                <div><small>NGÂN HÀNG CÂU HỎI</small><h3 id="question-dialog-title">{editor.mode === "create" ? "Thêm câu hỏi" : `Sửa câu hỏi ${editingDetail?.maCauHoi ?? ""}`}</h3></div>
+                <div><h3 id="question-dialog-title">{editor.mode === "create" ? "Thêm câu hỏi" : `Sửa câu hỏi ${editingDetail?.maCauHoi ?? ""}`}</h3></div>
               </div>
               <button aria-label="Đóng" className="dialog-close" disabled={submitting} onClick={() => setEditor(null)} type="button"><BieuTuong name="x" size={19} /></button>
             </header>
@@ -347,9 +332,7 @@ export default function TrangNganHangCauHoi() {
                         {formErrors.maMD && <small className="field-error">{formErrors.maMD}</small>}
                       </label>
                     </div>
-                    {editor.mode === "edit"
-                      ? <small className="field-help">KQHT và mức độ quyết định mã câu hỏi nên không đổi được. Muốn phân loại lại, hãy thêm câu mới và ngừng dùng câu này.</small>
-                      : <small className="field-help">Mã câu hỏi được cấp tự động theo KQHT và mức độ, ví dụ A1-1.</small>}
+                    {editor.mode === "edit" && <small className="field-help">Không đổi được KQHT và mức độ sau khi tạo.</small>}
                     <label className="dialog-field full" style={{ marginTop: 14 }}><span>Nội dung câu hỏi <em>*</em></span>
                       <textarea autoFocus maxLength={GIOI_HAN.noiDung} onChange={(event) => capNhatForm("noiDung", event.target.value)} rows={4} value={form.noiDung} />
                       {formErrors.noiDung && <small className="field-error">{formErrors.noiDung}</small>}
@@ -374,7 +357,7 @@ export default function TrangNganHangCauHoi() {
                     {editingDetail && editingDetail.hinhAnh.length > 0 && (
                       <div className="question-images">
                         <span>Hình trong câu hỏi</span>
-                        <small className="field-help">Mã như <code>{"{{media:NOIDUNG:1}}"}</code> trong nội dung đánh dấu vị trí hình; giữ nguyên mã khi sửa để hình hiển thị đúng chỗ.</small>
+                        <small className="field-help">Giữ nguyên mã hình trong nội dung khi sửa.</small>
                         <div className="question-image-grid">
                           {editingDetail.hinhAnh.map((hinh) => (
                             <figure key={hinh.maTN}>
@@ -385,7 +368,7 @@ export default function TrangNganHangCauHoi() {
                         </div>
                       </div>
                     )}
-                    <label className="checkbox-field"><input checked={form.coDinhDapAn} onChange={(event) => capNhatForm("coDinhDapAn", event.target.checked)} type="checkbox" /><span>Giữ nguyên thứ tự phương án khi sinh đề (dùng cho phương án kiểu “Cả A và B đều đúng”).</span></label>
+                    <label className="checkbox-field"><input checked={form.coDinhDapAn} onChange={(event) => capNhatForm("coDinhDapAn", event.target.checked)} type="checkbox" /><span>Giữ nguyên thứ tự phương án khi sinh đề</span></label>
                   </>
                 )}
               </div>

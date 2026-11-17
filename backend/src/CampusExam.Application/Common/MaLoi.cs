@@ -27,6 +27,25 @@ public static class MaLoi
     public const string QuestionNotFound = "QUESTION_NOT_FOUND";
     public const string QuestionInUse = "QUESTION_IN_USE";
 
+    public const string MatrixNotFound = "MATRIX_NOT_FOUND";
+    public const string MatrixInUse = "MATRIX_IN_USE";
+    public const string MatrixNotEditable = "MATRIX_NOT_EDITABLE";
+    public const string MatrixNotReady = "MATRIX_NOT_READY";
+
+    public const string PaperNotFound = "PAPER_NOT_FOUND";
+    public const string PaperInUse = "PAPER_IN_USE";
+    public const string PaperCodeConflict = "PAPER_CODE_CONFLICT";
+    public const string PaperPermutationsExhausted = "PAPER_PERMUTATIONS_EXHAUSTED";
+
+    public const string ExamNotFound = "EXAM_NOT_FOUND";
+    public const string ExamInvalidState = "EXAM_INVALID_STATE";
+    public const string ExamNotReady = "EXAM_NOT_READY";
+    public const string ExamStudentStarted = "EXAM_STUDENT_STARTED";
+    public const string ExamAssignmentNotFound = "EXAM_ASSIGNMENT_NOT_FOUND";
+    public const string ExamNotOpen = "EXAM_NOT_OPEN";
+    public const string AttemptNotFound = "ATTEMPT_NOT_FOUND";
+    public const string AttemptClosed = "ATTEMPT_CLOSED";
+
     public const string ConcurrencyConflict = "CONCURRENCY_CONFLICT";
 
     public const string StudentNotFound = "STUDENT_NOT_FOUND";

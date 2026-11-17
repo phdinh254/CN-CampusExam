@@ -110,7 +110,7 @@ export default function TrangNhapThiSinh() {
         <div>
           <span className="page-kicker"><Link to="/admin/candidates">THÍ SINH</Link></span>
           <h2>Nhập thí sinh từ Excel</h2>
-          <p>Tệp .xlsx gồm các cột: mã số thí sinh, họ và tên, ngày sinh, giới tính, lớp, nơi sinh, CCCD. Mỗi thí sinh được tạo kèm tài khoản, mật khẩu là ngày sinh (ddMMyyyy).</p>
+          <p>Tệp .xlsx theo mẫu; mật khẩu ban đầu là ngày sinh (ddMMyyyy).</p>
         </div>
         <div className="heading-actions">
           <button className="button button-secondary" onClick={() => void taiTepMau()} type="button"><BieuTuong name="file" size={17} /> Tải tệp mẫu</button>
@@ -141,9 +141,9 @@ export default function TrangNhapThiSinh() {
       {xemTruoc && (
         <>
           <section className="mini-stats-grid">
-            <div><span className="mini-stat-icon indigo"><BieuTuong name="file" /></span><p><small>TỔNG DÒNG</small><strong>{xemTruoc.tongDong}</strong></p><em>{tep ? dinhDangDungLuong(tep.size) : ""}</em></div>
-            <div><span className="mini-stat-icon teal"><BieuTuong name="check" /></span><p><small>HỢP LỆ</small><strong>{xemTruoc.soDongHopLe}</strong></p></div>
-            <div><span className="mini-stat-icon orange"><BieuTuong name="alert" /></span><p><small>CÓ LỖI</small><strong>{xemTruoc.soDongLoi}</strong></p></div>
+            <div><p><small>TỔNG DÒNG</small><strong>{xemTruoc.tongDong}</strong></p><em>{tep ? dinhDangDungLuong(tep.size) : ""}</em></div>
+            <div><p><small>HỢP LỆ</small><strong>{xemTruoc.soDongHopLe}</strong></p></div>
+            <div><p><small>CÓ LỖI</small><strong>{xemTruoc.soDongLoi}</strong></p></div>
           </section>
 
           <section className="panel import-confirm">

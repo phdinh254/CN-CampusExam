@@ -102,8 +102,6 @@ export default function TrangKetQuaHocTap() {
     });
   }, [items, query, status]);
 
-  const activeCount = items.filter((item) => item.trangThai === "dang_su_dung").length;
-  const inactiveCount = items.length - activeCount;
 
   function openCreateForm() {
     setEditing(null);
@@ -215,7 +213,7 @@ export default function TrangKetQuaHocTap() {
       <section className="page-heading-row">
         <div>
           <h2>Danh mục KQHT</h2>
-          <p>Kết quả học tập (KQHT) là mục tiêu đánh giá của môn học, dùng để phân loại câu hỏi và đặt mã câu hỏi.</p>
+          <p>Mục tiêu đánh giá dùng để phân loại và đặt mã câu hỏi.</p>
         </div>
         <div className="heading-actions">
           <button className="button button-primary" disabled={nextOrder > 26} onClick={openCreateForm} type="button">
@@ -230,16 +228,6 @@ export default function TrangKetQuaHocTap() {
           <button aria-label="Đóng thông báo" onClick={() => setSuccess(null)} type="button"><BieuTuong name="x" size={16} /></button>
         </div>
       )}
-
-      <section className="outcome-summary" aria-label="Tóm tắt kết quả học tập">
-        <article className="outcome-summary-main">
-          <span className="summary-icon"><BieuTuong name="layers" size={22} /></span>
-          <div><small>TỔNG KẾT QUẢ HỌC TẬP</small><strong>{loading ? "—" : items.length.toString().padStart(2, "0")}</strong><p>Mỗi KQHT tạo một nhóm mã câu hỏi riêng.</p></div>
-        </article>
-        <article><span className="summary-dot active" /><div><small>ĐANG SỬ DỤNG</small><strong>{loading ? "—" : activeCount}</strong></div></article>
-        <article><span className="summary-dot inactive" /><div><small>NGỪNG SỬ DỤNG</small><strong>{loading ? "—" : inactiveCount}</strong></div></article>
-        <article><span className="summary-letter">{nextOrder <= 26 ? kyHieuTheoThuTu(nextOrder) : "✓"}</span><div><small>KÝ HIỆU TIẾP THEO</small><strong>{nextOrder <= 26 ? `KQHT ${nextOrder}` : "Đã đủ 26"}</strong></div></article>
-      </section>
 
       <section className="panel table-panel outcomes-table-panel">
         <div className="table-toolbar">
@@ -267,7 +255,7 @@ export default function TrangKetQuaHocTap() {
                     <tr key={item.maKQHT}>
                       <td><span className="outcome-letter">{item.kyHieu}</span></td>
                       <td><div className="outcome-name"><strong>{item.tenKQHT}</strong><small>{item.moTa || "Chưa có mô tả"}</small></div></td>
-                      <td><code>{item.kyHieu}1-1</code><small className="code-caption">Mức độ 1 · câu 1</small></td>
+                      <td><code>{item.kyHieu}1-1</code></td>
                       <td><span className="order-chip">{item.thuTu.toString().padStart(2, "0")}</span></td>
                       <td><span className="muted-cell">{item.soCauHoi}</span></td>
                       <td><span className={`status-dot ${item.trangThai === "dang_su_dung" ? "status-active" : "status-disabled"}`}>{statusLabels[item.trangThai]}</span></td>
@@ -284,7 +272,7 @@ export default function TrangKetQuaHocTap() {
               </table>
             </div>
             {visibleItems.length === 0 && <div className="empty-state"><BieuTuong name="search" size={28} /><strong>Không có KQHT phù hợp</strong><span>Thử thay đổi từ khóa hoặc trạng thái.</span></div>}
-            <div className="table-footer"><span><strong>{visibleItems.length}</strong> / {items.length} kết quả học tập</span><span>Ký hiệu A–Z theo thứ tự 1–26</span></div>
+            <div className="table-footer"><span><strong>{visibleItems.length}</strong> / {items.length} kết quả học tập</span></div>
           </>
         )}
       </section>
@@ -302,7 +290,6 @@ export default function TrangKetQuaHocTap() {
                   <label className="dialog-field"><span>Ký hiệu</span><div className="readonly-code"><strong>{form.kyHieu || "—"}</strong><small>Tạo tự động theo thứ tự</small></div>{formErrors.kyHieu && <small className="field-error">{formErrors.kyHieu}</small>}</label>
                 </div>
                 <label className="dialog-field full"><span>Mô tả</span><textarea maxLength={1000} onChange={(event) => { setForm((current) => ({ ...current, moTa: event.target.value })); setFormErrors((current) => ({ ...current, moTa: undefined })); }} placeholder="Mô tả ngắn năng lực người học cần đạt…" rows={4} value={form.moTa} />{formErrors.moTa && <small className="field-error">{formErrors.moTa}</small>}<small className="field-counter">{form.moTa.length}/1000</small></label>
-                {!editing && <label className="dialog-field full"><span>Trạng thái</span><select onChange={(event) => setForm((current) => ({ ...current, trangThai: event.target.value as TrangThaiSuDung }))} value={form.trangThai}><option value="dang_su_dung">Đang sử dụng</option><option value="ngung_su_dung">Ngừng sử dụng</option></select></label>}
               </div>
               <footer><button className="button button-secondary" disabled={submitting} onClick={() => setShowForm(false)} type="button">Hủy</button><button className="button button-primary" disabled={submitting} type="submit">{submitting ? "Đang lưu…" : editing ? <><BieuTuong name="check" size={16} /> Lưu thay đổi</> : <><BieuTuong name="plus" size={16} /> Thêm KQHT</>}</button></footer>
             </form>

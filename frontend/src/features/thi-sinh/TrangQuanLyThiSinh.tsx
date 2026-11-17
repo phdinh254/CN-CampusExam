@@ -291,9 +291,9 @@ export default function TrangQuanLyThiSinh() {
             <div className="table-footer">
               <span>{loading && !data ? "Đang tải…" : <><strong>{data?.tongSoDong.toLocaleString("vi-VN") ?? 0}</strong> thí sinh</>}</span>
               <div className="pagination">
-                <button aria-label="Trang trước" disabled={loading || trang <= 1} onClick={() => setTrang((value) => value - 1)} type="button"><BieuTuong name="arrow-left" size={15} /></button>
+                <button aria-label="Trang trước" disabled={loading || trang <= 1} onClick={() => setTrang((value) => value - 1)} type="button"><BieuTuong name="chevron-left" size={15} /></button>
                 <span>Trang {data && data.tongSoTrang > 0 ? data.trang : 0} / {data?.tongSoTrang ?? 0}</span>
-                <button aria-label="Trang sau" disabled={loading || !data || trang >= data.tongSoTrang} onClick={() => setTrang((value) => value + 1)} type="button"><BieuTuong name="arrow-right" size={15} /></button>
+                <button aria-label="Trang sau" disabled={loading || !data || trang >= data.tongSoTrang} onClick={() => setTrang((value) => value + 1)} type="button"><BieuTuong name="chevron-right" size={15} /></button>
               </div>
             </div>
           </>
@@ -306,7 +306,7 @@ export default function TrangQuanLyThiSinh() {
             <header>
               <div>
                 <span className="dialog-icon"><BieuTuong name="users" size={20} /></span>
-                <div><small>HỒ SƠ THÍ SINH</small><h3 id="student-dialog-title">{editor.mode === "create" ? "Thêm thí sinh" : `Sửa hồ sơ ${editor.msts}`}</h3></div>
+                <div><h3 id="student-dialog-title">{editor.mode === "create" ? "Thêm thí sinh" : `Sửa hồ sơ ${editor.msts}`}</h3></div>
               </div>
               <button aria-label="Đóng" className="dialog-close" disabled={submitting} onClick={() => setEditor(null)} type="button"><BieuTuong name="x" size={19} /></button>
             </header>
@@ -321,14 +321,11 @@ export default function TrangQuanLyThiSinh() {
                       <label className="dialog-field"><span>Mã số thí sinh <em>*</em></span>
                         <input autoFocus={editor.mode === "create"} disabled={editor.mode === "edit"} maxLength={20} onChange={(event) => capNhatForm("msts", event.target.value)} placeholder="Ví dụ: SV20230082" value={form.msts} />
                         {formErrors.msts && <small className="field-error">{formErrors.msts}</small>}
-                        <small className="field-help">{editor.mode === "create" ? "Dùng làm tên đăng nhập; không đổi được sau khi tạo." : "Mã số là tên đăng nhập nên không đổi được."}</small>
+                        {editor.mode === "edit" && <small className="field-help">Không đổi được mã số.</small>}
                       </label>
                       <label className="dialog-field"><span>Ngày sinh <em>*</em></span>
                         <input max={homNay()} min="1900-01-01" onChange={(event) => capNhatForm("ngaySinh", event.target.value)} type="date" value={form.ngaySinh} />
                         {formErrors.ngaySinh && <small className="field-error">{formErrors.ngaySinh}</small>}
-                        {editor.mode === "create"
-                          ? <small className="field-help">Mật khẩu ban đầu là ngày sinh dạng ddMMyyyy.</small>
-                          : <small className="field-help">Đổi ngày sinh không đổi mật khẩu hiện tại.</small>}
                       </label>
                     </div>
                     <label className="dialog-field full"><span>Họ tên <em>*</em></span>

@@ -1,0 +1,158 @@
+/*
+ * Quy chuẩn tương tác toàn hệ thống: hover, focus, chuyển trạng thái, phản hồi.
+ * Nạp cuối cùng để thống nhất các quy tắc rải rác. Chỉ đổi màu, viền, độ mờ và dịch chuyển rất nhỏ;
+ * không phóng to, không nảy, không chuyển động lặp (trừ vòng xoay đang tải và skeleton).
+ */
+:root {
+  --dur-hover: 160ms;
+  --dur-trans: 200ms;
+  --dur-modal: 220ms;
+  --ease-out: cubic-bezier(.2, .8, .2, 1);
+  --focus-ring: 0 0 0 3px rgba(40, 120, 199, .14);
+}
+
+/* ---------- Hover và chuyển trạng thái của thành phần bấm được ---------- */
+
+.button, .row-action, .icon-button, .dialog-close, .pagination button, .row-link, .select-button,
+.candidate-logout, .cand-navbar a, .cand-navbar li > button, .cand-submenu a,
+.paper-tabs button, .segmented button, .matrix-chip, .matrix-preset, .monitor-stat, .quick-action,
+.stat-link, .cand-btn, .back-link, .exam-overview-link, .matrix-name strong, .success-banner button,
+.assign-page > .form-alert button {
+  transition:
+    color var(--dur-hover) ease,
+    background-color var(--dur-hover) ease,
+    border-color var(--dur-hover) ease,
+    box-shadow var(--dur-hover) ease,
+    opacity var(--dur-hover) ease;
+}
+
+/* Nút không nhảy lên khi hover; nhấn thì sẫm nhẹ để biết đã bấm. */
+.button:hover, .cand-btn:hover { transform: none; }
+.button:active:not(:disabled), .cand-btn:active:not(:disabled) { filter: brightness(.96); }
+.button:disabled, .cand-btn:disabled, .row-action:disabled, .pagination button:disabled {
+  cursor: not-allowed;
+  opacity: .55;
+}
+.button-secondary:hover:not(:disabled) { border-color: #B9C6D6; background: var(--canvas); }
+.pagination button:hover:not(:disabled) { border-color: #B9C6D6; color: var(--primary); background: var(--primary-soft); }
+.icon-button:hover { background: var(--primary-soft); }
+.candidate-logout:hover { color: var(--danger); }
+
+/* Thanh điều hướng quản trị: hover nền nhạt, mục đang chọn có gạch chân (đã có). */
+.cand-navbar a:hover:not(.active) { color: var(--primary); background: rgba(22, 59, 101, .05); }
+.cand-submenu a:hover { background: var(--primary-soft); }
+.cand-caret { display: inline-block; transition: transform var(--dur-trans) var(--ease-out); }
+.cand-navbar li > button[aria-expanded="true"] .cand-caret { transform: rotate(180deg); }
+
+/* Tab, nhóm nút chọn. */
+.paper-tabs button:hover:not(.active) { border-color: #B9C6D6; color: var(--ink); }
+
+/* Dòng bảng: nền nhạt khi di chuột (không đổi trên bảng chọn trong hộp thoại đã có màu riêng). */
+.data-table tbody tr { transition: background-color var(--dur-hover) ease; }
+.data-table tbody tr:hover { background: #F6F9FC; }
+.monitor-row-idle:hover { background: #FBEFD9; }
+
+/* ---------- Focus của trường nhập liệu ---------- */
+
+.search-box { transition: border-color var(--dur-hover) ease, box-shadow var(--dur-hover) ease; }
+.search-box:focus-within { border-color: #8DB8E4; box-shadow: var(--focus-ring); }
+.search-box input:focus, .search-box input:focus-visible { outline: 0; }
+
+.table-toolbar select, .assign-exam-select, .assign-pick-paper select, .matrix-input, .seat-input,
+.dialog-field input, .dialog-field textarea, .dialog-field select {
+  transition: border-color var(--dur-hover) ease, box-shadow var(--dur-hover) ease, background-color var(--dur-hover) ease;
+}
+.table-toolbar select:focus, .assign-exam-select:focus, .assign-pick-paper select:focus,
+.matrix-input:focus, .seat-input:focus {
+  outline: 0;
+  border-color: #8DB8E4;
+  box-shadow: var(--focus-ring);
+}
+.matrix-input:hover:not(:disabled):not(:focus), .table-toolbar select:hover, .assign-exam-select:hover { border-color: #B9C6D6; }
+
+/* Trường lỗi: viền đỏ rõ ràng, chữ lỗi hiện nhẹ. */
+.dialog-field:has(.field-error) input, .dialog-field:has(.field-error) textarea, .dialog-field:has(.field-error) select,
+.seat-input-error, input[aria-invalid="true"] {
+  border-color: #E8A3A3;
+}
+.dialog-field:has(.field-error) input:focus, .dialog-field:has(.field-error) textarea:focus {
+  box-shadow: 0 0 0 3px rgba(220, 76, 76, .12);
+}
+.field-error { animation: tt-fade var(--dur-trans) ease both; }
+
+/* ---------- Hộp thoại, menu, thông báo: chỉ hiệu ứng khi xuất hiện ---------- */
+
+@keyframes tt-fade { from { opacity: 0; } to { opacity: 1; } }
+@keyframes tt-rise { from { opacity: 0; transform: translateY(8px); } to { opacity: 1; transform: none; } }
+@keyframes tt-drop { from { opacity: 0; transform: translateY(-4px); } to { opacity: 1; transform: none; } }
+
+.dialog-backdrop { animation: tt-fade var(--dur-modal) ease both; }
+.dialog-backdrop > .form-dialog { animation: tt-rise var(--dur-modal) var(--ease-out) both; }
+.cand-submenu { animation: tt-drop 160ms var(--ease-out) both; }
+.success-banner, .page-stack > .form-alert, .matrix-savebar .field-error, .paper-result {
+  animation: tt-drop var(--dur-trans) var(--ease-out) both;
+}
+
+/* Dòng KQHT mới thêm vào ma trận: chỉ hiện dần, không đẩy bố cục. */
+.matrix-grid tbody tr { animation: tt-fade var(--dur-trans) ease both; }
+
+/* Thẻ chọn và thẻ thống kê bấm được. */
+.matrix-chip:active, .matrix-preset:active, .monitor-stat:active { filter: brightness(.97); }
+
+/* Nút đang xử lý (aria-busy): vòng xoay nhỏ trước chữ. */
+.button[aria-busy="true"] { cursor: progress; }
+.button[aria-busy="true"]::before {
+  content: "";
+  width: 14px;
+  height: 14px;
+  border: 2px solid currentColor;
+  border-right-color: transparent;
+  border-radius: 50%;
+  animation: session-spin .7s linear infinite;
+}
+.button[aria-busy="true"] > svg { display: none; }
+
+/* ---------- Biểu đồ: cột mọc lên một lần khi xuất hiện ---------- */
+
+@keyframes tt-grow { from { transform: scaleY(0); } to { transform: scaleY(1); } }
+.bar-track .bar { transform-origin: bottom; animation: tt-grow 420ms var(--ease-out) both; }
+
+/* ---------- Phòng thi: tối giản, phản hồi tức thì ---------- */
+
+.pt-answers label, .pt-grid button, .pt-btn, .pt-flag {
+  transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
+}
+.pt-answers label:hover:not(.chon) { background: #F8FAFC; }
+.pt-overlay { animation: tt-fade 140ms ease both; }
+.pt-save { transition: color var(--dur-trans) ease, background-color var(--dur-trans) ease; }
+
+/* ---------- Giảm chuyển động theo cài đặt hệ điều hành ---------- */
+
+@media (prefers-reduced-motion: reduce) {
+  *, *::before, *::after {
+    animation-duration: .01ms !important;
+    animation-iteration-count: 1 !important;
+    transition-duration: .01ms !important;
+    scroll-behavior: auto !important;
+  }
+  /* Vẫn cần thấy đang tải: quay chậm thay vì tắt hẳn. */
+  .button[aria-busy="true"]::before, .session-spinner { animation-duration: 2.4s !important; animation-iteration-count: infinite !important; }
+}
+
+/* ---------- Mũi tên thả xuống: chữ v thay cho tam giác ---------- */
+
+.cand-caret { display: inline-flex; align-items: center; line-height: 0; }
+.cand-caret svg { display: block; }
+
+select:not([multiple]):not([size]) {
+  appearance: none;
+  -webkit-appearance: none;
+  padding-right: 34px;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='16' viewBox='0 0 24 24' fill='none' stroke='%237F899A' stroke-width='2' stroke-linecap='round' stroke-linejoin='round'%3E%3Cpath d='m6 9 6 6 6-6'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 11px center;
+  background-size: 16px 16px;
+  cursor: pointer;
+}
+select:not([multiple]):not([size]):disabled { cursor: not-allowed; opacity: .7; }
+select::-ms-expand { display: none; }
