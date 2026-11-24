@@ -45,7 +45,6 @@ export default function TrangTaiKhoan() {
     <div className="student-dashboard">
       <section className="cand-page-head">
         <h1>Tài khoản cá nhân</h1>
-        <p>Hồ sơ và mật khẩu đăng nhập.</p>
       </section>
 
       {/* Thẻ định danh: chữ cái đầu, họ tên, mã số thí sinh, lớp. */}
@@ -68,7 +67,7 @@ export default function TrangTaiKhoan() {
               <BieuTuong name="alert" size={28} />
               <strong>Chưa tải được hồ sơ</strong>
               <span>{loi}</span>
-              <button className="cand-btn cand-btn-outline" onClick={() => setReloadKey((value) => value + 1)} type="button">Thử lại</button>
+              <button className="button button-secondary" onClick={() => setReloadKey((value) => value + 1)} type="button">Thử lại</button>
             </div>
           ) : !hoSo ? (
             <div aria-label="Đang tải hồ sơ" className="outcomes-loading">{[1, 2, 3].map((item) => <span key={item} />)}</div>
@@ -88,7 +87,7 @@ export default function TrangTaiKhoan() {
             <div><dt>Mật khẩu</dt><dd aria-label="Đã ẩn">••••••••</dd></div>
           </dl>
           <div className="cand-security-foot">
-            <Link className="cand-btn cand-btn-primary" to={DUONG_DAN_DOI_MAT_KHAU}><BieuTuong name="lock" size={16} /> Đổi mật khẩu</Link>
+            <Link className="button button-primary" to={DUONG_DAN_DOI_MAT_KHAU}><BieuTuong name="lock" size={16} /> Đổi mật khẩu</Link>
           </div>
         </section>
       </div>

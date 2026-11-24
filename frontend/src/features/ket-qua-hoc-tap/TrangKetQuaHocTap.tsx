@@ -213,7 +213,6 @@ export default function TrangKetQuaHocTap() {
       <section className="page-heading-row">
         <div>
           <h2>Danh mục KQHT</h2>
-          <p>Mục tiêu đánh giá dùng để phân loại và đặt mã câu hỏi.</p>
         </div>
         <div className="heading-actions">
           <button className="button button-primary" disabled={nextOrder > 26} onClick={openCreateForm} type="button">

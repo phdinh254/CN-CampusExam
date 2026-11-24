@@ -3,12 +3,13 @@ import { Link, NavLink, Outlet, useLocation } from "react-router-dom";
 
 import { BieuTuong } from "../components/BieuTuong";
 import { LogoCampusExam } from "../components/LogoCampusExam";
+import { MenuTaiKhoan } from "../components/MenuTaiKhoan";
 import { useXacThuc, useTaiKhoan } from "../features/xac-thuc/NhaCungCapXacThuc";
-import { chuCaiDau } from "../features/xac-thuc/tienIchXacThuc";
+import { chuCaiDau, DUONG_DAN_DOI_MAT_KHAU } from "../features/xac-thuc/tienIchXacThuc";
 import "../styles/cong-thi-sinh.css";
 
 /**
- * Menu cổng thí sinh: Trang chủ · Thi trực tuyến · Tài khoản cá nhân. Chi tiết kỳ thi và xác nhận
+ * Menu cổng thí sinh: Trang chủ · Thi trực tuyến. Tài khoản cá nhân mở từ menu avatar trên header. Chi tiết kỳ thi và xác nhận
  * dự thi mở từ danh sách kỳ thi được phân công, không có mục menu riêng.
  */
 const thiTrucTuyen = [
@@ -48,19 +49,23 @@ export default function BoCucThiSinh() {
       <header className="cand-header">
         <div className="cand-topbar">
           <Link aria-label="CampusExam — về trang chủ" className="cand-brand" to="/candidate">
-            <LogoCampusExam className="cand-logo" nen="toi" size={52} />
+            <LogoCampusExam className="cand-logo" nen="toi" size={36} />
             <span className="cand-brand-text">
               <strong>Campus<em className="brand-exam">Exam</em></strong>
               <span>Hệ thống thi trắc nghiệm</span>
             </span>
           </Link>
 
-          <div className="cand-user">
-            <span className="avatar avatar-teal">{chuCaiDau(taiKhoan.hoTen)}</span>
-            <span className="cand-user-name"><strong>{taiKhoan.hoTen}</strong><small>{taiKhoan.msts}</small></span>
-            <span aria-hidden="true" className="cand-user-divider" />
-            <button className="candidate-logout" onClick={() => void dangXuat()} title="Đăng xuất" type="button"><BieuTuong name="logout" size={16} /><span>Đăng xuất</span></button>
-          </div>
+          <MenuTaiKhoan
+            chuCai={chuCaiDau(taiKhoan.hoTen)}
+            dongPhu={`Mã số thí sinh: ${taiKhoan.msts}`}
+            hoTen={taiKhoan.hoTen}
+            muc={[
+              { to: "/candidate/tai-khoan", nhan: "Tài khoản cá nhân", icon: "users" },
+              { to: DUONG_DAN_DOI_MAT_KHAU, nhan: "Đổi mật khẩu", icon: "lock" },
+            ]}
+            onDangXuat={() => void dangXuat()}
+          />
         </div>
 
         {/* Thanh điều hướng ngang: các mục ngăn bằng vạch dọc mảnh, không bo góc. */}
@@ -85,7 +90,6 @@ export default function BoCucThiSinh() {
             </li>
             {/* Điện thoại: thanh cuộn ngang sẽ cắt dropdown, nên hiện thẳng các mục con. */}
             {thiTrucTuyen.map((item) => <li className="cand-nav-flat" key={item.to}><NavLink to={item.to}>{item.label}</NavLink></li>)}
-            <li><NavLink to="/candidate/tai-khoan"><BieuTuong name="users" size={16} /> Tài khoản cá nhân</NavLink></li>
           </ul>
         </nav>
       </header>

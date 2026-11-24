@@ -170,7 +170,6 @@ export default function TrangGanDeThiSinh() {
       <section className="page-heading-row">
         <div>
           <h2>Gán đề và thí sinh</h2>
-          <p>Gắn đề gốc, phân công thí sinh và số máy, rồi phát hành.</p>
         </div>
         <div className="heading-actions">
           <select aria-label="Chọn kỳ thi" className="assign-exam-select" onChange={(event) => { setThongBao(null); setParams(event.target.value ? { maKT: event.target.value } : {}); }} value={maKT ?? ""}>
@@ -219,7 +218,7 @@ export default function TrangGanDeThiSinh() {
 
           <div className="assign-grid">
             <section className="panel assign-step">
-              <header className="paper-panel-head"><h3>1. Đề gốc</h3><p>Mỗi đề gốc chỉ dùng cho một kỳ thi. Thí sinh nhận các đề con của đề này.</p></header>
+              <header className="paper-panel-head"><h3>1. Đề gốc</h3></header>
               {chiTiet.deGoc ? (
                 <div className="assign-paper">
                   <div className="assign-paper-code"><BieuTuong name="file" size={20} /><strong>{chiTiet.deGoc.maDeGocHienThi}</strong></div>
@@ -248,7 +247,7 @@ export default function TrangGanDeThiSinh() {
             </section>
 
             <section className="panel assign-step">
-              <header className="paper-panel-head"><h3>3. Phát hành</h3><p>Sau khi phát hành không đổi được đề, giờ thi và thời lượng.</p></header>
+              <header className="paper-panel-head"><h3>3. Phát hành</h3></header>
               {laNhap && kiemTra ? (
                 <>
                   <ul className="assign-checklist">

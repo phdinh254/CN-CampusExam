@@ -1,4 +1,4 @@
-import { useEffect, useMemo, useState } from "react";
+import { useCallback, useEffect, useMemo, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { BieuTuong } from "../../components/BieuTuong";
@@ -8,18 +8,23 @@ import { mauTrangThaiKyThi, nhanTrangThaiKyThi } from "../ky-thi/hienThiKyThi";
 import { cauHoiApi } from "../ngan-hang-cau-hoi/api";
 import { thiSinhApi } from "../thi-sinh/api";
 import { nhatKyApi } from "./api";
+import { KhungLuotThi } from "./KhungLuotThi";
+import { TrangThaiTrong } from "./TrangThaiTrong";
 
 /*
  * Mọi số liệu lấy từ API. Lượt thi tính theo số bài đã nộp (kể cả hệ thống thu) của các kỳ thi,
  * gom theo ngày hoặc giờ bắt đầu kỳ thi.
  */
 
-type KhoangLuotThi = "30_ngay" | "hom_nay";
 type LocKyThi = "tat_ca" | "dang_thi" | "da_phat_hanh";
 
 const MOT_NGAY = 86_400_000;
-const GIO_HOM_NAY = Array.from({ length: 11 }, (_, i) => 7 + i); // 7h–17h
-const SO_NHAT_KY = 8;
+const SO_NHAT_KY = 6;
+/** Giới hạn của API nhật ký. */
+const SO_NHAT_KY_TOI_DA = 50;
+/** Số dòng mỗi trang trong hộp thoại "Xem tất cả". */
+const SO_NHAT_KY_MOI_TRANG = 10;
+const SO_KY_THI = 5;
 
 const dinhDangNgay = new Intl.DateTimeFormat("vi-VN", { weekday: "long", day: "2-digit", month: "2-digit", year: "numeric" });
 const dinhDangGio = new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit" });
@@ -36,17 +41,6 @@ const NHAN_NHOM: Record<string, string> = {
   TAIKHOAN: "Tài khoản",
   KQHT: "KQHT",
 };
-
-const dauNgay = (ms: number) => { const d = new Date(ms); d.setHours(0, 0, 0, 0); return d.getTime(); };
-
-/** Mốc trên cùng của trục: 4 khoảng đều, mỗi khoảng là bước "đẹp" (1; 1,5; 2; 2,5; 3; 4; 5; 6; 8 × 10^k). */
-function mocTruc(lonNhat: number) {
-  if (lonNhat <= 4) return 4;
-  const tho = lonNhat / 4;
-  const bac = 10 ** Math.floor(Math.log10(tho));
-  const buoc = [1, 1.5, 2, 2.5, 3, 4, 5, 6, 8, 10].find((he) => he * bac >= tho)! * bac;
-  return buoc * 4;
-}
 
 function truocDay(ms: number, now: number) {
   const phut = Math.max(0, Math.round(ms / 60_000));
@@ -65,38 +59,78 @@ function conBao(ms: number) {
   return gio < 24 ? `${gio} giờ ${phut % 60 ? `${phut % 60} phút` : ""}`.trim() : `${Math.floor(gio / 24)} ngày`;
 }
 
-type Cot = { nhan: string; nhanDayDu: string; luot: number; homNay: boolean };
+const thoiDiem = new Intl.DateTimeFormat("vi-VN", { hour: "2-digit", minute: "2-digit", day: "2-digit", month: "2-digit" });
 
-function BieuDoLuotThi({ cot, khoang }: { cot: Cot[]; khoang: KhoangLuotThi }) {
-  const lonNhat = Math.max(0, ...cot.map((c) => c.luot));
-  const dinh = mocTruc(lonNhat);
-  const vach = [1, 0.75, 0.5, 0.25, 0];
-  const day = cot.length > 12;
-  const trong = lonNhat === 0;
+/** Bảng hoạt động: loại, nội dung, người thực hiện, thời gian. Dùng chung cho trang và hộp thoại "Xem tất cả". */
+function BangHoatDong({ ds, now }: { ds: NhatKy[]; now: number }) {
+  return (
+    <div className="tq-activity" role="table" aria-label="Hoạt động gần đây">
+      <div className="tq-activity-row tq-activity-head" role="row">
+        <span role="columnheader">Loại</span>
+        <span role="columnheader">Nội dung</span>
+        <span role="columnheader">Người thực hiện</span>
+        <span role="columnheader">Thời gian</span>
+      </div>
+      {ds.map((nk) => {
+        const luc = new Date(nk.thoiGian);
+        return (
+          <div className="tq-activity-row" key={nk.maNhatKy} role="row">
+            <span role="cell"><span className={`tq-activity-group nhom-${nk.nhom.toLowerCase()}`}>{NHAN_NHOM[nk.nhom] ?? nk.nhom}</span></span>
+            <div className="tq-activity-main" role="cell">
+              <strong>{nk.hanhDong}</strong>
+              {nk.chiTiet && <span title={nk.chiTiet}>{nk.chiTiet}</span>}
+            </div>
+            <span className="tq-activity-user" role="cell" title={nk.nguoiThucHien ?? undefined}>{nk.nguoiThucHien ?? "—"}</span>
+            <time dateTime={nk.thoiGian} role="cell" title={luc.toLocaleString("vi-VN")}>
+              {truocDay(now - luc.getTime(), now)}
+              <small>{thoiDiem.format(luc)}</small>
+            </time>
+          </div>
+        );
+      })}
+    </div>
+  );
+}
+
+function HopThoaiHoatDong({ now, onDong }: { now: number; onDong: () => void }) {
+  const [ds, setDs] = useState<NhatKy[] | null>(null);
+  const [loi, setLoi] = useState(false);
+  const [trang, setTrang] = useState(1);
+  const soTrang = ds ? Math.max(1, Math.ceil(ds.length / SO_NHAT_KY_MOI_TRANG)) : 1;
+  const dsTrang = ds?.slice((trang - 1) * SO_NHAT_KY_MOI_TRANG, trang * SO_NHAT_KY_MOI_TRANG) ?? [];
+
+  useEffect(() => {
+    const huy = new AbortController();
+    nhatKyApi.ganDay(SO_NHAT_KY_TOI_DA, huy.signal).then(setDs).catch(() => { if (!huy.signal.aborted) setLoi(true); });
+    const dongBangPhim = (event: KeyboardEvent) => { if (event.key === "Escape") onDong(); };
+    document.addEventListener("keydown", dongBangPhim);
+    return () => { huy.abort(); document.removeEventListener("keydown", dongBangPhim); };
+  }, [onDong]);
 
   return (
-    <div className="tq-chart" role="img" aria-label={`Biểu đồ lượt thi ${khoang === "30_ngay" ? "30 ngày qua" : "hôm nay"}, cao nhất ${dinhDangSo.format(lonNhat)} lượt`}>
-      <div aria-hidden="true" className="tq-chart-axis">
-        {vach.map((v) => <span key={v}>{dinhDangSo.format(Math.round(dinh * v))}</span>)}
-      </div>
-      <div className="tq-chart-plot">
-        <div aria-hidden="true" className="tq-chart-grid">{vach.map((v) => <i key={v} />)}</div>
-        <div className={`tq-chart-bars${day ? " is-dense" : ""}`}>
-          {cot.map((c, i) => {
-            const hienNhan = !day || c.homNay || (cot.length - 1 - i) % 5 === 0;
-            return (
-              <div className={`tq-col${c.homNay ? " is-today" : ""}${c.luot === lonNhat && lonNhat > 0 ? " is-peak" : ""}`} key={c.nhanDayDu}>
-                <div className="tq-col-track">
-                  {c.luot > 0 && <div className="tq-col-bar" style={{ height: `${(c.luot / dinh) * 100}%` }} />}
-                  <span className="tq-tip">{c.nhanDayDu}: <strong>{dinhDangSo.format(c.luot)}</strong> lượt</span>
-                </div>
-                <small>{hienNhan ? (c.homNay && day ? "Hôm nay" : c.nhan) : " "}</small>
-              </div>
-            );
-          })}
+    <div className="dialog-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget) onDong(); }}>
+      <section aria-labelledby="activity-dialog-title" aria-modal="true" className="form-dialog tq-activity-dialog" role="dialog">
+        <header>
+          <div><span className="dialog-icon"><BieuTuong name="activity" size={20} /></span><h3 id="activity-dialog-title">Hoạt động gần đây</h3></div>
+          <button aria-label="Đóng" autoFocus className="dialog-close" onClick={onDong} type="button"><BieuTuong name="x" size={19} /></button>
+        </header>
+        <div className="dialog-body">
+          {loi && <TrangThaiTrong bieuTuong="alert" tieuDe="Chưa tải được nhật ký" moTa="Vui lòng thử lại sau." />}
+          {!loi && ds === null && <div className="outcomes-loading" aria-label="Đang tải">{[1, 2, 3].map((x) => <span key={x} />)}</div>}
+          {ds && ds.length === 0 && <TrangThaiTrong bieuTuong="activity" tieuDe="Chưa có hoạt động nào" />}
+          {ds && ds.length > 0 && <BangHoatDong ds={dsTrang} now={now} />}
         </div>
-        {trong && <p className="tq-chart-empty">Chưa có lượt thi nào {khoang === "30_ngay" ? "trong 30 ngày qua" : "hôm nay"}.</p>}
-      </div>
+        {ds && ds.length > 0 && (
+          <footer className="tq-activity-dialog-foot">
+            <span>{ds.length} hoạt động gần nhất</span>
+            <div className="pagination">
+              <button aria-label="Trang trước" disabled={trang <= 1} onClick={() => setTrang((x) => x - 1)} type="button"><BieuTuong name="chevron-left" size={15} /></button>
+              <span>Trang {trang} / {soTrang}</span>
+              <button aria-label="Trang sau" disabled={trang >= soTrang} onClick={() => setTrang((x) => x + 1)} type="button"><BieuTuong name="chevron-right" size={15} /></button>
+            </div>
+          </footer>
+        )}
+      </section>
     </div>
   );
 }
@@ -108,7 +142,8 @@ export default function TongQuanQuanTri() {
   const [nhatKy, setNhatKy] = useState<NhatKy[] | null>(null);
   const [now, setNow] = useState(() => Date.now());
   const [loc, setLoc] = useState<LocKyThi>("tat_ca");
-  const [khoang, setKhoang] = useState<KhoangLuotThi>("30_ngay");
+  const [xemNhatKy, setXemNhatKy] = useState(false);
+  const dongNhatKy = useCallback(() => setXemNhatKy(false), []);
 
   useEffect(() => {
     const huy = new AbortController();
@@ -171,37 +206,6 @@ export default function TongQuanQuanTri() {
     },
   ];
 
-  // Biểu đồ: số bài đã nộp của các kỳ thi đang thi hoặc đã kết thúc, theo ngày (30 ngày) hoặc giờ (hôm nay).
-  const cot = useMemo<Cot[]>(() => {
-    const coBai = kyThi.filter((kt) => kt.trangThai === "dang_thi" || kt.trangThai === "da_ket_thuc");
-    const homNay = dauNgay(now);
-    if (khoang === "30_ngay") {
-      return Array.from({ length: 30 }, (_, i) => {
-        const ngay = homNay - (29 - i) * MOT_NGAY;
-        const luot = coBai
-          .filter((kt) => dauNgay(new Date(kt.tgBatDau).getTime()) === ngay)
-          .reduce((t, kt) => t + kt.soDaNop, 0);
-        const nhan = dinhDangNgayNgan.format(new Date(ngay));
-        return { nhan, nhanDayDu: nhan, luot, homNay: i === 29 };
-      });
-    }
-    const gioHienTai = new Date(now).getHours();
-    return GIO_HOM_NAY.map((gio) => {
-      const luot = coBai
-        .filter((kt) => {
-          const d = new Date(kt.tgBatDau);
-          const g = Math.min(Math.max(d.getHours(), GIO_HOM_NAY[0]), GIO_HOM_NAY[GIO_HOM_NAY.length - 1]);
-          return dauNgay(d.getTime()) === homNay && g === gio;
-        })
-        .reduce((t, kt) => t + kt.soDaNop, 0);
-      return { nhan: `${gio}h`, nhanDayDu: `${gio}:00–${gio + 1}:00`, luot, homNay: gio === gioHienTai };
-    });
-  }, [kyThi, khoang, now]);
-
-  const tongLuot = cot.reduce((t, c) => t + c.luot, 0);
-  const cotCaoNhat = cot.reduce<Cot | null>((max, c) => (c.luot > (max?.luot ?? 0) ? c : max), null);
-  const trungBinh = khoang === "30_ngay" ? tongLuot / 30 : null;
-
   const dsHienThi = [...dangThi, ...sapToi]
     .filter((kt) => loc === "tat_ca" || kt.trangThai === loc)
     .sort((a, b) => (a.trangThai === b.trangThai ? a.tgBatDau.localeCompare(b.tgBatDau) : a.trangThai === "dang_thi" ? -1 : 1));
@@ -211,7 +215,6 @@ export default function TongQuanQuanTri() {
       <section className="page-heading-row">
         <div>
           <h2>Tổng quan</h2>
-          <p>Câu hỏi, kỳ thi, thí sinh và hoạt động mới nhất.</p>
         </div>
         <div className="date-chip"><BieuTuong name="calendar" size={18} /><span><small>Hôm nay</small><strong>{dinhDangNgay.format(new Date(now))}</strong></span></div>
       </section>
@@ -230,43 +233,19 @@ export default function TongQuanQuanTri() {
       </section>
 
       <section className="tq-grid">
-        <article className="panel tq-panel">
-          <header className="tq-panel-head">
-            <div>
-              <h3>Lượt thi</h3>
-              <p>Số bài đã nộp, kể cả bài hệ thống tự thu</p>
-            </div>
-            <div aria-label="Khoảng thời gian" className="segmented" role="group">
-              {([["30_ngay", "30 ngày qua"], ["hom_nay", "Hôm nay"]] as const).map(([giaTri, nhan]) => (
-                <button aria-pressed={khoang === giaTri} key={giaTri} onClick={() => setKhoang(giaTri)} type="button">{nhan}</button>
-              ))}
-            </div>
-          </header>
-          <dl className="tq-chart-summary">
-            <div><dt>Tổng</dt><dd>{dinhDangSo.format(tongLuot)}</dd></div>
-            {trungBinh !== null && <div><dt>Trung bình / ngày</dt><dd>{dinhDangPhanTram.format(trungBinh)}</dd></div>}
-            <div><dt>Cao nhất</dt><dd>{cotCaoNhat ? <>{dinhDangSo.format(cotCaoNhat.luot)}<small> · {cotCaoNhat.nhanDayDu}</small></> : "—"}</dd></div>
-          </dl>
-          {dsKyThi ? <BieuDoLuotThi cot={cot} khoang={khoang} /> : <div className="outcomes-loading" aria-label="Đang tải">{[1, 2].map((x) => <span key={x} />)}</div>}
-        </article>
+        <KhungLuotThi kyThi={dsKyThi} now={now} />
 
         <article className="panel tq-panel">
           <header className="tq-panel-head">
-            <div>
-              <h3>Kỳ thi</h3>
-              <p>Đang diễn ra và sắp diễn ra trong 7 ngày</p>
-            </div>
-            <Link className="tq-more" to="/admin/exams">Xem tất cả <BieuTuong name="chevron-right" size={15} /></Link>
-          </header>
-          <div className="tq-filter">
+            <h3>Kỳ thi</h3>
             <div aria-label="Lọc theo trạng thái" className="segmented" role="group">
               {([["tat_ca", `Tất cả (${dangThi.length + sapToi.length})`], ["dang_thi", `Đang thi (${dangThi.length})`], ["da_phat_hanh", `Sắp diễn ra (${sapToi.length})`]] as const).map(([giaTri, nhan]) => (
                 <button aria-pressed={loc === giaTri} key={giaTri} onClick={() => setLoc(giaTri)} type="button">{nhan}</button>
               ))}
             </div>
-          </div>
+          </header>
           <ul className="tq-exams">
-            {dsHienThi.map((kt) => {
+            {dsHienThi.slice(0, SO_KY_THI).map((kt) => {
               const batDau = new Date(kt.tgBatDau).getTime();
               const ketThuc = batDau + kt.thoiLuong * 60_000;
               const dang = kt.trangThai === "dang_thi";
@@ -293,42 +272,36 @@ export default function TongQuanQuanTri() {
             })}
           </ul>
           {dsKyThi && dsHienThi.length === 0 && (
-            <div className="tq-empty">
-              <strong>{loc === "dang_thi" ? "Không có kỳ thi nào đang diễn ra" : "Chưa có kỳ thi nào trong 7 ngày tới"}</strong>
-              <Link className="button button-secondary" to="/admin/exams">Tạo kỳ thi</Link>
-            </div>
+            <TrangThaiTrong
+              bieuTuong="calendar"
+              moTa="Tạo kỳ thi, gắn đề và thí sinh rồi phát hành để kỳ thi xuất hiện tại đây."
+              tieuDe={loc === "dang_thi" ? "Không có kỳ thi đang diễn ra" : loc === "da_phat_hanh" ? "Không có kỳ thi trong 7 ngày tới" : "Chưa có kỳ thi đang hoặc sắp diễn ra"}
+            >
+              <Link className="button button-secondary" to="/admin/exams"><BieuTuong name="plus" size={16} /> Tạo kỳ thi</Link>
+            </TrangThaiTrong>
           )}
           {!dsKyThi && <div className="outcomes-loading" aria-label="Đang tải">{[1, 2, 3].map((x) => <span key={x} />)}</div>}
+          {dsHienThi.length > 0 && (
+            <Link className="tq-more tq-panel-foot" to="/admin/exams">
+              {dsHienThi.length > SO_KY_THI ? `Xem tất cả (còn ${dsHienThi.length - SO_KY_THI} kỳ thi)` : "Xem tất cả kỳ thi"} <BieuTuong name="chevron-right" size={15} />
+            </Link>
+          )}
         </article>
       </section>
 
       <article className="panel tq-panel">
         <header className="tq-panel-head">
-          <div>
-            <h3>Hoạt động gần đây</h3>
-            <p>Thao tác quản trị mới nhất, không gồm đăng nhập</p>
-          </div>
+          <h3>Hoạt động gần đây</h3>
+          {nhatKy && nhatKy.length > 0 && (
+            <button className="tq-more tq-more-button" onClick={() => setXemNhatKy(true)} type="button">Xem tất cả <BieuTuong name="chevron-right" size={15} /></button>
+          )}
         </header>
         {nhatKy === null && <div className="outcomes-loading" aria-label="Đang tải">{[1, 2].map((x) => <span key={x} />)}</div>}
-        {nhatKy && nhatKy.length === 0 && <div className="tq-empty"><strong>Chưa có hoạt động nào</strong></div>}
-        {nhatKy && nhatKy.length > 0 && (
-          <ol className="tq-activity">
-            {nhatKy.map((nk) => (
-              <li key={nk.maNhatKy}>
-                <span className="tq-activity-group">{NHAN_NHOM[nk.nhom] ?? nk.nhom}</span>
-                <div className="tq-activity-main">
-                  <strong>{nk.hanhDong}</strong>
-                  {nk.chiTiet && <span title={nk.chiTiet}>{nk.chiTiet}</span>}
-                </div>
-                <time dateTime={nk.thoiGian} title={new Date(nk.thoiGian).toLocaleString("vi-VN")}>
-                  {truocDay(now - new Date(nk.thoiGian).getTime(), now)}
-                  {nk.nguoiThucHien && <small>{nk.nguoiThucHien}</small>}
-                </time>
-              </li>
-            ))}
-          </ol>
-        )}
+        {nhatKy && nhatKy.length === 0 && <TrangThaiTrong bieuTuong="activity" moTa="Các thao tác quản trị sẽ được ghi lại tại đây." tieuDe="Chưa có hoạt động nào" />}
+        {nhatKy && nhatKy.length > 0 && <BangHoatDong ds={nhatKy} now={now} />}
       </article>
+
+      {xemNhatKy && <HopThoaiHoatDong now={now} onDong={dongNhatKy} />}
     </div>
   );
 }

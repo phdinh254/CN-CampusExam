@@ -94,7 +94,6 @@ export default function TrangMaTranDe() {
       <section className="page-heading-row">
         <div>
           <h2>Ma trận đề</h2>
-          <p>Số câu theo KQHT và tỷ lệ dễ, trung bình, khó.</p>
         </div>
         <div className="heading-actions">
           <button className="button button-primary" onClick={() => setShowForm(true)} type="button"><BieuTuong name="plus" size={17} /> Tạo ma trận</button>

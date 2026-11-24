@@ -65,7 +65,6 @@ export default function TrangSinhDe() {
       <section className="page-heading-row">
         <div>
           <h2>Sinh đề thi</h2>
-          <p>Chọn câu theo ma trận, ưu tiên câu ít dùng, rồi hoán vị thành đề con.</p>
         </div>
       </section>
 
@@ -78,7 +77,7 @@ export default function TrangSinhDe() {
       ) : (
         <div className="paper-layout">
         <form className="panel paper-generate" noValidate onSubmit={handleSubmit}>
-          <header className="paper-panel-head"><h3>Thông tin sinh đề</h3><p>Chọn ma trận và số đề con cần tạo.</p></header>
+          <header className="paper-panel-head"><h3>Thông tin sinh đề</h3></header>
           {submitError && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{submitError}</span></div>}
           <label className="dialog-field"><span>Ma trận đề <em>*</em></span>
             <select onChange={(event) => { setMaMT(event.target.value); setLoiTruong({}); }} value={maMT}>
@@ -105,7 +104,7 @@ export default function TrangSinhDe() {
         </form>
 
         <aside className="panel paper-summary" aria-live="polite">
-          <header className="paper-panel-head"><h3>Tóm tắt</h3><p>{maTranChon ? "Ma trận được dùng để sinh đề." : "Chọn ma trận để xem trước."}</p></header>
+          <header className="paper-panel-head"><h3>Tóm tắt</h3></header>
           {maTranChon ? (
             <>
               <strong className="paper-summary-name">{maTranChon.tenMT}</strong>

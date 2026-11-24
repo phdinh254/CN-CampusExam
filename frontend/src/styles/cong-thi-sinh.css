@@ -5,49 +5,45 @@
 /* Điện thoại: menu xuống hàng thứ hai, cuộn ngang nếu thiếu chỗ. */
 
 /* Trang tổng quan thí sinh */
-.student-dashboard { display: grid; gap: 23px; }.student-welcome { display: flex; align-items: flex-end; justify-content: space-between; }.student-welcome .eyebrow { color: var(--primary); }.student-welcome h1 { margin: 8px 0 6px; font-size: 22px; letter-spacing: -.04em; }.student-welcome p { margin: 0; color: var(--muted); font-size: 12px; }.student-semester { display: grid; gap: 5px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }.student-semester small { color: #929bac; font-size: 12px; font-weight: 800; letter-spacing: .08em; }.student-semester strong { font-size: 12px; }.next-exam-date { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(32,43,60,.18); border-right: 1px solid rgba(255,255,255,.12); }.next-exam-date span,.next-exam-date small { color: #D6E6F6; font-size: 12px; font-weight: 800; letter-spacing: .1em; }.next-exam-date strong { margin: 6px 0; font-size: 48px; line-height: 1; }.exam-facts { display: flex; gap: 22px; margin-top: 15px; }.exam-facts span { display: flex; align-items: center; gap: 7px; color: #D6E6F6; font-size: 12px; }.student-exam-list { padding: 0 20px 9px; }.student-exam-item { display: grid; grid-template-columns: 44px minmax(170px,1fr) auto auto 16px; align-items: center; gap: 14px; padding: 13px 0; border-top: 1px solid #eef1f5; }.compact-date { display: grid; place-items: center; width: 42px; height: 45px; color: #2878C7; background: #efeeff; border-radius: 8px; }.compact-date.purple { color: #2878C7; background: #EEF4FB; }.compact-date.orange { color: #E9A23B; background: #FDF5E8; }.compact-date strong { font-size: 14px; }.compact-date small { font-size: 12px; font-weight: 800; }.student-exam-item > div:nth-child(2) { display: grid; gap: 4px; }.student-exam-item > div:nth-child(2) strong { font-size: 12px; }.student-exam-item > div:nth-child(2) span { color: #949dad; font-size: 12px; }.location-pill { display: flex; align-items: center; gap: 5px; color: #778294; font-size: 12px; }.score-circle { display: grid; place-items: center; width: 39px; height: 39px; border: 3px solid #E9A23B; border-radius: 50%; color: #E9A23B; font-size: 12px; font-weight: 800; }.score-circle.high { color: #0F7A4E; border-color: #8BD3B4; }.grade-badge { padding: 4px 8px; color: #0F7A4E; background: #ECF8F2; border-radius: 8px; font-size: 12px; font-weight: 800; }.grade-badge.good { color: #E9A23B; background: #FDF5E8; }.score-ring { display: grid; place-items: center; width: 62px; height: 62px; border: 6px solid #EEF4FB; border-top-color: var(--primary); border-right-color: var(--primary); border-radius: 50%; color: var(--primary); font-size: 12px; font-weight: 800; }.semester-stats { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }.semester-stats div { display: grid; gap: 3px; padding-top: 14px; }.semester-stats div + div { padding-left: 18px; border-left: 1px solid var(--line); }.semester-stats strong { font-size: 16px; }.semester-stats span { color: #939cad; font-size: 12px; }
+.student-dashboard { display: grid; gap: 23px; }.student-welcome { display: flex; align-items: flex-end; justify-content: space-between; }.student-welcome .eyebrow { color: var(--primary); }.student-welcome h1 { margin: 8px 0 6px; font-size: var(--fs-2xl); letter-spacing: -.04em; }.student-welcome p { margin: 0; color: var(--muted); font-size: var(--fs-xs); }.student-semester { display: grid; gap: 5px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 9px; background: #fff; }.student-semester small { color: var(--muted); font-size: var(--fs-xs); font-weight: 800; letter-spacing: .08em; }.student-semester strong { font-size: var(--fs-xs); }.next-exam-date { display: flex; flex-direction: column; align-items: center; justify-content: center; background: rgba(32,43,60,.18); border-right: 1px solid rgba(255,255,255,.12); }.next-exam-date span,.next-exam-date small { color: #D6E6F6; font-size: var(--fs-xs); font-weight: 800; letter-spacing: .1em; }.next-exam-date strong { margin: 6px 0; font-size: var(--fs-display); line-height: 1; }.exam-facts { display: flex; gap: 22px; margin-top: 15px; }.exam-facts span { display: flex; align-items: center; gap: 7px; color: #D6E6F6; font-size: var(--fs-xs); }.student-exam-list { padding: 0 20px 9px; }.student-exam-item { display: grid; grid-template-columns: 44px minmax(170px,1fr) auto auto 16px; align-items: center; gap: 14px; padding: 13px 0; border-top: 1px solid #eef1f5; }.compact-date { display: grid; place-items: center; width: 42px; height: 45px; color: #2878C7; background: #efeeff; border-radius: 8px; }.compact-date.purple { color: #2878C7; background: #EEF4FB; }.compact-date.orange { color: var(--warning-text); background: #FDF5E8; }.compact-date strong { font-size: var(--fs-base); }.compact-date small { font-size: var(--fs-xs); font-weight: 800; }.student-exam-item > div:nth-child(2) { display: grid; gap: 4px; }.student-exam-item > div:nth-child(2) strong { font-size: var(--fs-xs); }.student-exam-item > div:nth-child(2) span { color: var(--muted); font-size: var(--fs-xs); }.location-pill { display: flex; align-items: center; gap: 5px; color: var(--muted); font-size: var(--fs-xs); }.score-circle { display: grid; place-items: center; width: 39px; height: 39px; border: 3px solid #E9A23B; border-radius: 50%; color: var(--warning-text); font-size: var(--fs-xs); font-weight: 800; }.score-circle.high { color: #0F7A4E; border-color: #8BD3B4; }.grade-badge { padding: 4px 8px; color: #0F7A4E; background: #ECF8F2; border-radius: 8px; font-size: var(--fs-xs); font-weight: 800; }.grade-badge.good { color: var(--warning-text); background: #FDF5E8; }.score-ring { display: grid; place-items: center; width: 62px; height: 62px; border: 6px solid #EEF4FB; border-top-color: var(--primary); border-right-color: var(--primary); border-radius: 50%; color: var(--primary); font-size: var(--fs-xs); font-weight: 800; }.semester-stats { display: grid; grid-template-columns: 1fr 1fr; border-top: 1px solid var(--line); }.semester-stats div { display: grid; gap: 3px; padding-top: 14px; }.semester-stats div + div { padding-left: 18px; border-left: 1px solid var(--line); }.semester-stats strong { font-size: var(--fs-md); }.semester-stats span { color: var(--muted); font-size: var(--fs-xs); }
 
 .cand-exam-list { margin: 0; padding: 0 20px 8px; list-style: none; }
 .cand-exam-list li { display: flex; align-items: center; gap: 14px; padding: 14px 0; border-top: 1px solid #EEF1F5; }
 .cand-date { display: grid; flex: none; place-items: center; width: 72px; padding: 6px 0; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); }
-.cand-date small { color: var(--muted); white-space: nowrap; font-size: 11px; font-weight: 600; letter-spacing: .04em; }
-.cand-date strong { color: var(--primary); font-size: 20px; line-height: 1.2; }
+.cand-date small { color: var(--muted); white-space: nowrap; font-size: var(--fs-xs); font-weight: 600; letter-spacing: .04em; }
+.cand-date strong { color: var(--primary); font-size: var(--fs-xl); line-height: var(--lh-tight); }
 .cand-schedule-copy { display: grid; flex: 1; gap: 3px; min-width: 0; }
-.cand-schedule-copy strong { overflow: hidden; font-size: 15px; text-overflow: ellipsis; white-space: nowrap; }
-.cand-schedule-copy span { color: var(--muted); font-size: 13px; }
-.cand-empty { justify-content: center; color: var(--muted); font-size: 14px; }
+.cand-schedule-copy strong { overflow: hidden; font-size: var(--fs-md); text-overflow: ellipsis; white-space: nowrap; }
+.cand-schedule-copy span { color: var(--muted); font-size: var(--fs-sm); }
+.cand-empty { justify-content: center; color: var(--muted); font-size: var(--fs-base); }
 
-.cand-status { display: inline-flex; flex: none; align-items: center; padding: 3px 8px; border-radius: 4px; font-size: 12px; font-weight: 600; white-space: nowrap; }
+.cand-status { display: inline-flex; flex: none; align-items: center; padding: 3px 8px; border-radius: 4px; font-size: var(--fs-xs); font-weight: 600; white-space: nowrap; }
 .tt-sap-thi { color: var(--primary); background: var(--blue-soft); }
 .tt-dang-mo { color: #0F7A4E; background: var(--success-soft); }
 .tt-da-nop { color: var(--muted); background: #F0F2F5; }
 .tt-vang { color: #A93333; background: var(--danger-soft); }
 
 .cand-notice { display: flex; gap: 12px; margin: 0 20px 20px; padding: 14px; border: 1px solid #F2CD94; border-radius: 8px; background: var(--warning-soft); }
-.cand-notice strong { display: block; margin-bottom: 4px; font-size: 14px; }
-.cand-notice p { margin: 0; color: #4A5260; font-size: 14px; line-height: 1.55; }
+.cand-notice strong { display: block; margin-bottom: 4px; font-size: var(--fs-base); }
+.cand-notice p { margin: 0; color: #4A5260; font-size: var(--fs-base); line-height: var(--lh-normal); }
 
 /* Các trang của luồng dự thi */
 .cand-page-head h1 { margin: 0; font-size: var(--fs-page-title); letter-spacing: -.02em; }
-.cand-page-head p { margin: 6px 0 0; color: var(--muted); font-size: 14px; }
-.cand-back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px; color: var(--muted); font-size: 14px; font-weight: 500; }
+.cand-page-head p { margin: 6px 0 0; color: var(--muted); font-size: var(--fs-base); }
+.cand-back { display: inline-flex; align-items: center; gap: 6px; margin-bottom: 10px; color: var(--muted); font-size: var(--fs-base); font-weight: 500; }
 .cand-back:hover { color: var(--primary); }
 
 .cand-facts { display: grid; margin: 0; padding: 0 20px 10px; }
 .cand-facts > div { display: grid; grid-template-columns: 130px minmax(0, 1fr); gap: 12px; padding: 11px 0; border-top: 1px solid #EEF1F5; }
-.cand-facts dt { color: var(--muted); font-size: 14px; }
-.cand-facts dd { margin: 0; font-size: 14px; font-weight: 600; }
-.cand-rules { display: grid; gap: 10px; margin: 0; padding: 0 20px 20px 40px; font-size: 14px; line-height: 1.55; }
+.cand-facts dt { color: var(--muted); font-size: var(--fs-base); }
+.cand-facts dd { margin: 0; font-size: var(--fs-base); font-weight: 600; }
+.cand-rules { display: grid; gap: 10px; margin: 0; padding: 0 20px 20px 40px; font-size: var(--fs-base); line-height: var(--lh-normal); }
 .cand-rules li::marker { color: var(--primary); font-weight: 700; }
-.cand-action-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--muted); font-size: 14px; }
+.cand-action-bar { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 14px; padding: 16px 20px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); color: var(--muted); font-size: var(--fs-base); }
 .cand-agree { display: flex; flex: 1; align-items: flex-start; gap: 10px; min-width: 260px; color: var(--ink); cursor: pointer; }
 .cand-agree input { width: 18px; height: 18px; margin: 1px 0 0; accent-color: var(--primary); }
-.cand-btn { display: inline-flex; flex: none; align-items: center; justify-content: center; gap: 8px; min-height: 40px; padding: 0 18px; border: 0; border-radius: 6px; font: inherit; font-size: 14px; font-weight: 600; cursor: pointer; }
-.cand-btn-primary { color: #fff; background: var(--primary); }
-.cand-btn-primary:hover:not(:disabled) { background: var(--primary-hover); }
-.cand-btn:disabled { opacity: .45; cursor: not-allowed; }
-.cand-exam-list .cand-btn { min-height: 32px; padding: 0 12px; font-size: 13px; }
-.cand-score { color: var(--primary); font-size: 16px; }
+.cand-action-bar .button, .cand-exam-list .button { flex: none; }
+.cand-score { color: var(--primary); font-size: var(--fs-md); }
 .cand-muted { color: var(--muted); }
 .cand-empty-panel { padding: 32px 20px; color: var(--muted); text-align: center; }
 
@@ -58,7 +54,7 @@
   .cand-exam-list li .cand-status { margin-left: 0; }
   .cand-exam-list li > a { margin-left: auto; }
   .cand-facts > div { grid-template-columns: 110px minmax(0, 1fr); }
-  .cand-action-bar .cand-btn { width: 100%; }
+  .cand-action-bar .button { width: 100%; }
 }
 .cand-step-links { display: flex; flex-wrap: wrap; gap: 4px 14px; }
 
@@ -66,63 +62,70 @@
  * Tiêu đề trang 32–36 · Menu 13–14 · Tiêu đề khu vực 14–16 · Tên thí sinh 13–14
  * Hướng dẫn, nhãn bước, lưu ý 12–13 · Thông tin đăng xuất 11–12 */
 .student-shell .cand-page-head h1,
-.student-shell .student-welcome h1 { font-size: 32px; line-height: 1.2; }
+.student-shell .student-welcome h1 { font-size: var(--fs-4xl); line-height: var(--lh-tight); }
 
-.student-shell .panel-heading h3 { font-size: 16px; }
+.student-shell .panel-heading h3 { font-size: var(--fs-md); }
 
-.student-shell .cand-notice strong,.student-shell .cand-notice p,.student-shell .cand-rules { font-size: 13px; }
+.student-shell .cand-notice strong,.student-shell .cand-notice p,.student-shell .cand-rules { font-size: var(--fs-sm); }
 
-.candidate-logout { display: inline-flex; align-items: center; gap: 6px; margin-left: 6px; padding: 6px 10px; border: 1px solid var(--line); border-radius: 6px; color: var(--muted); background: var(--surface); font: inherit; font-size: 12px; font-weight: 500; cursor: pointer; }
-.candidate-logout:hover { border-color: #B9C6D6; color: var(--ink); }
 
 @media (max-width: 620px) {
-  .student-shell .cand-page-head h1, .student-shell .student-welcome h1 { font-size: 26px; }
-  .candidate-logout { padding: 6px 8px; }
-  .candidate-logout span { position: absolute; width: 1px; height: 1px; overflow: hidden; clip: rect(0 0 0 0); white-space: nowrap; }
+  .student-shell .cand-page-head h1, .student-shell .student-welcome h1 { font-size: var(--fs-2xl); }
 }
 
 /* ===== Trang chủ thí sinh: chào mừng (trái) · hướng dẫn và lưu ý (phải) ===== */
 .cand-home { display: grid; grid-template-columns: minmax(0, 1fr) minmax(0, 1.25fr); gap: 20px; align-items: stretch; }
 .cand-welcome { display: flex; flex-direction: column; padding: 28px; }
-.cand-welcome-date { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px; color: var(--primary); font-size: 14px; font-weight: 600; }
-.student-shell .cand-welcome h1 { margin: 0 0 8px; font-size: 32px; line-height: 1.2; letter-spacing: -.02em; }
+.cand-welcome-date { display: inline-flex; align-items: center; gap: 8px; margin: 0 0 14px; color: var(--primary); font-size: var(--fs-base); font-weight: 600; }
+.student-shell .cand-welcome h1 { margin: 0 0 8px; font-size: var(--fs-4xl); line-height: var(--lh-tight); letter-spacing: -.02em; }
 
 .cand-welcome .cand-facts { padding: 0; }
 .cand-welcome .cand-facts > div:last-child { border-bottom: 1px solid #EEF1F5; }
 
-.student-shell .cand-guide .panel-heading h2 { margin: 0; font-size: 16px; }
+.student-shell .cand-guide .panel-heading h2 { margin: 0; font-size: var(--fs-md); }
 
-.cand-guide .cand-notice ul { margin: 0; padding-left: 18px; color: #4A5260; font-size: 13px; line-height: 1.6; }
+.cand-guide .cand-notice ul { margin: 0; padding-left: 18px; color: #4A5260; font-size: var(--fs-sm); line-height: var(--lh-relaxed); }
 
 @media (max-width: 900px) {
   .cand-home { grid-template-columns: 1fr; }
 }
 @media (max-width: 620px) {
   .cand-welcome { padding: 20px; }
-  .student-shell .cand-welcome h1 { font-size: 26px; }
+  .student-shell .cand-welcome h1 { font-size: var(--fs-2xl); }
 
 }
 
 /* ===== Header thí sinh: tầng trên (logo, tài khoản) và thanh điều hướng ngang có vạch ngăn dọc ===== */
 .cand-header { position: sticky; top: 0; z-index: 20; background: var(--surface); }
 .cand-topbar { display: flex; align-items: center; justify-content: space-between; gap: 16px; min-height: 64px; padding: 0 max(24px, calc((100vw - 1160px) / 2)); }
-.cand-user { display: flex; align-items: center; gap: 10px; min-width: 0; }
-.cand-user-name { display: grid; gap: 2px; min-width: 0; }
-.cand-user-name strong { font-size: 14px; }
-.cand-user-name small { color: var(--muted); font-size: 12px; }
-.cand-user-divider { width: 1px; height: 26px; background: rgba(22,59,101,.18); }
-.cand-header .candidate-logout { margin-left: 0; border: 0; border-radius: 0; background: transparent; }
+.cand-user { position: relative; display: flex; align-items: center; min-width: 0; }
+
+/* Cụm tài khoản: avatar + mũi tên, nhấn mở menu (họ tên, liên kết tài khoản, đăng xuất). */
+.cand-user-btn { display: inline-flex; align-items: center; gap: 6px; min-height: 40px; padding: 4px 6px 4px 4px; border: 0; border-radius: 8px; color: rgba(255,255,255,.85); background: transparent; cursor: pointer; }
+.cand-user-btn:hover, .cand-user-btn[aria-expanded="true"] { color: #fff; background: rgba(255,255,255,.1); }
+.cand-user-btn .avatar { width: 32px; height: 32px; border-radius: 8px; font-size: var(--fs-sm); }
+.cand-user-btn[aria-expanded="true"] .cand-caret { transform: rotate(180deg); }
+.cand-user-btn:focus-visible { outline: 2px solid #fff; outline-offset: 2px; }
+.cand-user-menu { position: absolute; top: calc(100% + 6px); right: 0; z-index: 40; display: grid; min-width: 240px; padding: 6px 0; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); background: var(--surface); box-shadow: 0 10px 28px rgba(32,43,60,.14); animation: tt-drop 160ms var(--ease-out) both; }
+.cand-user-menu-head { display: grid; gap: 2px; padding: 8px 16px 12px; border-bottom: 1px solid var(--line); margin-bottom: 6px; }
+.cand-user-menu-head strong { font-size: var(--fs-base); }
+.cand-user-menu-head small { color: var(--muted); font-size: var(--fs-xs); }
+.cand-user-menu a, .cand-user-menu-logout { display: flex; align-items: center; gap: 10px; min-height: 40px; padding: 0 16px; border: 0; color: var(--ink); background: transparent; font: inherit; font-size: var(--fs-base); text-align: left; cursor: pointer; }
+.cand-user-menu a:hover, .cand-user-menu-logout:hover { background: var(--primary-soft); }
+.cand-user-menu-logout { margin-top: 6px; border-top: 1px solid var(--line); color: var(--danger); }
+.cand-user-menu-logout:hover { background: var(--danger-soft); }
+.cand-user-menu :focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
 
 .cand-navbar { border-top: 1px solid var(--line); border-bottom: 1px solid var(--line); background: #F3F7FC; }
 .cand-navbar ul { display: flex; align-items: stretch; margin: 0; padding: 0 max(24px, calc((100vw - 1160px) / 2)); list-style: none; }
 .cand-navbar li { position: relative; display: flex; }
 .cand-navbar li + li::before { content: ""; position: absolute; top: 50%; left: 0; width: 1px; height: 18px; transform: translateY(-50%); background: rgba(22,59,101,.2); }
-.cand-navbar a, .cand-navbar li > button { position: relative; display: flex; align-items: center; gap: 7px; min-height: 46px; padding: 0 22px; border: 0; border-radius: 0; color: #4A5260; background: transparent; font: inherit; font-size: 14px; font-weight: 500; white-space: nowrap; cursor: pointer; }
+.cand-navbar a, .cand-navbar li > button { position: relative; display: flex; align-items: center; gap: 7px; min-height: 44px; padding: 0 20px; border: 0; border-radius: 0; color: #4A5260; background: transparent; font: inherit; font-size: var(--fs-base); font-weight: 500; white-space: nowrap; cursor: pointer; }
 .cand-navbar a:hover, .cand-navbar li > button:hover { color: var(--primary); background: rgba(22,59,101,.05); }
 .cand-navbar a.active, .cand-navbar li > button.active { color: var(--primary); font-weight: 600; }
 .cand-navbar a.active::after, .cand-navbar li > button.active::after { content: ""; position: absolute; right: 0; bottom: -1px; left: 0; height: 3px; background: var(--primary); }
 .cand-navbar :focus-visible { outline: 2px solid var(--blue); outline-offset: -2px; }
-.cand-caret { font-size: 12px; }
+.cand-caret { font-size: var(--fs-xs); }
 .cand-nav-flat { display: none !important; }
 .cand-submenu { position: absolute; top: 100%; left: 0; z-index: 30; display: grid; min-width: 230px; border: 1px solid var(--line); background: var(--surface); box-shadow: 0 8px 20px rgba(32,43,60,.08); }
 .cand-submenu a { min-height: 42px; padding: 0 16px; border-bottom: 1px solid #EEF1F5; }
@@ -131,8 +134,8 @@
 
 @media (max-width: 620px) {
   .cand-topbar { padding: 0 14px; }
-  .cand-user-name, .cand-user-divider { display: none; }
-  .cand-navbar ul { padding: 0; overflow-x: auto; }
+  .cand-navbar ul { padding: 0; overflow-x: auto; scrollbar-width: none; }
+  .cand-navbar ul::-webkit-scrollbar { display: none; }
   .cand-nav-dropdown { display: none !important; }
   .cand-nav-flat { display: flex !important; }
   .cand-navbar a { padding: 0 14px; }
@@ -140,32 +143,27 @@
 
 /* Dải hero navy trên cùng; chỉ thanh điều hướng dính khi cuộn. Lề hai bên khớp với nội dung trang. */
 .cand-header { position: static; }
-.cand-topbar { min-height: 96px; padding: 0 16px; color: #fff; background: var(--primary); }
-.cand-brand { display: flex; align-items: center; gap: 16px; color: #fff; }
+.cand-topbar { min-height: 56px; padding: 0 16px; color: #fff; background: var(--primary); }
+.cand-brand { display: flex; align-items: center; gap: 10px; color: #fff; }
 .cand-brand-mark { display: grid; flex: none; place-items: center; width: 56px; height: 56px; border: 1px solid rgba(255,255,255,.28); border-radius: 10px; background: rgba(255,255,255,.12); }
-.cand-brand-text { display: grid; gap: 4px; }
-.cand-brand-text strong { font-size: 30px; font-weight: 700; line-height: 1.1; letter-spacing: -.01em; }
-.cand-brand-text span { color: rgba(255,255,255,.75); font-size: 14px; letter-spacing: .02em; }
+.cand-brand-text { display: grid; gap: 2px; }
+.cand-brand-text strong { font-size: var(--fs-lg); font-weight: 700; line-height: var(--lh-tight); letter-spacing: -.01em; }
+.cand-brand-text span { color: rgba(255,255,255,.75); font-size: var(--fs-xs); letter-spacing: .02em; }
 .cand-header .avatar { color: var(--primary); background: #fff; }
-.cand-user-name strong { color: #fff; }
-.cand-user-name small { color: rgba(255,255,255,.7); }
-.cand-user-divider { background: rgba(255,255,255,.3); }
-.cand-header .candidate-logout { color: rgba(255,255,255,.85); }
-.cand-header .candidate-logout:hover { color: #fff; background: rgba(255,255,255,.08); }
 
 .cand-navbar { position: sticky; top: 0; z-index: 20; border-top: 0; }
 .cand-navbar ul { padding: 0 16px; }
 .cand-navbar li:first-child > a { padding-left: 4px; }
 
 @media (max-width: 620px) {
-  .cand-topbar { min-height: 72px; padding: 0 10px; }
+  .cand-topbar { min-height: 52px; padding: 0 10px; }
   .cand-brand { gap: 10px; }
   .cand-brand-mark { width: 40px; height: 40px; }
   .cand-brand-mark svg { width: 22px; height: 22px; }
-  .cand-brand-text strong { font-size: 22px; }
+  .cand-brand-text strong { font-size: var(--fs-md); }
   .cand-brand { min-width: 0; }
   .cand-brand-text { min-width: 0; }
-  .cand-brand-text span { overflow: hidden; font-size: 12px; text-overflow: ellipsis; white-space: nowrap; }
+  .cand-brand-text span { overflow: hidden; font-size: var(--fs-xs); text-overflow: ellipsis; white-space: nowrap; }
   .cand-navbar ul { padding: 0; }
   .cand-navbar li:first-child > a { padding-left: 14px; }
 }
@@ -173,13 +171,13 @@
 
 /* Thanh menu thí sinh: chữ lớn hơn (16px), thanh cao hơn. */
 .student-shell .cand-navbar a,
-.student-shell .cand-navbar li > button { min-height: 52px; padding: 0 24px; font-size: 16px; }
+.student-shell .cand-navbar li > button { min-height: 44px; padding: 0 20px; font-size: var(--fs-md); }
 .student-shell .cand-navbar a svg,
 .student-shell .cand-navbar li > button svg { width: 18px; height: 18px; }
 .student-shell .cand-navbar li + li::before { height: 20px; }
-.student-shell .cand-submenu a { min-height: 46px; font-size: 16px; }
+.student-shell .cand-submenu a { min-height: 46px; font-size: var(--fs-md); }
 @media (max-width: 620px) {
-  .student-shell .cand-navbar a { min-height: 48px; padding: 0 16px; font-size: 15px; }
+  .student-shell .cand-navbar a { min-height: 44px; padding: 0 16px; font-size: var(--fs-md); }
 }
 
 /* ===== Hướng dẫn dự thi: dòng thời gian dọc + khối lưu ý ===== */
@@ -190,45 +188,45 @@
 .cand-timeline li:last-child { padding-bottom: 4px; }
 /* Đường nối giữa các bước */
 .cand-timeline li:not(:last-child)::before { content: ""; position: absolute; top: 38px; bottom: 2px; left: 17px; width: 2px; background: var(--line); }
-.cand-timeline-dot { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border: 2px solid var(--primary); border-radius: 50%; color: var(--primary); background: var(--surface); font-size: 15px; font-weight: 700; }
+.cand-timeline-dot { position: relative; z-index: 1; display: grid; place-items: center; width: 36px; height: 36px; border: 2px solid var(--primary); border-radius: 50%; color: var(--primary); background: var(--surface); font-size: var(--fs-md); font-weight: 700; }
 .cand-timeline-body { padding-top: 2px; }
 
-.cand-timeline-body strong { display: block; margin-bottom: 4px; font-size: 15px; }
-.cand-timeline-body p { margin: 0 0 6px; color: var(--muted); font-size: 14px; line-height: 1.55; }
-.cand-timeline-body .cand-step-links a { display: inline-flex; align-items: center; gap: 4px; color: var(--primary); font-size: 14px; font-weight: 600; }
+.cand-timeline-body strong { display: block; margin-bottom: 4px; font-size: var(--fs-md); }
+.cand-timeline-body p { margin: 0 0 6px; color: var(--muted); font-size: var(--fs-base); line-height: var(--lh-normal); }
+.cand-timeline-body .cand-step-links a { display: inline-flex; align-items: center; gap: 4px; color: var(--primary); font-size: var(--fs-base); font-weight: 600; }
 
 .cand-tips { margin-top: 18px; padding: 16px 18px; border: 1px solid #F2CD94; border-left: 4px solid var(--warning); border-radius: 8px; background: var(--warning-soft); }
-.cand-tips > strong { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #9A6212; font-size: 15px; }
+.cand-tips > strong { display: flex; align-items: center; gap: 8px; margin-bottom: 10px; color: #9A6212; font-size: var(--fs-md); }
 .cand-tips ul { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
-.cand-tips li { display: flex; align-items: flex-start; gap: 8px; color: #4A5260; font-size: 14px; line-height: 1.5; }
+.cand-tips li { display: flex; align-items: flex-start; gap: 8px; color: #4A5260; font-size: var(--fs-base); line-height: var(--lh-normal); }
 .cand-tips li svg { flex: none; margin-top: 3px; color: #9A6212; }
 
 @media (max-width: 620px) {
   .cand-guide { padding: 18px 16px; }
   .cand-timeline li { grid-template-columns: 32px minmax(0, 1fr); gap: 12px; }
-  .cand-timeline-dot { width: 32px; height: 32px; font-size: 14px; }
+  .cand-timeline-dot { width: 32px; height: 32px; font-size: var(--fs-base); }
   .cand-timeline li:not(:last-child)::before { top: 34px; left: 15px; }
 }
 
 /* Hướng dẫn dự thi: chỉ còn số bước và nội dung, chữ lớn hơn. */
 .cand-timeline li { grid-template-columns: 40px minmax(0, 1fr); gap: 18px; padding-bottom: 22px; }
 .cand-timeline li:not(:last-child)::before { top: 42px; left: 19px; }
-.cand-timeline-dot { width: 40px; height: 40px; font-size: 17px; }
+.cand-timeline-dot { width: 40px; height: 40px; font-size: var(--fs-md); }
 .cand-timeline-body { padding-top: 7px; }
-.cand-timeline-body p { margin: 0 0 6px; color: var(--ink); font-size: 17px; line-height: 1.55; }
-.cand-timeline-body .cand-step-links a { font-size: 16px; }
+.cand-timeline-body p { margin: 0 0 6px; color: var(--ink); font-size: var(--fs-md); line-height: var(--lh-normal); }
+.cand-timeline-body .cand-step-links a { font-size: var(--fs-md); }
 .cand-tips { margin-top: 20px; padding: 18px 20px; }
-.cand-tips > strong { font-size: 17px; }
-.cand-tips li { font-size: 16px; line-height: 1.55; }
+.cand-tips > strong { font-size: var(--fs-md); }
+.cand-tips li { font-size: var(--fs-md); line-height: var(--lh-normal); }
 .cand-tips li svg { margin-top: 4px; }
 
 @media (max-width: 620px) {
   .cand-timeline li { grid-template-columns: 34px minmax(0, 1fr); gap: 12px; }
   .cand-timeline li:not(:last-child)::before { top: 36px; left: 16px; }
-  .cand-timeline-dot { width: 34px; height: 34px; font-size: 15px; }
+  .cand-timeline-dot { width: 34px; height: 34px; font-size: var(--fs-md); }
   .cand-timeline-body { padding-top: 5px; }
-  .cand-timeline-body p { font-size: 16px; }
-  .cand-tips li { font-size: 15px; }
+  .cand-timeline-body p { font-size: var(--fs-md); }
+  .cand-tips li { font-size: var(--fs-md); }
 }
 
 /* ===== Thang kích thước thống nhất cho mọi trang cổng thí sinh (14/11/2026) =====
@@ -236,66 +234,64 @@
  * Badge 14 · nút cao 44, chữ 16. Áp chung cho Trang chủ, Tài khoản, Kỳ thi được phân công,
  * Chi tiết kỳ thi, Kết quả thi, Lịch sử thi. */
 .student-shell .cand-page-head h1,
-.student-shell .cand-welcome h1 { font-size: 34px; }
-.student-shell .cand-page-head p { margin-top: 8px; font-size: 16px; }
-.student-shell .cand-back { font-size: 15px; }
+.student-shell .cand-welcome h1 { font-size: var(--fs-4xl); }
+.student-shell .cand-page-head p { margin-top: 8px; font-size: var(--fs-md); }
+.student-shell .cand-back { font-size: var(--fs-md); }
 .student-shell .panel-heading { padding: 20px 22px 16px; }
-.student-shell .panel-heading h3 { font-size: 18px; }
+.student-shell .panel-heading h3 { font-size: var(--fs-lg); }
 
 /* Danh sách thông tin (hồ sơ, thông tin kỳ thi) */
 .student-shell .cand-facts { padding: 0 22px 12px; }
 .student-shell .cand-facts > div { grid-template-columns: 160px minmax(0, 1fr); padding: 13px 0; }
 .student-shell .cand-facts dt,
-.student-shell .cand-facts dd { font-size: 16px; }
+.student-shell .cand-facts dd { font-size: var(--fs-md); }
 .student-shell .cand-welcome .cand-facts { padding: 0; }
-.student-shell .cand-welcome-date { font-size: 16px; }
+.student-shell .cand-welcome-date { font-size: var(--fs-md); }
 
 /* Danh sách kỳ thi */
 .student-shell .cand-exam-list { padding: 0 22px 10px; }
 .student-shell .cand-exam-list li { gap: 16px; padding: 16px 0; }
-.student-shell .cand-schedule-copy strong { font-size: 17px; }
-.student-shell .cand-schedule-copy span { font-size: 15px; }
+.student-shell .cand-schedule-copy strong { font-size: var(--fs-md); }
+.student-shell .cand-schedule-copy span { font-size: var(--fs-md); }
 .student-shell .cand-date { width: 76px; padding: 8px 0; }
-.student-shell .cand-date small { font-size: 12px; }
-.student-shell .cand-date strong { font-size: 24px; }
+.student-shell .cand-date small { font-size: var(--fs-xs); }
+.student-shell .cand-date strong { font-size: var(--fs-2xl); }
 
 /* Bảng (kết quả, lịch sử) */
-.student-shell .data-table th { padding: 14px 18px; font-size: 14px; }
-.student-shell .data-table td { padding: 16px 18px; font-size: 16px; }
-.student-shell .cand-score { font-size: 18px; }
-.student-shell .cell-action a { font-size: 16px; }
+.student-shell .data-table th { padding: 14px 18px; font-size: var(--fs-base); }
+.student-shell .data-table td { padding: 16px 18px; font-size: var(--fs-md); }
+.student-shell .cand-score { font-size: var(--fs-lg); }
+.student-shell .cell-action a { font-size: var(--fs-md); }
 
 /* Badge trạng thái, quy định, thanh hành động */
-.student-shell .cand-status { padding: 4px 10px; font-size: 14px; }
-.student-shell .cand-rules { gap: 12px; padding: 0 22px 22px 44px; font-size: 16px; }
-.student-shell .cand-action-bar { padding: 18px 22px; font-size: 16px; }
+.student-shell .cand-status { padding: 4px 10px; font-size: var(--fs-base); }
+.student-shell .cand-rules { gap: 12px; padding: 0 22px 22px 44px; font-size: var(--fs-md); }
+.student-shell .cand-action-bar { padding: 18px 22px; font-size: var(--fs-md); }
 .student-shell .cand-agree input { width: 20px; height: 20px; }
 
 /* Nút */
-.student-shell .cand-btn { min-height: 44px; padding: 0 22px; font-size: 16px; }
-.student-shell .cand-exam-list .cand-btn { min-height: 40px; padding: 0 16px; font-size: 15px; }
-.student-shell .row-link { padding: 8px 14px; font-size: 15px; }
+.student-shell .row-link { padding: 8px 14px; font-size: var(--fs-md); }
 
 /* Trang tài khoản */
 
 @media (max-width: 620px) {
   .student-shell .cand-page-head h1,
-  .student-shell .cand-welcome h1 { font-size: 26px; }
-  .student-shell .cand-page-head p { font-size: 15px; }
+  .student-shell .cand-welcome h1 { font-size: var(--fs-2xl); }
+  .student-shell .cand-page-head p { font-size: var(--fs-md); }
   .student-shell .panel-heading { padding: 16px 16px 12px; }
   .student-shell .cand-facts { padding: 0 16px 10px; }
   .student-shell .cand-facts > div { grid-template-columns: 120px minmax(0, 1fr); }
-  .student-shell .cand-facts dt, .student-shell .cand-facts dd { font-size: 15px; }
+  .student-shell .cand-facts dt, .student-shell .cand-facts dd { font-size: var(--fs-md); }
   .student-shell .cand-exam-list { padding: 0 16px 8px; }
-  .student-shell .cand-schedule-copy strong { font-size: 16px; }
-  .student-shell .cand-schedule-copy span { font-size: 14px; }
+  .student-shell .cand-schedule-copy strong { font-size: var(--fs-md); }
+  .student-shell .cand-schedule-copy span { font-size: var(--fs-base); }
   .student-shell .cand-date { width: 68px; }
-  .student-shell .cand-date strong { font-size: 20px; }
+  .student-shell .cand-date strong { font-size: var(--fs-xl); }
   .student-shell .cand-exam-list li .cand-status { margin-left: 0; }
   .student-shell .cand-schedule-copy { flex-basis: 100%; }
-  .student-shell .data-table td { font-size: 15px; }
-  .student-shell .cand-rules { padding: 0 16px 18px 36px; font-size: 15px; }
-  .student-shell .cand-action-bar { padding: 16px; font-size: 15px; }
+  .student-shell .data-table td { font-size: var(--fs-md); }
+  .student-shell .cand-rules { padding: 0 16px 18px 36px; font-size: var(--fs-md); }
+  .student-shell .cand-action-bar { padding: 16px; font-size: var(--fs-md); }
 }
 
 /* Chi tiết kỳ thi: hai cột cân chiều cao. Cột phải: quy định giãn theo cột, xác nhận ở đáy. */
@@ -306,7 +302,7 @@
 .cand-detail-col .panel-heading { align-items: flex-start; }
 .cand-detail-col .cand-action-bar { flex-direction: column; align-items: stretch; gap: 16px; }
 .cand-detail-col .cand-action-bar .cand-agree { min-width: 0; }
-.cand-detail-col .cand-action-bar .cand-btn { width: 100%; }
+.cand-detail-col .cand-action-bar .button { width: 100%; }
 @media (max-width: 900px) {
   .cand-detail-layout { grid-template-columns: minmax(0, 1fr); }
 }
@@ -314,43 +310,145 @@
 
 /* ===== Trang tài khoản cá nhân ===== */
 .cand-id-card { display: flex; align-items: center; gap: 20px; padding: 24px; border-left: 4px solid var(--primary); }
-.cand-id-avatar { display: grid; flex: none; place-items: center; width: 72px; height: 72px; border-radius: 50%; color: #fff; background: var(--primary); font-size: 26px; font-weight: 700; }
+.cand-id-avatar { display: grid; flex: none; place-items: center; width: 72px; height: 72px; border-radius: 50%; color: #fff; background: var(--primary); font-size: var(--fs-2xl); font-weight: 700; }
 .cand-id-main { min-width: 0; }
-.student-shell .cand-id-main h2 { margin: 0 0 10px; font-size: 26px; letter-spacing: -.01em; }
+.student-shell .cand-id-main h2 { margin: 0 0 10px; font-size: var(--fs-2xl); letter-spacing: -.01em; }
 .cand-id-tags { display: flex; flex-wrap: wrap; gap: 10px; }
-.cand-id-tags span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; color: var(--muted); background: var(--canvas); font-size: 15px; }
+.cand-id-tags span { display: inline-flex; align-items: center; gap: 6px; padding: 6px 12px; border-radius: 6px; color: var(--muted); background: var(--canvas); font-size: var(--fs-md); }
 .cand-id-tags strong { color: var(--ink); }
 
 .cand-account-layout { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 16px; align-items: stretch; }
 .cand-account-layout > .panel { display: flex; flex-direction: column; }
 
 .cand-security-foot { display: grid; gap: 14px; margin-top: auto; padding: 4px 22px 22px; }
-.cand-security-foot p { margin: 0; color: var(--muted); font-size: 15px; line-height: 1.55; }
-.cand-security-foot .cand-btn { justify-self: start; }
-.cand-btn-outline { border: 1px solid var(--line); color: var(--ink); background: var(--surface); }
-.cand-btn-outline:hover { border-color: #B9C6D6; background: var(--canvas); }
+.cand-security-foot p { margin: 0; color: var(--muted); font-size: var(--fs-md); line-height: var(--lh-normal); }
+.cand-security-foot .button { justify-self: start; }
 
 @media (max-width: 900px) {
   .cand-account-layout { grid-template-columns: minmax(0, 1fr); }
 }
 @media (max-width: 620px) {
   .cand-id-card { gap: 14px; padding: 18px 16px; }
-  .cand-id-avatar { width: 56px; height: 56px; font-size: 20px; }
-  .student-shell .cand-id-main h2 { font-size: 21px; }
-  .cand-id-tags span { font-size: 14px; }
+  .cand-id-avatar { width: 56px; height: 56px; font-size: var(--fs-xl); }
+  .student-shell .cand-id-main h2 { font-size: var(--fs-xl); }
+  .cand-id-tags span { font-size: var(--fs-base); }
   .cand-security-foot { padding: 4px 16px 18px; }
-  .cand-security-foot .cand-btn { justify-self: stretch; }
+  .cand-security-foot .button { justify-self: stretch; }
 }
 .cand-security-foot { margin-top: 8px; }
 
 /* Cân chỉnh cụm logo: chiều cao biểu tượng = chiều cao khối chữ (28 + 6 + 18 = 52px), khoảng cách ≈ 1/4 biểu tượng. */
-.cand-brand { gap: 14px; }
-.cand-brand-text { gap: 6px; }
-.cand-brand-text strong { font-size: 28px; font-weight: 700; line-height: 1; letter-spacing: -.02em; }
-.cand-brand-text > span { font-size: 13px; line-height: 18px; letter-spacing: 0; }
+.cand-brand { gap: 10px; }
+.cand-brand-text { gap: 2px; }
+.cand-brand-text strong { font-size: var(--fs-lg); font-weight: 700; line-height: var(--lh-tight); letter-spacing: -.01em; }
+.cand-brand-text > span { font-size: var(--fs-xs); line-height: 16px; letter-spacing: 0; }
 @media (max-width: 620px) {
   .cand-brand { gap: 10px; }
   .cand-brand-text { gap: 4px; }
-  .cand-brand-text strong { font-size: 22px; }
-  .cand-brand-text > span { font-size: 12px; line-height: 16px; }
+  .cand-brand-text strong { font-size: var(--fs-md); }
+  .cand-brand-text > span { font-size: var(--fs-xs); line-height: 16px; }
+}
+
+/* Xem lại bài: chỉ đọc; phương án đã chọn được nhấn, không có màu đúng/sai. */
+.xl-tom-tat { padding: 16px 20px; }
+.xl-tom-tat dl { display: flex; flex-wrap: wrap; gap: 12px 32px; margin: 0; }
+.xl-tom-tat dt { color: var(--muted); font-size: var(--fs-sm); }
+.xl-tom-tat dd { margin: 2px 0 0; color: var(--ink); font-size: var(--fs-md); font-weight: 600; }
+.xl-tom-tat dd small { color: var(--muted); font-size: var(--fs-sm); font-weight: 500; }
+.xl-so-cau { position: sticky; top: 8px; z-index: 2; display: flex; flex-wrap: wrap; gap: 6px; padding: 12px 16px; }
+.xl-so-cau a { display: grid; place-items: center; width: 34px; height: 34px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: #fff; font-size: var(--fs-base); font-weight: 600; text-decoration: none; }
+.xl-so-cau a.da-chon { border-color: var(--primary); color: var(--primary); background: var(--primary-soft); }
+.xl-so-cau a.bo-trong { border-style: dashed; color: var(--muted); }
+.xl-so-cau a:hover { border-color: var(--primary); }
+.xl-cau-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.xl-cau { padding: 20px; scroll-margin-top: 72px; }
+.xl-cau-dau { display: flex; flex-wrap: wrap; align-items: center; gap: 10px; margin-bottom: 10px; }
+.xl-cau-dau strong { color: var(--primary); font-size: var(--fs-base); }
+.xl-danh-dau { display: inline-flex; align-items: center; gap: 4px; padding: 2px 8px; border-radius: 6px; color: #9A6212; background: #FDF5E8; font-size: var(--fs-xs); font-weight: 600; }
+.xl-chua-chon { padding: 2px 8px; border: 1px dashed var(--line); border-radius: 6px; color: var(--muted); font-size: var(--fs-xs); font-weight: 600; }
+.xl-noi-dung { margin-bottom: 14px; color: var(--ink); font-size: var(--fs-md); font-weight: 600; line-height: var(--lh-relaxed); }
+.xl-phuong-an { display: grid; gap: 8px; margin: 0; padding: 0; list-style: none; }
+.xl-phuong-an li { display: flex; align-items: flex-start; gap: 12px; padding: 10px 14px; border: 1px solid var(--line); border-radius: 8px; color: var(--ink); font-size: var(--fs-md); line-height: var(--lh-normal); }
+.xl-phuong-an li.chon { border-color: var(--primary); background: var(--primary-soft); box-shadow: inset 0 0 0 1px var(--primary); }
+.xl-nhan { display: grid; flex: none; place-items: center; width: 26px; height: 26px; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); font-size: var(--fs-sm); font-weight: 700; }
+.xl-phuong-an li.chon .xl-nhan { border-color: var(--primary); color: #fff; background: var(--primary); }
+.xl-ban-chon { align-self: center; margin-left: auto; flex: none; color: var(--primary); font-size: var(--fs-xs); font-weight: 700; }
+
+/* ---------- Header một thanh 56px (logo · menu · tài khoản) trên màn đủ rộng ----------
+ * Giữ nguyên DOM: .cand-topbar dùng display: contents để logo và khối tài khoản thành ô lưới của header,
+ * thanh menu nằm cột giữa. Màn hẹp hơn ngưỡng vẫn là hai tầng như cũ.
+ * Ngưỡng đo theo bề rộng thực của logo + menu + tài khoản: thí sinh (3 mục) từ 1080px, quản trị (5 mục) từ 1440px.
+ */
+@media (min-width: 1080px) {
+  .student-shell .cand-header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: stretch; min-height: 56px; padding: 0 16px; column-gap: 24px; background: var(--primary); position: sticky; top: 0; z-index: 20; }
+  .student-shell .cand-topbar { display: contents; }
+  .student-shell .cand-brand { grid-column: 1; grid-row: 1; }
+  .student-shell .cand-user { grid-column: 3; grid-row: 1; }
+  .student-shell .cand-navbar { position: static; grid-column: 2; grid-row: 1; border: 0; background: transparent; }
+  .student-shell .cand-navbar ul { height: 100%; padding: 0; }
+  .student-shell .cand-navbar ul > li > a,
+  .student-shell .cand-navbar ul > li > button { min-height: 56px; padding: 0 16px; color: rgba(255,255,255,.82); font-size: var(--fs-base); }
+  .student-shell .cand-navbar li:first-child > a { padding-left: 16px; }
+  .student-shell .cand-navbar ul > li > a:hover:not(.active),
+  .student-shell .cand-navbar ul > li > button:hover { color: #fff; background: rgba(255,255,255,.08); }
+  .student-shell .cand-navbar ul > li > a.active,
+  .student-shell .cand-navbar ul > li > button.active { color: #fff; }
+  .student-shell .cand-navbar ul > li > a.active::after,
+  .student-shell .cand-navbar ul > li > button.active::after { bottom: 0; background: #fff; }
+  .student-shell .cand-navbar li + li::before { background: rgba(255,255,255,.2); }
+  .student-shell .cand-navbar :focus-visible { outline-color: #fff; }
+  .student-shell .cand-submenu a { color: var(--ink); }
+}
+@media (min-width: 1440px) {
+  .admin-shell .cand-header { display: grid; grid-template-columns: auto minmax(0, 1fr) auto; align-items: stretch; min-height: 56px; padding: 0 16px; column-gap: 24px; background: var(--primary); position: sticky; top: 0; z-index: 20; }
+  .admin-shell .cand-topbar { display: contents; }
+  .admin-shell .cand-brand { grid-column: 1; grid-row: 1; }
+  .admin-shell .cand-brand-text > span { display: none; }
+  .admin-shell .cand-user { grid-column: 3; grid-row: 1; }
+  .admin-shell .cand-navbar { position: static; grid-column: 2; grid-row: 1; border: 0; background: transparent; }
+  .admin-shell .cand-navbar ul { height: 100%; padding: 0; }
+  .admin-shell .cand-navbar ul > li > a,
+  .admin-shell .cand-navbar ul > li > button { min-height: 56px; padding: 0 14px; color: rgba(255,255,255,.82); font-size: var(--fs-base); }
+  .admin-shell .cand-navbar li:first-child > a { padding-left: 14px; }
+  .admin-shell .cand-navbar ul > li > a:hover:not(.active),
+  .admin-shell .cand-navbar ul > li > button:hover { color: #fff; background: rgba(255,255,255,.08); }
+  .admin-shell .cand-navbar ul > li > a.active,
+  .admin-shell .cand-navbar ul > li > button.active { color: #fff; }
+  .admin-shell .cand-navbar ul > li > a.active::after,
+  .admin-shell .cand-navbar ul > li > button.active::after { bottom: 0; background: #fff; }
+  .admin-shell .cand-navbar li + li::before { background: rgba(255,255,255,.2); }
+  .admin-shell .cand-navbar :focus-visible { outline-color: #fff; }
+  .admin-shell .cand-submenu a { color: var(--ink); }
+}
+
+/* Quản trị 621–1099px: 5 menu thả xuống không đủ chỗ, dùng danh sách phẳng cuộn ngang như điện thoại. */
+@media (max-width: 1099px) {
+  .admin-shell .cand-navbar ul { overflow-x: auto; scrollbar-width: none; }
+  .admin-shell .cand-navbar ul::-webkit-scrollbar { display: none; }
+  .admin-shell .cand-nav-dropdown { display: none !important; }
+  .admin-shell .cand-nav-flat { display: flex !important; }
+  .admin-shell .cand-navbar a { white-space: nowrap; }
+}
+
+/* ---------- Chi tiết kỳ thi: banner tên kỳ thi và bảng trạng thái nhãn – giá trị ---------- */
+.cand-detail-head { display: grid; gap: 4px; }
+.cand-detail-head .cand-back { justify-self: start; margin-bottom: 6px; }
+.cand-banner { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 24px 28px; border-radius: 10px; color: #fff; background: var(--primary); }
+.cand-banner h1 { margin: 0; color: #fff; font-size: var(--fs-2xl); line-height: var(--lh-tight); letter-spacing: -.01em; }
+.cand-banner p { margin: 6px 0 0; color: rgba(255,255,255,.8); font-size: var(--fs-md); }
+.cand-banner .cand-status { color: var(--primary); background: #fff; }
+
+.cand-status-table { width: calc(100% - 40px); margin: 0 20px 20px; border-collapse: collapse; border: 1px solid var(--line); }
+.cand-status-table th, .cand-status-table td { padding: 12px 16px; border-bottom: 1px solid var(--line); font-size: var(--fs-md); text-align: left; vertical-align: middle; }
+.cand-status-table tr:last-child th, .cand-status-table tr:last-child td { border-bottom: 0; }
+.cand-status-table th { width: 200px; color: var(--ink); background: var(--canvas); font-weight: 600; }
+.cand-status-table td strong { font-variant-numeric: tabular-nums; }
+.cand-status-table td.cand-sap-het { color: var(--danger); font-weight: 600; }
+
+@media (max-width: 620px) {
+  .cand-banner { flex-direction: column; align-items: flex-start; padding: 18px 16px; }
+  .cand-banner h1 { font-size: var(--fs-xl); }
+  .cand-status-table { width: calc(100% - 32px); margin: 0 16px 16px; }
+  .cand-status-table th { width: 110px; padding: 10px 12px; }
+  .cand-status-table td { padding: 10px 12px; }
 }

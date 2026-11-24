@@ -104,7 +104,6 @@ export default function TrangNhapCauHoi() {
         <div>
           <span className="page-kicker"><Link to="/admin/questions">NGÂN HÀNG CÂU HỎI</Link></span>
           <h2>Nhập câu hỏi từ Word</h2>
-          <p>Tệp .docx theo mẫu bảng IU03.</p>
         </div>
         <div className="heading-actions">
           <input accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="sr-only" onChange={(event) => void chonTep(event)} ref={inputRef} tabIndex={-1} type="file" />

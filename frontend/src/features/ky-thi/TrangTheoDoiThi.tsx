@@ -70,6 +70,54 @@ function HopThoaiCongGio({ thiSinh, onDong, onXacNhan }: { thiSinh: ThiSinhGiamS
   );
 }
 
+/** Thu bài khi có sự cố (vi phạm quy chế, thí sinh rời phòng…): chấm ngay, không mở lại được. */
+function HopThoaiThuBai({ thiSinh, tongSoCau, onDong, onXacNhan }: { thiSinh: ThiSinhGiamSat; tongSoCau: number; onDong: () => void; onXacNhan: (lyDo: string) => Promise<void> }) {
+  const [lyDo, setLyDo] = useState("");
+  const [loi, setLoi] = useState<string | null>(null);
+  const [dangLuu, setDangLuu] = useState(false);
+
+  useEffect(() => {
+    const handleKeyDown = (event: KeyboardEvent) => { if (event.key === "Escape" && !dangLuu) onDong(); };
+    document.addEventListener("keydown", handleKeyDown);
+    return () => document.removeEventListener("keydown", handleKeyDown);
+  }, [dangLuu, onDong]);
+
+  async function handleSubmit(event: FormEvent) {
+    event.preventDefault();
+    if (!lyDo.trim()) { setLoi("Nhập lý do thu bài."); return; }
+    setDangLuu(true);
+    setLoi(null);
+    try {
+      await onXacNhan(lyDo.trim());
+    } catch (error) {
+      setLoi(thongBaoLoi(error));
+      setDangLuu(false);
+    }
+  }
+
+  return (
+    <div className="dialog-backdrop" onMouseDown={(event) => { if (event.target === event.currentTarget && !dangLuu) onDong(); }}>
+      <section aria-labelledby="collect-title" aria-modal="true" className="form-dialog" role="dialog">
+        <header>
+          <div><span className="dialog-icon danger"><BieuTuong name="lock" size={20} /></span><div><h3 id="collect-title">Thu bài — {thiSinh.hoTen}</h3></div></div>
+          <button aria-label="Đóng" className="dialog-close" disabled={dangLuu} onClick={onDong} type="button"><BieuTuong name="x" size={19} /></button>
+        </header>
+        <form noValidate onSubmit={handleSubmit}>
+          <div className="dialog-body">
+            {loi && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loi}</span></div>}
+            <p className="dialog-note">Bài của {thiSinh.msts} (đã làm {thiSinh.soCauDaLam}/{tongSoCau} câu) sẽ được chấm ngay với các câu đã lưu. Thí sinh không làm tiếp được và không thể hoàn tác.</p>
+            <label className="dialog-field full"><span>Lý do <em>*</em></span><textarea autoFocus maxLength={500} onChange={(event) => setLyDo(event.target.value)} placeholder="Ví dụ: Sử dụng tài liệu trong giờ thi" rows={3} value={lyDo} /></label>
+          </div>
+          <footer>
+            <button className="button button-secondary" disabled={dangLuu} onClick={onDong} type="button">Hủy</button>
+            <button aria-busy={dangLuu} className="button button-danger" disabled={dangLuu} type="submit"><BieuTuong name="lock" size={16} /> {dangLuu ? "Đang thu…" : "Thu bài"}</button>
+          </footer>
+        </form>
+      </section>
+    </div>
+  );
+}
+
 export default function TrangTheoDoiThi() {
   const [params, setParams] = useSearchParams();
   const maKT = Number(params.get("maKT")) || null;
@@ -84,6 +132,7 @@ export default function TrangTheoDoiThi() {
   const [loc, setLoc] = useState<"" | TrangThaiThiSinhKyThi>("");
   const [tuKhoa, setTuKhoa] = useState("");
   const [congGio, setCongGio] = useState<ThiSinhGiamSat | null>(null);
+  const [thuBai, setThuBai] = useState<ThiSinhGiamSat | null>(null);
   const [thongBao, setThongBao] = useState<string | null>(null);
 
   // Kỳ thi theo dõi được: đang thi, sắp diễn ra, đã kết thúc gần đây.
@@ -156,7 +205,6 @@ export default function TrangTheoDoiThi() {
       <section className="page-heading-row">
         <div>
           <h2>Theo dõi thi</h2>
-          <p>Tình hình làm bài, tự cập nhật mỗi 10 giây.</p>
         </div>
         <div className="heading-actions">
           <select aria-label="Chọn kỳ thi" className="assign-exam-select" onChange={(event) => setParams(event.target.value ? { maKT: event.target.value } : {})} value={maKT ?? ""}>
@@ -239,7 +287,10 @@ export default function TrangTheoDoiThi() {
                         <td>{ts.diem !== null ? <strong>{dinhDangDiem.format(ts.diem)}</strong> : <span className="muted-cell">—</span>}</td>
                         <td>
                           {ts.trangThai === "dang_thi" && ts.maBL && (
-                            <div className="row-actions"><button aria-label={`Cộng giờ cho ${ts.hoTen}`} className="row-action" onClick={() => setCongGio(ts)} title="Cộng giờ" type="button"><BieuTuong name="clock" size={16} /></button></div>
+                            <div className="row-actions">
+                              <button aria-label={`Cộng giờ cho ${ts.hoTen}`} className="row-action" onClick={() => setCongGio(ts)} title="Cộng giờ" type="button"><BieuTuong name="clock" size={16} /></button>
+                              <button aria-label={`Thu bài của ${ts.hoTen}`} className="row-action danger" onClick={() => setThuBai(ts)} title="Thu bài" type="button"><BieuTuong name="lock" size={16} /></button>
+                            </div>
                           )}
                         </td>
                       </tr>
@@ -265,6 +316,19 @@ export default function TrangTheoDoiThi() {
             lamMoi();
           }}
           thiSinh={congGio}
+        />
+      )}
+      {thuBai && giamSat && (
+        <HopThoaiThuBai
+          onDong={() => setThuBai(null)}
+          onXacNhan={async (lyDo) => {
+            await kyThiApi.thuBai(giamSat.maKT, thuBai.maBL!, lyDo);
+            setThongBao(`Đã thu bài của ${thuBai.hoTen} (${thuBai.msts}).`);
+            setThuBai(null);
+            lamMoi();
+          }}
+          thiSinh={thuBai}
+          tongSoCau={giamSat.tongSoCau}
         />
       )}
     </div>

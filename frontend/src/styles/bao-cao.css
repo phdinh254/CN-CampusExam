@@ -1,0 +1,45 @@
+/* Trang Báo cáo kết quả: dùng lại thẻ chỉ số, panel và biểu đồ cột của trang Tổng quan. */
+.bc-chon-ky-thi { width: min(360px, 100%); height: 42px; padding: 0 32px 0 12px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: #fff; font: inherit; font-size: var(--fs-body); font-weight: 500; }
+.bc-chon-ky-thi:focus { outline: 0; border-color: var(--blue); box-shadow: var(--focus-ring); }
+
+/* Dòng thông tin kỳ thi đang xem. */
+.bc-ky-thi { display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; margin-top: -4px; color: var(--muted); font-size: var(--fs-body); }
+.bc-tam-thoi { display: inline-flex; align-items: center; gap: 10px; padding: 4px 10px; border-radius: 6px; color: #8A5A00; background: #FDF5E8; font-size: var(--fs-caption); font-weight: 600; }
+
+.bc-page .stats-grid .stat-card { padding-top: 20px; }
+.bc-page .heading-actions .button { flex: none; white-space: nowrap; }
+
+/* Phổ điểm: cột từ 5 điểm trở lên (đạt) màu chính. */
+.bc-pho-diem .tq-col.bc-dat .tq-col-bar { background: var(--primary); }
+.bc-pho-diem .tq-col-bar { animation: none; }
+
+/* Câu sai nhiều nhất. */
+.bc-cau-sai { display: grid; margin: 0; padding: 0; list-style: none; }
+.bc-cau-sai li { display: grid; grid-template-columns: 64px minmax(0, 1fr) 96px; align-items: center; gap: 12px; padding: 10px 0; border-top: 1px solid #EEF1F5; }
+.bc-cau-sai li:first-child { border-top: 0; }
+.bc-ma-cau { justify-self: start; padding: 3px 8px; border-radius: 6px; color: var(--primary); background: var(--primary-soft); font-size: var(--fs-micro); font-weight: 700; font-variant-numeric: tabular-nums; }
+.bc-cau-noi-dung { display: grid; gap: 2px; min-width: 0; }
+.bc-cau-noi-dung > span { overflow: hidden; color: var(--ink); font-size: var(--fs-body); text-overflow: ellipsis; white-space: nowrap; }
+.bc-cau-noi-dung small { color: var(--muted); font-size: var(--fs-caption); }
+.bc-ty-le { display: grid; justify-items: end; gap: 4px; }
+.bc-ty-le strong { color: var(--ink); font-size: var(--fs-body); font-variant-numeric: tabular-nums; }
+.bc-ty-le .tq-progress { width: 84px; }
+.bc-ty-le .tq-progress i { background: var(--danger); }
+
+@media (max-width: 620px) {
+  .bc-chon-ky-thi { width: 100%; }
+  .bc-cau-sai li { grid-template-columns: minmax(0, 1fr) auto; }
+  .bc-ma-cau { grid-column: 1 / -1; }
+}
+
+/* Tỷ lệ trả lời đúng theo KQHT × mức độ. */
+.bc-chu-thich { color: var(--muted); font-size: var(--fs-caption); }
+.bc-bang-kqht th:not(:first-child), .bc-bang-kqht td:not(:first-child) { text-align: right; }
+.bc-bang-kqht td:first-child { max-width: 320px; }
+.bc-ten-kqht { color: var(--ink); }
+.bc-o strong { display: block; color: var(--ink); font-size: var(--fs-body); font-variant-numeric: tabular-nums; }
+.bc-o small { color: var(--muted); font-size: var(--fs-micro); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.bc-o.bc-thap strong { color: var(--danger); }
+.bc-o.bc-cao strong { color: var(--success-text); }
+.bc-o-trong { color: var(--muted); }
+.bc-bang-kqht tfoot td { border-top: 1px solid var(--line); background: var(--canvas); }

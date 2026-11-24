@@ -50,4 +50,6 @@ export const kyThiApi = {
   /** Chỉ cộng cho bài đang làm; bài đã đóng trả `ATTEMPT_CLOSED`. */
   congGio: (maKT: number, maBL: number, soPhut: number, lyDo: string) =>
     khachHttp.post<void>(`/ky-thi/${maKT}/bai-lam/${maBL}/cong-gio`, { soPhut, lyDo }),
+  thuBai: (maKT: number, maBL: number, lyDo: string) =>
+    khachHttp.post<void>(`/ky-thi/${maKT}/bai-lam/${maBL}/thu-bai`, { lyDo }),
 };

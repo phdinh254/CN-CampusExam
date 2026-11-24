@@ -146,7 +146,6 @@ export default function TrangKyThi() {
       <section className="page-heading-row">
         <div>
           <h2>Quản lý kỳ thi</h2>
-          <p>Gắn đề và thí sinh, rồi phát hành để thí sinh vào thi đúng giờ.</p>
         </div>
         <div className="heading-actions">
           <button className="button button-primary" onClick={() => setForm({ kyThi: null })} type="button"><BieuTuong name="plus" size={17} /> Tạo kỳ thi</button>

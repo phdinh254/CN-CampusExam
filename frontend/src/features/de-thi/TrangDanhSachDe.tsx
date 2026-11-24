@@ -73,7 +73,6 @@ export default function TrangDanhSachDe() {
       <section className="page-heading-row">
         <div>
           <h2>Danh sách đề thi</h2>
-          <p>Đề gốc sinh từ ma trận và các đề con hoán vị.</p>
         </div>
         <div className="heading-actions">
           <Link className="button button-primary" to="/admin/exam-generation"><BieuTuong name="sparkles" size={17} /> Sinh đề</Link>

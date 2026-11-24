@@ -118,13 +118,13 @@ export default function TrangDoiMatKhau() {
               value={xacNhan}
             />
 
-            <button className="dmk-submit" disabled={dangGui} type="submit">
+            <button className="button button-primary button-lg dmk-submit" disabled={dangGui} type="submit">
               {dangGui ? "Đang lưu…" : "Lưu mật khẩu mới"}
             </button>
           </form>
 
           <div className="dmk-foot">
-            <button className="link-button" onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(trangChuTheoVaiTro(taiKhoan.vaiTro)))} type="button"><BieuTuong name="arrow-left" size={16} /> Quay lại</button>
+            <button className="button button-ghost" onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(trangChuTheoVaiTro(taiKhoan.vaiTro)))} type="button"><BieuTuong name="arrow-left" size={16} /> Quay lại</button>
           </div>
         </section>
       </main>

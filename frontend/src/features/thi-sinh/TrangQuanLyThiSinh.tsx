@@ -49,7 +49,6 @@ export default function TrangQuanLyThiSinh() {
   const [tuKhoa, setTuKhoa] = useState("");
   const [lop, setLop] = useState("");
   const [trangThai, setTrangThai] = useState<TrangThaiTaiKhoan | "">("");
-  const [chuaDoiMatKhau, setChuaDoiMatKhau] = useState(false);
   const [trang, setTrang] = useState(1);
   const [danhSachLop, setDanhSachLop] = useState<string[]>([]);
   const [data, setData] = useState<TrangDuLieu<ThiSinhTomTat> | null>(null);
@@ -89,7 +88,6 @@ export default function TrangQuanLyThiSinh() {
       tuKhoa,
       lop: lop || undefined,
       trangThai: trangThai || undefined,
-      daDoiMatKhau: chuaDoiMatKhau ? false : undefined,
       trang,
       kichThuocTrang: KICH_THUOC_TRANG,
     }, controller.signal)
@@ -100,7 +98,7 @@ export default function TrangQuanLyThiSinh() {
       .catch((error: unknown) => { if (!laHuy(error)) setLoadError(thongBaoLoi(error)); })
       .finally(() => { if (!controller.signal.aborted) setLoading(false); });
     return () => controller.abort();
-  }, [tuKhoa, lop, trangThai, chuaDoiMatKhau, trang, reloadKey]);
+  }, [tuKhoa, lop, trangThai, trang, reloadKey]);
 
   useEffect(() => {
     if (!editor) return undefined;
@@ -202,7 +200,7 @@ export default function TrangQuanLyThiSinh() {
 
   const editingDetail = editor?.mode === "edit" ? editor.chiTiet : null;
   const editorLoading = editor?.mode === "edit" && !editor.chiTiet && !submitError;
-  const coBoLoc = Boolean(tuKhoa || lop || trangThai || chuaDoiMatKhau);
+  const coBoLoc = Boolean(tuKhoa || lop || trangThai);
 
   const confirmText: Record<ConfirmKind, (item: ThiSinhTomTat) => { title: string; label: string; body: string }> = {
     toggle: (item) => item.trangThaiTaiKhoan === "hoat_dong"
@@ -242,7 +240,6 @@ export default function TrangQuanLyThiSinh() {
             <option value="hoat_dong">Hoạt động</option>
             <option value="khoa">Đã khóa</option>
           </select>
-          <label className="checkbox-field toolbar-check"><input checked={chuaDoiMatKhau} onChange={(event) => doiLoc(setChuaDoiMatKhau)(event.target.checked)} type="checkbox" /><span>Chưa đổi mật khẩu mặc định</span></label>
         </div>
 
         {loadError ? (

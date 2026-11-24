@@ -1,5 +1,5 @@
 /* Quản lý kỳ thi, gán đề và thí sinh. */
-.exam-status.warning, .exam-subject-icon.warning { color: #B4701A; background: var(--warning-soft); }
+.exam-status.warning, .exam-subject-icon.warning { color: var(--warning-text); background: var(--warning-soft); }
 .exam-status.danger, .exam-subject-icon.danger { color: var(--danger); background: var(--danger-soft); }
 .exam-status.indigo, .exam-subject-icon.indigo { color: var(--primary); background: var(--primary-soft); }
 
@@ -76,7 +76,7 @@
 .monitor-head-main p { margin: 0; color: var(--muted); font-size: var(--fs-body); }
 .monitor-clock { display: grid; justify-items: end; gap: 2px; padding: 10px 16px; border-radius: 8px; background: var(--primary-soft); }
 .monitor-clock span { color: var(--muted); font-size: var(--fs-caption); font-weight: 700; letter-spacing: .04em; }
-.monitor-clock strong { color: var(--ink); font-size: var(--fs-stat); font-variant-numeric: tabular-nums; line-height: 1.1; }
+.monitor-clock strong { color: var(--ink); font-size: var(--fs-stat); font-variant-numeric: tabular-nums; line-height: var(--lh-tight); }
 .monitor-clock small { color: var(--muted); font-size: var(--fs-caption); }
 .monitor-stats .monitor-stat { display: flex; align-items: center; gap: 12px; padding: 14px 16px; border: 1px solid var(--line); border-radius: 8px; background: var(--surface); font: inherit; text-align: left; cursor: pointer; }
 .monitor-stats .monitor-stat:hover { border-color: #B9C6D6; }
@@ -84,5 +84,8 @@
 .monitor-stats .monitor-stat p { display: grid; gap: 3px; margin: 0; }
 .monitor-table td { vertical-align: middle; }
 .monitor-row-idle { background: var(--warning-soft); }
-.monitor-idle { display: inline-flex; align-items: center; gap: 4px; color: #B4701A; font-weight: 600; }
+.monitor-idle { display: inline-flex; align-items: center; gap: 4px; color: var(--warning-text); font-weight: 600; }
 .monitor-extra { display: block; color: var(--primary); font-size: var(--fs-caption); font-weight: 600; }
+
+/* Ghi chú hậu quả trong hộp thoại (thu bài…). */
+.dialog-note { margin: 0 0 14px; color: var(--muted); font-size: var(--fs-body); line-height: var(--lh-normal); }

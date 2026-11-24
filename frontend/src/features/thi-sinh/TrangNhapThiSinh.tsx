@@ -110,7 +110,6 @@ export default function TrangNhapThiSinh() {
         <div>
           <span className="page-kicker"><Link to="/admin/candidates">THÍ SINH</Link></span>
           <h2>Nhập thí sinh từ Excel</h2>
-          <p>Tệp .xlsx theo mẫu; mật khẩu ban đầu là ngày sinh (ddMMyyyy).</p>
         </div>
         <div className="heading-actions">
           <button className="button button-secondary" onClick={() => void taiTepMau()} type="button"><BieuTuong name="file" size={17} /> Tải tệp mẫu</button>

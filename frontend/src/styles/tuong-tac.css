@@ -8,15 +8,15 @@
   --dur-trans: 200ms;
   --dur-modal: 220ms;
   --ease-out: cubic-bezier(.2, .8, .2, 1);
-  --focus-ring: 0 0 0 3px rgba(40, 120, 199, .14);
+  --focus-ring: 0 0 0 3px rgba(40, 120, 199, .3);
 }
 
 /* ---------- Hover và chuyển trạng thái của thành phần bấm được ---------- */
 
 .button, .row-action, .icon-button, .dialog-close, .pagination button, .row-link, .select-button,
-.candidate-logout, .cand-navbar a, .cand-navbar li > button, .cand-submenu a,
+.cand-navbar a, .cand-navbar li > button, .cand-submenu a,
 .paper-tabs button, .segmented button, .matrix-chip, .matrix-preset, .monitor-stat, .quick-action,
-.stat-link, .cand-btn, .back-link, .exam-overview-link, .matrix-name strong, .success-banner button,
+.stat-link, .back-link, .exam-overview-link, .matrix-name strong, .success-banner button,
 .assign-page > .form-alert button {
   transition:
     color var(--dur-hover) ease,
@@ -27,16 +27,13 @@
 }
 
 /* Nút không nhảy lên khi hover; nhấn thì sẫm nhẹ để biết đã bấm. */
-.button:hover, .cand-btn:hover { transform: none; }
-.button:active:not(:disabled), .cand-btn:active:not(:disabled) { filter: brightness(.96); }
-.button:disabled, .cand-btn:disabled, .row-action:disabled, .pagination button:disabled {
+.button:active:not(:disabled) { filter: brightness(.96); }
+.button:disabled, .row-action:disabled, .pagination button:disabled {
   cursor: not-allowed;
   opacity: .55;
 }
-.button-secondary:hover:not(:disabled) { border-color: #B9C6D6; background: var(--canvas); }
 .pagination button:hover:not(:disabled) { border-color: #B9C6D6; color: var(--primary); background: var(--primary-soft); }
 .icon-button:hover { background: var(--primary-soft); }
-.candidate-logout:hover { color: var(--danger); }
 
 /* Thanh điều hướng quản trị: hover nền nhạt, mục đang chọn có gạch chân (đã có). */
 .cand-navbar a:hover:not(.active) { color: var(--primary); background: rgba(22, 59, 101, .05); }
@@ -55,7 +52,7 @@
 /* ---------- Focus của trường nhập liệu ---------- */
 
 .search-box { transition: border-color var(--dur-hover) ease, box-shadow var(--dur-hover) ease; }
-.search-box:focus-within { border-color: #8DB8E4; box-shadow: var(--focus-ring); }
+.search-box:focus-within { border-color: var(--blue); box-shadow: var(--focus-ring); }
 .search-box input:focus, .search-box input:focus-visible { outline: 0; }
 
 .table-toolbar select, .assign-exam-select, .assign-pick-paper select, .matrix-input, .seat-input,
@@ -65,7 +62,7 @@
 .table-toolbar select:focus, .assign-exam-select:focus, .assign-pick-paper select:focus,
 .matrix-input:focus, .seat-input:focus {
   outline: 0;
-  border-color: #8DB8E4;
+  border-color: var(--blue);
   box-shadow: var(--focus-ring);
 }
 .matrix-input:hover:not(:disabled):not(:focus), .table-toolbar select:hover, .assign-exam-select:hover { border-color: #B9C6D6; }
@@ -119,7 +116,7 @@
 
 /* ---------- Phòng thi: tối giản, phản hồi tức thì ---------- */
 
-.pt-answers label, .pt-grid button, .pt-btn, .pt-flag {
+.pt-answers label, .pt-grid button, .pt-flag {
   transition: color 120ms ease, background-color 120ms ease, border-color 120ms ease;
 }
 .pt-answers label:hover:not(.chon) { background: #F8FAFC; }

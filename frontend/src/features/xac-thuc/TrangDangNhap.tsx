@@ -72,7 +72,6 @@ export default function TrangDangNhap() {
         <div className="photo-login-card">
           <div className="photo-login-heading">
             <h2>Đăng nhập</h2>
-            <p>Dùng tài khoản được nhà trường cung cấp.</p>
           </div>
 
           {/* Chỉ đổi gợi ý nhập liệu; vai trò thật do máy chủ trả về. */}

@@ -560,6 +560,12 @@ export type KyThiCuaToiApi = {
   ketThucLuc: string;
   trangThaiBaiLam: TrangThaiBaiCuaToi;
   duocVaoThi: boolean;
+  hienDiem: boolean;
+  /** Chỉ có khi bài đã nộp/thu và kỳ thi cho hiện điểm. */
+  soCauDung: number | null;
+  diem: number | null;
+  /** Kỳ thi đã kết thúc, cho xem lại và thí sinh có bài đã nộp/thu. */
+  duocXemLai: boolean;
 };
 
 export type DanhSachKyThiCuaToi = { gioServer: string; duLieu: KyThiCuaToiApi[] };
@@ -581,6 +587,19 @@ export type BaiLam = {
   kyThi: { tenKT: string; monThi: string; tenDeCon: string; soCau: number; thoiLuong: number };
   cauHoi: CauLamBai[];
   traLoi: { ttCau: number; dapAnChon: DapAn | null; danhDau: boolean }[];
+};
+
+/** Bài xem lại sau khi kỳ thi kết thúc; không có đáp án đúng. Điểm chỉ có khi kỳ thi cho hiện điểm. */
+export type BaiXemLai = {
+  tenKT: string;
+  monThi: string;
+  tenDeCon: string;
+  soCau: number;
+  tgNop: string;
+  trangThai: TrangThaiBaiCuaToi;
+  soCauDung: number | null;
+  diem: number | null;
+  cauHoi: (CauLamBai & { dapAnChon: DapAn | null; danhDau: boolean })[];
 };
 
 /** `dapAnChon`: "" bỏ chọn, bỏ trống là không đổi. */
@@ -644,3 +663,80 @@ export type NhatKy = {
   thoiGian: string;
   nguoiThucHien: string | null;
 };
+
+/* ---------- Kết quả kỳ thi (quản trị) ---------- */
+
+export type TrangThaiKetQuaThiSinh = "da_nop" | "he_thong_thu" | "dang_lam" | "vang_thi" | "chua_vao";
+
+export type KyThiKetQua = {
+  maKT: number;
+  tenKT: string;
+  monThi: string;
+  tgBatDau: string;
+  thoiLuong: number;
+  trangThai: TrangThaiKyThi;
+  tongSoCau: number;
+};
+
+/** Điểm tính trên bài đã nộp hoặc hệ thống thu; null khi chưa có bài. `tyLeDat` là phần trăm. */
+export type ChiSoKetQua = {
+  soPhanCong: number;
+  soDaThi: number;
+  diemTrungBinh: number | null;
+  diemCaoNhat: number | null;
+  diemThapNhat: number | null;
+  tyLeDat: number | null;
+};
+
+export type KhoangDiem = { tu: number; den: number; soBai: number };
+
+export type CauSai = {
+  maCauHoi: string;
+  noiDung: string;
+  soLuot: number;
+  soSai: number;
+  soChonSai: number;
+  soBoTrong: number;
+  tyLeSai: number;
+};
+
+/** Một ô KQHT × mức độ. `tyLeDung` là phần trăm, null khi chưa có lượt trả lời nào. */
+export type OTyLeDung = { soCau: number; soLuot: number; soDung: number; tyLeDung: number | null };
+
+export type DongTyLeDung = {
+  maKQHT: number;
+  kyHieu: string;
+  tenKQHT: string;
+  theoMucDo: OTyLeDung[];
+  tong: OTyLeDung;
+};
+
+export type BangTyLeDung = {
+  mucDo: { maMD: number; tenMD: string }[];
+  dong: DongTyLeDung[];
+  tongTheoMucDo: OTyLeDung[];
+  tongCong: OTyLeDung;
+};
+
+export type ThongKeKetQua = {
+  kyThi: KyThiKetQua;
+  chiSo: ChiSoKetQua;
+  phoDiem: KhoangDiem[];
+  cauSaiNhieuNhat: CauSai[];
+  tyLeDungTheoKqht: BangTyLeDung;
+};
+
+export type DongBangDiem = {
+  msts: string;
+  hoTen: string;
+  lop: string | null;
+  soMay: string | null;
+  tenDeCon: string | null;
+  soCauDung: number | null;
+  tongSoCau: number;
+  diem: number | null;
+  trangThai: TrangThaiKetQuaThiSinh;
+  tgNop: string | null;
+};
+
+export type TruyVanBangDiem = TruyVanTrang & { tuKhoa?: string; trangThai?: TrangThaiKetQuaThiSinh };

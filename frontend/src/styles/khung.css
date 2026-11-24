@@ -2,17 +2,16 @@
 
 .page-stack { display: grid; gap: 22px; max-width: 1500px; margin: 0 auto; }
 
-.panel { border: 1px solid var(--line); border-radius: 11px; background: #fff; box-shadow: 0 3px 12px rgba(32,43,60,.025); }.panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px 15px; }.panel-heading h3 { margin-bottom: 4px; font-size: 14px; letter-spacing: -.02em; }.panel-heading p { margin: 0; color: #8e97a7; font-size: 12px; }.panel-heading > a { display: flex; align-items: center; gap: 6px; color: var(--primary); font-size: 12px; font-weight: 800; }
-.select-button { display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: #fff; color: #647084; font-size: 12px; font-weight: 700; cursor: pointer; }
+.panel { border: 1px solid var(--line); border-radius: 11px; background: #fff; box-shadow: 0 3px 12px rgba(32,43,60,.025); }.panel-heading { display: flex; align-items: center; justify-content: space-between; gap: 16px; padding: 18px 20px 15px; }.panel-heading h3 { margin-bottom: 4px; font-size: var(--fs-base); letter-spacing: -.02em; }.panel-heading p { margin: 0; color: var(--muted); font-size: var(--fs-xs); }.panel-heading > a { display: flex; align-items: center; gap: 6px; color: var(--primary); font-size: var(--fs-xs); font-weight: 800; }
+.select-button { display: flex; align-items: center; gap: 8px; min-height: 32px; padding: 0 10px; border: 1px solid var(--line); border-radius: 7px; background: #fff; color: #647084; font-size: var(--fs-xs); font-weight: 700; cursor: pointer; }
 .student-shell { min-height: 100vh; background: #f5f7fb; }
 .student-content { width: min(1160px,calc(100% - 48px)); margin: 0 auto; padding: 32px 0 50px; }
 
 /* Khung quản trị: dải đầu trang và menu ngang dùng chung class cand-* với cổng thí sinh. */
 .admin-shell { min-height: 100vh; background: #f5f7fb; }
 .admin-content { padding: 24px 16px 40px; }
-.admin-shell .cand-navbar a, .admin-shell .cand-navbar li > button { font-size: 16px; }
-.admin-shell .cand-caret { font-size: 16px; }
-.admin-shell .cand-navbar a.sap-co:not(.active) { color: var(--muted); }
+.admin-shell .cand-navbar a, .admin-shell .cand-navbar li > button { font-size: var(--fs-md); }
+.admin-shell .cand-caret { font-size: var(--fs-md); }
 .admin-shell .cand-nav-dropdown:nth-child(5) .cand-submenu { right: 0; left: auto; }
 @media (max-width: 620px) {
   .admin-content { padding: 18px 10px 32px; }

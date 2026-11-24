@@ -1,23 +1,40 @@
 /* Trang Tổng quan: biểu đồ lượt thi, danh sách kỳ thi, hoạt động gần đây. */
 .tq-grid { display: grid; grid-template-columns: minmax(0, 1.15fr) minmax(0, 1fr); gap: 16px; align-items: stretch; }
 .tq-panel { display: flex; flex-direction: column; min-width: 0; padding: 20px; }
-.tq-panel-head { display: flex; flex-wrap: wrap; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 16px; }
-.tq-panel-head h3 { margin: 0; color: var(--ink); font-size: var(--fs-section-title); }
-.tq-panel-head p { margin: 4px 0 0; color: var(--muted); font-size: var(--fs-caption); }
+.tq-panel-head { display: flex; flex-wrap: wrap; align-items: center; justify-content: space-between; gap: 12px; min-height: 36px; margin-bottom: 14px; }
+.tq-panel-head h3 { margin: 0; color: var(--ink); font-size: var(--fs-section-title); line-height: var(--lh-snug); }
 .tq-more { display: inline-flex; align-items: center; gap: 4px; color: var(--primary); font-size: var(--fs-body); font-weight: 600; text-decoration: none; }
 .tq-more:hover { text-decoration: underline; }
-.tq-empty { display: grid; justify-items: center; gap: 12px; padding: 28px 12px; color: var(--muted); text-align: center; }
+.tq-panel-foot { align-self: flex-start; margin-top: auto; padding-top: 12px; }
+.tq-more-button { padding: 0; border: 0; background: none; font-family: inherit; cursor: pointer; }
+/* Trạng thái trống: canh giữa phần còn lại của khung, không vẽ trục hay danh sách rỗng. */
+.tq-empty { display: grid; flex: 1; align-content: center; justify-items: center; gap: 6px; padding: 24px 12px; color: var(--muted); text-align: center; }
+.tq-empty-icon { display: grid; place-items: center; width: 44px; height: 44px; margin-bottom: 6px; border-radius: 10px; color: var(--primary); background: var(--primary-soft); }
 .tq-empty strong { color: var(--ink); font-size: var(--fs-emphasis); }
+.tq-empty > span:not(.tq-empty-icon) { max-width: 340px; font-size: var(--fs-caption); line-height: var(--lh-normal); }
+.tq-empty .button { margin-top: 10px; }
+
+/* Bộ lọc khoảng thời gian của biểu đồ Lượt thi: lựa chọn đang bật có chữ màu chính, nền trắng, viền nhấn. */
+.tq-range { position: relative; }
+.tq-range-segmented button { display: inline-flex; align-items: center; gap: 6px; white-space: nowrap; }
+.tq-range-segmented button[aria-pressed="true"] { color: var(--primary); box-shadow: 0 0 0 1px #C9D6E5, 0 1px 2px rgba(32,43,60,.08); }
+.tq-range-pop { position: absolute; top: calc(100% + 8px); right: 0; z-index: 20; display: grid; gap: 12px; width: 320px; padding: 16px; border: 1px solid var(--line); border-radius: 10px; background: #fff; box-shadow: 0 12px 32px rgba(32,43,60,.14); }
+.tq-range-fields { display: grid; grid-template-columns: 1fr 1fr; gap: 10px; }
+.tq-range-fields label { display: grid; gap: 6px; color: var(--muted); font-size: var(--fs-caption); font-weight: 600; }
+.tq-range-fields input { width: 100%; height: 38px; padding: 0 8px; border: 1px solid var(--line); border-radius: 6px; color: var(--ink); background: #fff; font: inherit; font-size: var(--fs-caption); font-weight: 500; }
+.tq-range-fields input:focus { outline: 0; border-color: var(--blue); box-shadow: var(--focus-ring); }
+.tq-range-error { margin: 0; color: var(--danger, #B42318); font-size: var(--fs-caption); }
+.tq-range-actions { display: flex; justify-content: flex-end; gap: 8px; }
 
 /* Tóm tắt trên biểu đồ. */
 .tq-chart-summary { display: flex; flex-wrap: wrap; gap: 10px 28px; margin: 0 0 14px; }
 .tq-chart-summary div { display: grid; gap: 2px; }
 .tq-chart-summary dt { color: var(--muted); font-size: var(--fs-caption); }
-.tq-chart-summary dd { margin: 0; color: var(--ink); font-size: 22px; font-weight: 700; font-variant-numeric: tabular-nums; }
+.tq-chart-summary dd { margin: 0; color: var(--ink); font-size: var(--fs-2xl); font-weight: 700; font-variant-numeric: tabular-nums; }
 .tq-chart-summary dd small { color: var(--muted); font-size: var(--fs-caption); font-weight: 500; }
 
 /* Biểu đồ cột có trục số và đường lưới. */
-.tq-chart { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; flex: 1; min-height: 240px; }
+.tq-chart { display: grid; grid-template-columns: auto minmax(0, 1fr); gap: 10px; flex: 1; min-height: 200px; }
 .tq-chart-axis { display: flex; flex-direction: column; justify-content: space-between; padding-bottom: 26px; color: var(--muted); font-size: var(--fs-micro); font-variant-numeric: tabular-nums; text-align: right; }
 .tq-chart-axis span { transform: translateY(-50%); line-height: 1; }
 .tq-chart-axis span:last-child { transform: translateY(50%); }
@@ -41,20 +58,19 @@
 .tq-col:hover .tq-col-bar { background: var(--primary-hover); }
 .tq-tip { position: absolute; bottom: calc(100% + 6px); left: 50%; z-index: 2; padding: 5px 8px; border-radius: 6px; color: #fff; background: var(--ink); font-size: var(--fs-micro); white-space: nowrap; opacity: 0; pointer-events: none; transform: translateX(-50%); transition: opacity var(--dur-hover) ease; }
 .tq-col-track:hover .tq-tip { opacity: 1; }
-.tq-col:first-child .tq-tip { left: 0; transform: none; }
-.tq-col:last-child .tq-tip { right: 0; left: auto; transform: none; }
-.tq-chart-empty { position: absolute; inset: 0 0 26px; display: grid; place-items: center; margin: 0; color: var(--muted); font-size: var(--fs-body); }
+/* Tooltip các cột sát hai mép căn vào trong để không tràn khung (màn hẹp có nhiều cột). */
+.tq-col:nth-child(-n+4) .tq-tip { left: 0; transform: none; }
+.tq-col:nth-last-child(-n+4) .tq-tip { right: 0; left: auto; transform: none; }
 
 /* Danh sách kỳ thi. */
-.tq-filter { margin-bottom: 6px; }
 .tq-exams { display: grid; margin: 0; padding: 0; list-style: none; }
 /* Tầng trên: tên và môn; tầng dưới: giờ thi và tiến độ. Trạng thái và nút cố định bên phải. */
-.tq-exam { display: grid; grid-template-columns: minmax(0, 1fr) 96px 84px; grid-template-areas: "main status action" "meta status action"; align-items: center; column-gap: 12px; row-gap: 6px; padding: 14px 0; border-top: 1px solid #EEF1F5; }
+.tq-exam { display: grid; grid-template-columns: minmax(0, 1fr) 96px 96px; grid-template-areas: "main status action" "meta status action"; align-items: center; column-gap: 12px; row-gap: 6px; padding: 14px 0; border-top: 1px solid #EEF1F5; }
 .tq-exam:first-child { border-top: 0; }
 .tq-exam-main { grid-area: main; display: grid; gap: 2px; min-width: 0; }
 .tq-exam-meta { grid-area: meta; display: flex; flex-wrap: wrap; align-items: center; gap: 6px 16px; min-width: 0; }
 .tq-exam > .exam-status { grid-area: status; justify-self: start; }
-.tq-exam > .row-link { grid-area: action; justify-self: end; }
+.tq-exam > .row-link { grid-area: action; justify-self: end; white-space: nowrap; }
 .tq-exam-main strong { overflow: hidden; color: var(--ink); font-size: var(--fs-emphasis); text-overflow: ellipsis; white-space: nowrap; }
 .tq-exam-main span { overflow: hidden; color: var(--muted); font-size: var(--fs-caption); text-overflow: ellipsis; white-space: nowrap; }
 .tq-exam-time { color: var(--muted); font-size: var(--fs-caption); }
@@ -64,26 +80,49 @@
 .tq-progress { display: block; overflow: hidden; width: 84px; height: 6px; border-radius: 999px; background: #EAEFF5; }
 .tq-progress i { display: block; height: 100%; border-radius: inherit; background: var(--success); }
 
-/* Hoạt động gần đây: hai cột trên màn rộng, mỗi dòng một thao tác. */
-.tq-activity { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); column-gap: 28px; margin: 0; padding: 0; list-style: none; }
-.tq-activity li { display: grid; grid-template-columns: 82px minmax(0, 1fr) auto; align-items: center; gap: 12px; padding: 11px 0; border-top: 1px solid #EEF1F5; }
-.tq-activity li:nth-child(-n + 2) { border-top: 0; }
-.tq-activity-group { justify-self: start; padding: 3px 8px; border-radius: 6px; color: var(--primary); background: var(--primary-soft); font-size: var(--fs-micro); font-weight: 700; white-space: nowrap; }
-.tq-activity-main { display: grid; gap: 2px; min-width: 0; }
-.tq-activity-main strong { color: var(--ink); font-size: var(--fs-body); }
+/* Hoạt động gần đây: bảng gọn bốn cột — loại, nội dung, người thực hiện, thời gian. */
+.tq-activity { display: grid; }
+.tq-activity-row { display: grid; grid-template-columns: 104px minmax(0, 1fr) 180px 128px; align-items: center; gap: 20px; padding: 14px 0; border-top: 1px solid #EEF1F5; }
+.tq-activity-head { padding: 0 0 8px; border-top: 0; color: var(--muted); font-size: var(--fs-micro); font-weight: 600; letter-spacing: .02em; text-transform: uppercase; }
+.tq-activity-head span:last-child { text-align: right; }
+.tq-activity-group { display: inline-block; padding: 3px 8px; border-radius: 6px; color: var(--primary); background: var(--primary-soft); font-size: var(--fs-micro); font-weight: 700; white-space: nowrap; }
+.tq-activity-main { display: grid; gap: 4px; min-width: 0; }
+.tq-activity-main strong { color: var(--ink); font-size: var(--fs-md); font-weight: 700; line-height: var(--lh-tight); }
 .tq-activity-main span { overflow: hidden; color: var(--muted); font-size: var(--fs-caption); text-overflow: ellipsis; white-space: nowrap; }
-.tq-activity time { display: grid; justify-items: end; gap: 2px; color: var(--muted); font-size: var(--fs-caption); white-space: nowrap; }
-.tq-activity time small { font-size: var(--fs-micro); }
+.tq-activity-user { overflow: hidden; color: var(--ink); font-size: var(--fs-body); text-overflow: ellipsis; white-space: nowrap; }
+.tq-activity-row time { display: grid; justify-items: end; gap: 2px; color: var(--ink); font-size: var(--fs-body); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.tq-activity-row time small { color: var(--muted); font-size: var(--fs-micro); font-variant-numeric: tabular-nums; }
+.tq-activity-dialog { width: min(860px, 100%); display: flex; flex-direction: column; }
+.tq-activity-dialog .dialog-body { overflow-y: auto; }
+.tq-activity-dialog .tq-activity-head { position: sticky; top: 0; z-index: 1; background: #fff; }
+.tq-activity-dialog .tq-activity-dialog-foot { justify-content: space-between; color: var(--muted); font-size: var(--fs-caption); }
+
+/* Badge loại hoạt động: mỗi nhóm một màu (đều đạt tương phản ≥ 4,5:1). */
+.tq-activity-group.nhom-kythi { color: #163B65; background: #E8EEF5; }
+.tq-activity-group.nhom-dethi { color: #5B3FA8; background: #F0ECFA; }
+.tq-activity-group.nhom-matran { color: #0E6670; background: #E2F3F5; }
+.tq-activity-group.nhom-cauhoi { color: #0F7A4E; background: #E6F6EE; }
+.tq-activity-group.nhom-kqht { color: #8A5200; background: #FDF2E0; }
+.tq-activity-group.nhom-thisinh { color: #A1365F; background: #FBEAF1; }
+.tq-activity-group.nhom-taikhoan { color: #4B5563; background: #EEF0F3; }
 
 @media (max-width: 1100px) {
   .tq-grid { grid-template-columns: 1fr; }
 }
 @media (max-width: 860px) {
-  .tq-activity { grid-template-columns: 1fr; }
-  .tq-activity li:nth-child(2) { border-top: 1px solid #EEF1F5; }
+  .tq-activity-head { display: none; }
+  .tq-activity-row { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "group time" "main main" "user user"; gap: 4px 12px; }
+  .tq-activity-row > :nth-child(1) { grid-area: group; }
+  .tq-activity-main { grid-area: main; }
+  .tq-activity-user { grid-area: user; color: var(--muted); }
+  .tq-activity-row time { grid-area: time; }
+  .tq-activity-head + .tq-activity-row { border-top: 0; }
 }
 @media (max-width: 620px) {
+  .tq-range-pop { right: auto; left: 0; width: min(320px, calc(100vw - 32px)); }
   .tq-exam { grid-template-columns: minmax(0, 1fr) auto; grid-template-areas: "main main" "meta meta" "status action"; }
-  .tq-activity li { grid-template-columns: minmax(0, 1fr) auto; }
-  .tq-activity-group { grid-column: 1 / -1; }
+}
+
+@media (max-width: 620px) {
+  .dashboard-page .tq-range .segmented button { padding: 0 10px; }
 }

@@ -302,7 +302,7 @@ export default function TrangLamBai() {
             <span aria-hidden="true" className="pt-result-icon pt-result-icon-info"><BieuTuong name="alert" size={30} /></span>
             <h1 id="pt-thong-bao">{manHinh.tieuDe}</h1>
             <p className="pt-result-meta">{manHinh.noiDung}</p>
-            <Link className="pt-btn pt-btn-primary" to={maKT ? `/candidate/thi/${maKT}` : "/candidate/thi/tham-gia"}>Về trang kỳ thi</Link>
+            <Link className="button button-primary button-lg" to={maKT ? `/candidate/thi/${maKT}` : "/candidate/thi/tham-gia"}>Về trang kỳ thi</Link>
           </section>
         </main>
       )}
@@ -321,7 +321,7 @@ export default function TrangLamBai() {
             ) : (
               <p className="pt-result-hidden">Kỳ thi này không hiển thị điểm ngay. Bài làm của bạn đã được ghi nhận.</p>
             )}
-            <button className="pt-btn pt-btn-primary" onClick={() => navigate("/candidate")} type="button">Về trang chủ</button>
+            <button className="button button-primary button-lg" onClick={() => navigate("/candidate")} type="button">Về trang chủ</button>
           </section>
         </main>
       )}
@@ -355,10 +355,10 @@ export default function TrangLamBai() {
                 ))}
               </fieldset>
               <div className="pt-question-nav">
-                <button className="pt-btn pt-btn-ghost" disabled={cauHienTai === 1} onClick={() => chuyenCau(cauHienTai - 1)} type="button">
+                <button className="button button-secondary" disabled={cauHienTai === 1} onClick={() => chuyenCau(cauHienTai - 1)} type="button">
                   <BieuTuong name="arrow-left" size={16} /> Câu trước
                 </button>
-                <button className="pt-btn pt-btn-primary" disabled={cauHienTai === soCau} onClick={() => chuyenCau(cauHienTai + 1)} type="button">
+                <button className="button button-primary" disabled={cauHienTai === soCau} onClick={() => chuyenCau(cauHienTai + 1)} type="button">
                   Câu tiếp <BieuTuong name="arrow-right" size={16} />
                 </button>
               </div>
@@ -393,10 +393,10 @@ export default function TrangLamBai() {
               </div>
             )}
             <div className="pt-map-actions">
-              <button aria-controls="pt-bang-cau" aria-expanded={hienDanhSach} className="pt-btn pt-btn-ghost" onClick={() => setHienDanhSach((hien) => !hien)} type="button">
+              <button aria-controls="pt-bang-cau" aria-expanded={hienDanhSach} className="button button-secondary button-lg" onClick={() => setHienDanhSach((hien) => !hien)} type="button">
                 <BieuTuong name="dashboard" size={16} /> {hienDanhSach ? "Thu gọn danh sách" : "Danh sách câu"}
               </button>
-              <button className="pt-btn pt-btn-primary pt-submit" onClick={() => { setLoiNop(null); setXacNhanNop(true); }} type="button">
+              <button className="button button-primary button-lg" onClick={() => { setLoiNop(null); setXacNhanNop(true); }} type="button">
                 <BieuTuong name="file" size={16} /> Nộp bài
               </button>
             </div>
@@ -416,8 +416,8 @@ export default function TrangLamBai() {
               <div><dt>Thời gian còn lại</dt><dd>{dinhDangThoiGian(conLaiGiay)}</dd></div>
             </dl>
             <div className="pt-dialog-actions">
-              <button autoFocus className="pt-btn pt-btn-ghost" disabled={dangNop} onClick={() => setXacNhanNop(false)} type="button">Quay lại làm bài</button>
-              <button className="pt-btn pt-btn-primary" disabled={dangNop} onClick={() => void nopBai()} type="button">{dangNop ? "Đang nộp…" : "Nộp bài"}</button>
+              <button autoFocus className="button button-secondary" disabled={dangNop} onClick={() => setXacNhanNop(false)} type="button">Quay lại làm bài</button>
+              <button className="button button-primary" disabled={dangNop} onClick={() => void nopBai()} type="button">{dangNop ? "Đang nộp…" : "Nộp bài"}</button>
             </div>
           </div>
         </div>

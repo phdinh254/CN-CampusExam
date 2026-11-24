@@ -8,7 +8,7 @@
 /* Trang soạn: bước 1 chọn KQHT, bước 2 tỷ lệ chung, bước 3 bảng số câu, thanh lưu. */
 .matrix-setup { display: grid; grid-template-columns: minmax(0, 3fr) minmax(0, 2fr); gap: 16px; }
 .matrix-step { padding: 18px 20px; }
-.matrix-step > header, .matrix-step-title { display: flex; align-items: flex-start; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
+.matrix-step > header, .matrix-step-title { display: flex; align-items: center; justify-content: space-between; gap: 12px; margin-bottom: 14px; }
 .matrix-step-title { display: block; padding: 18px 20px 4px; margin-bottom: 0; }
 .matrix-step h3, .matrix-step-title h3 { margin: 0; color: var(--ink); font-size: var(--fs-section-title); }
 .matrix-step p, .matrix-step-title p, .matrix-muted { margin: 4px 0 0; color: var(--muted); font-size: var(--fs-caption); }

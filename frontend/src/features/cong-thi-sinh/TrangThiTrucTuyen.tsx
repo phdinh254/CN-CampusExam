@@ -2,44 +2,45 @@ import { useEffect, useState, type ReactNode } from "react";
 import { Link, useNavigate, useParams } from "react-router-dom";
 
 import { BieuTuong } from "../../components/BieuTuong";
-import { NhanMinhHoa } from "../../components/NhanMinhHoa";
 import type { DanhSachKyThiCuaToi, HoSoCaNhan, KyThiCuaToiApi, TrangThaiBaiCuaToi } from "../../types/api";
 import { useTaiKhoan } from "../xac-thuc/NhaCungCapXacThuc";
 import { dinhDangNgaySinh } from "../thi-sinh/bieuMauThiSinh";
 import { toiApi } from "./api";
-import {
-  diemThi,
-  kyThiMinhHoa,
-  laKyThiSapToi,
-  NHAN_TRANG_THAI,
-  ngayThiNgan,
-  QUY_DINH_THI,
-  type KyThiCuaToi,
-} from "./duLieuMinhHoa";
+import { diemThi, ngayThiNgan, QUY_DINH_THI } from "./hienThiThiSinh";
 
 /*
  * Luồng Thi trực tuyến: Kỳ thi được phân công → Chi tiết kỳ thi (xác nhận ngay trên trang) → Phòng thi.
- * Kết quả thi và Lịch sử thi xem riêng; hai trang này còn dùng dữ liệu minh họa cho tới phần kết quả.
+ * Kết quả thi và Lịch sử thi xem riêng; điểm chỉ có khi kỳ thi cho hiện điểm. Kỳ thi cho xem lại có
+ * thêm trang Xem lại bài sau khi kết thúc.
  */
 
-function DauTrang({ tieuDe, moTa, quayLai }: { tieuDe: string; moTa?: string; quayLai?: { to: string; nhan: string } }) {
+function DauTrang({ tieuDe, quayLai }: { tieuDe: string; quayLai?: { to: string; nhan: string } }) {
   return (
     <section className="cand-page-head">
       {quayLai && <Link className="cand-back" to={quayLai.to}><BieuTuong name="arrow-left" size={15} /> {quayLai.nhan}</Link>}
       <h1>{tieuDe}</h1>
-      {moTa && <p>{moTa}</p>}
     </section>
   );
 }
 
-function TrangThai({ kt }: { kt: KyThiCuaToi }) {
-  const { nhan, lop } = NHAN_TRANG_THAI[kt.trangThai];
-  return <span className={`cand-status ${lop}`}>{nhan}</span>;
-}
-
-function useKyThi() {
-  const [danhSach] = useState(kyThiMinhHoa);
-  return danhSach;
+/** Danh sách kỳ thi của thí sinh cho hai trang Kết quả thi, Lịch sử thi (mới nhất trước). */
+function useKyThiDaXong() {
+  const [ds, setDs] = useState<KyThiCuaToiApi[] | null>(null);
+  const [loi, setLoi] = useState<string | null>(null);
+  useEffect(() => {
+    const huy = new AbortController();
+    toiApi.kyThi(huy.signal)
+      .then((data) => setDs(
+        data.duLieu
+          .filter((kt) => kt.trangThaiBaiLam === "da_nop" || kt.trangThaiBaiLam === "he_thong_thu" || kt.trangThaiBaiLam === "vang_thi")
+          .sort((a, b) => b.tgBatDau.localeCompare(a.tgBatDau)),
+      ))
+      .catch((error: unknown) => {
+        if (!(error instanceof DOMException && error.name === "AbortError")) setLoi(error instanceof Error ? error.message : "Không tải được kỳ thi.");
+      });
+    return () => huy.abort();
+  }, []);
+  return { ds, loi };
 }
 
 const NHAN_BAI: Record<TrangThaiBaiCuaToi, { nhan: string; lop: string }> = {
@@ -112,7 +113,7 @@ export function TrangVaoThi() {
 
   return (
     <div className="student-dashboard">
-      <DauTrang moTa="Phòng thi mở khi đến giờ thi." tieuDe="Kỳ thi được phân công" />
+      <DauTrang tieuDe="Kỳ thi được phân công" />
       <section className="panel">
         <div className="panel-heading"><div><h3>Lịch thi</h3></div></div>
         {loi && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loi}</span></div>}
@@ -126,7 +127,7 @@ export function TrangVaoThi() {
                   <span>{dinhDangNgayThang.format(batDau)} · {gioThiThat(kt)} · {kt.thoiLuong} phút · {kt.soCau} câu · {soMayThat(kt)}</span>
                 </div>
                 <TrangThaiBai kt={kt} />
-                <Link className={kt.duocVaoThi ? "cand-btn cand-btn-primary" : "row-link"} to={`/candidate/thi/${kt.maKT}`}>
+                <Link className={kt.duocVaoThi ? "button button-primary" : "row-link"} to={`/candidate/thi/${kt.maKT}`}>
                   {kt.trangThaiBaiLam === "dang_lam" ? "Tiếp tục" : kt.duocVaoThi ? "Vào thi" : "Chi tiết"}
                 </Link>
               </li>
@@ -140,8 +141,43 @@ export function TrangVaoThi() {
   );
 }
 
+/** Đếm ngược còn dưới 5 phút thì tô cảnh báo. */
+const SAP_HET_MS = 5 * 60 * 1000;
+
 /**
- * Chi tiết kỳ thi: thông tin thí sinh, thông tin kỳ thi và quy định. Khi phòng thi đang mở,
+ * Dòng "Thời gian" của bảng trạng thái: mốc tiếp theo thí sinh cần biết (mở phòng, hết giờ vào, hết giờ
+ * làm bài) và thời gian còn lại theo giờ máy chủ.
+ */
+function thoiGianConLai(kt: KyThiCuaToiApi, now: number): { chu: ReactNode; sapHet: boolean } {
+  const gio = (iso: string) => dinhDangGioPhut.format(new Date(iso));
+  if (kt.trangThaiBaiLam === "dang_lam") {
+    const con = new Date(kt.ketThucLuc).getTime() - now;
+    return { chu: <>Kết thúc lúc {gio(kt.ketThucLuc)} · còn <strong>{demNguocNgan(con)}</strong></>, sapHet: con <= SAP_HET_MS };
+  }
+  if (kt.trangThaiBaiLam !== "chua_vao") {
+    // Nộp sớm thì kỳ thi có thể vẫn đang diễn ra với thí sinh khác.
+    const daKetThuc = new Date(kt.ketThucLuc).getTime() <= now;
+    const truoc = kt.trangThaiBaiLam === "vang_thi" ? "Không vào thi" : kt.trangThaiBaiLam === "he_thong_thu" ? "Hệ thống đã thu bài" : "Đã nộp bài";
+    return { chu: `${truoc} · kỳ thi ${daKetThuc ? "đã kết thúc" : "kết thúc"} lúc ${gio(kt.ketThucLuc)}`, sapHet: false };
+  }
+  if (kt.duocVaoThi) {
+    const con = new Date(kt.dongCongLuc).getTime() - now;
+    return { chu: <>Phòng thi đang mở · vào muộn nhất {gio(kt.dongCongLuc)} (còn <strong>{demNguocNgan(con)}</strong>)</>, sapHet: con <= SAP_HET_MS };
+  }
+  const mo = new Date(kt.moCongLuc).getTime() - now;
+  return { chu: mo > 0 ? <>Phòng thi mở lúc {gio(kt.moCongLuc)} · còn <strong>{demNguocNgan(mo)}</strong></> : "Đang mở phòng thi…", sapHet: false };
+}
+
+function diemCuaBai(kt: KyThiCuaToiApi) {
+  if (kt.trangThaiBaiLam === "vang_thi") return "—";
+  if (kt.trangThaiBaiLam !== "da_nop" && kt.trangThaiBaiLam !== "he_thong_thu") return "Có sau khi nộp bài";
+  if (!kt.hienDiem || kt.diem === null) return "Kỳ thi không hiển thị điểm";
+  return `${diemThi(kt.diem)} điểm${kt.soCauDung === null ? "" : ` · đúng ${kt.soCauDung}/${kt.soCau} câu`}`;
+}
+
+/**
+ * Chi tiết kỳ thi: banner tên kỳ thi, bảng trạng thái (như trang bài tập của LMS trường), thông tin
+ * thí sinh và quy định. Khi phòng thi đang mở,
  * thí sinh tick xác nhận rồi vào phòng thi ngay trên trang này.
  */
 export function TrangChiTietKyThi() {
@@ -197,27 +233,42 @@ export function TrangChiTietKyThi() {
     ["Lớp", hoSo ? (hoSo.lop ?? "—") : "…"],
   ];
 
+  const thoiGian = thoiGianConLai(kt, now);
+
   return (
     <div className="student-dashboard">
-      <DauTrang quayLai={{ to: daXong ? "/candidate/thi/lich-su" : "/candidate/thi/tham-gia", nhan: daXong ? "Lịch sử thi" : "Kỳ thi được phân công" }} tieuDe={kt.tenKT} />
+      <section className="cand-detail-head">
+        <Link className="cand-back" to={daXong ? "/candidate/thi/lich-su" : "/candidate/thi/tham-gia"}>
+          <BieuTuong name="arrow-left" size={15} /> {daXong ? "Lịch sử thi" : "Kỳ thi được phân công"}
+        </Link>
+        <div className="cand-banner">
+          <div>
+            <h1>{kt.tenKT}</h1>
+            <p>{kt.monThi} · {ngayThiThat(kt)}</p>
+          </div>
+          <TrangThaiBai kt={kt} />
+        </div>
+      </section>
 
-      {/* Hai cột cân nhau: trái là thông tin thí sinh và kỳ thi, phải là quy định và xác nhận. */}
+      <section className="panel">
+        <div className="panel-heading"><div><h3>Trạng thái bài thi</h3></div></div>
+        <table className="cand-status-table">
+          <tbody>
+            <tr><th scope="row">Trạng thái</th><td><TrangThaiBai kt={kt} /></td></tr>
+            <tr><th scope="row">Giờ thi</th><td>{gioThiThat(kt)} · {kt.thoiLuong} phút · {kt.soCau} câu</td></tr>
+            <tr><th scope="row">Thời gian</th><td className={thoiGian.sapHet ? "cand-sap-het" : undefined}>{thoiGian.chu}</td></tr>
+            <tr><th scope="row">Số máy</th><td>{soMayThat(kt)}</td></tr>
+            <tr><th scope="row">Điểm</th><td>{diemCuaBai(kt)}</td></tr>
+          </tbody>
+        </table>
+      </section>
+
+      {/* Hai cột: trái là thông tin thí sinh, phải là quy định và xác nhận vào thi. */}
       <div className="cand-detail-layout">
         <div className="cand-detail-col">
           <section className="panel">
             <div className="panel-heading"><div><h3>Thông tin thí sinh</h3></div></div>
             <dl className="cand-facts">{thongTinThiSinh.map(([nhan, giaTri]) => <div key={nhan}><dt>{nhan}</dt><dd>{giaTri}</dd></div>)}</dl>
-          </section>
-          <section className="panel">
-            <div className="panel-heading"><div><h3>Thông tin kỳ thi</h3></div><TrangThaiBai kt={kt} /></div>
-            <dl className="cand-facts">
-              <div><dt>Môn thi</dt><dd>{kt.monThi}</dd></div>
-              <div><dt>Ngày thi</dt><dd>{ngayThiThat(kt)}</dd></div>
-              <div><dt>Giờ thi</dt><dd>{gioThiThat(kt)}</dd></div>
-              <div><dt>Thời lượng</dt><dd>{kt.thoiLuong} phút · {kt.soCau} câu</dd></div>
-              <div><dt>Vào thi muộn nhất</dt><dd>{dinhDangGioPhut.format(new Date(kt.dongCongLuc))}</dd></div>
-              <div><dt>Số máy</dt><dd>{soMayThat(kt)}</dd></div>
-            </dl>
           </section>
         </div>
 
@@ -233,7 +284,7 @@ export function TrangChiTietKyThi() {
                   <input checked={dongY} onChange={(event) => setDongY(event.target.checked)} type="checkbox" />
                   <span>Tôi xác nhận thông tin trên là đúng{kt.soMay ? `, đang ngồi đúng máy số ${kt.soMay}` : ""} và đã đọc quy định thi.</span>
                 </label>
-                <button className="cand-btn cand-btn-primary" disabled={!dongY} onClick={() => navigate(`/exam/session?maKT=${kt.maKT}`)} type="button">
+                <button className="button button-primary button-lg" disabled={!dongY} onClick={() => navigate(`/exam/session?maKT=${kt.maKT}`)} type="button">
                   Vào phòng thi <BieuTuong name="arrow-right" size={16} />
                 </button>
               </>
@@ -241,16 +292,17 @@ export function TrangChiTietKyThi() {
             {kt.duocVaoThi && kt.trangThaiBaiLam === "dang_lam" && (
               <>
                 <span>Bạn đang làm bài dở. Bài làm đã được lưu, tiếp tục để làm tiếp.</span>
-                <button className="cand-btn cand-btn-primary" onClick={() => navigate(`/exam/session?maKT=${kt.maKT}`)} type="button">
+                <button className="button button-primary button-lg" onClick={() => navigate(`/exam/session?maKT=${kt.maKT}`)} type="button">
                   Tiếp tục làm bài <BieuTuong name="arrow-right" size={16} />
                 </button>
               </>
             )}
-            {moSau !== null && moSau > 0 && <span>Phòng thi mở sau <strong>{demNguocNgan(moSau)}</strong>. Nút vào thi sẽ hiện ở đây.</span>}
+            {moSau !== null && moSau > 0 && <span>Nút vào phòng thi sẽ hiện ở đây khi tới giờ mở phòng.</span>}
             {kt.trangThaiBaiLam === "chua_vao" && !kt.duocVaoThi && moSau !== null && moSau <= 0 && <span>Đang mở phòng thi…</span>}
             {daXong && (
               <>
                 <span>{kt.trangThaiBaiLam === "vang_thi" ? "Bạn đã không vào thi kỳ thi này." : "Bạn đã hoàn thành kỳ thi này."}</span>
+                {kt.duocXemLai && <Link className="row-link" to={`/candidate/thi/${kt.maKT}/xem-lai`}>Xem lại bài</Link>}
                 <Link className="row-link" to="/candidate/thi/ket-qua">Xem kết quả thi</Link>
               </>
             )}
@@ -261,28 +313,36 @@ export function TrangChiTietKyThi() {
   );
 }
 
+/** Dòng trạng thái tải dùng chung cho hai bảng kết quả. */
+function DongTrangThai({ ds, loi, soCot, trong }: { ds: KyThiCuaToiApi[] | null; loi: string | null; soCot: number; trong: string }) {
+  if (loi) return <tr><td className="cell-loading" colSpan={soCot}>{loi}</td></tr>;
+  if (!ds) return <tr><td className="cell-loading" colSpan={soCot}>Đang tải…</td></tr>;
+  return ds.length === 0 ? <tr><td className="cell-loading" colSpan={soCot}>{trong}</td></tr> : null;
+}
+
 /** Điểm các kỳ thi đã làm, hiện ngay sau khi nộp nếu kỳ thi cho xem điểm. */
 export function TrangKetQuaThi() {
-  const coDiem = useKyThi().filter((kt) => kt.ketQua);
+  const { ds, loi } = useKyThiDaXong();
+  const coDiem = ds?.filter((kt) => kt.diem !== null) ?? null;
 
   return (
     <div className="student-dashboard">
-      <DauTrang moTa="Điểm hiện ngay sau khi nộp nếu kỳ thi cho phép." tieuDe="Kết quả thi" />
+      <DauTrang tieuDe="Kết quả thi" />
       <section className="panel table-panel">
-        <div className="panel-heading"><div><h3>Điểm thi <NhanMinhHoa /></h3></div></div>
+        <div className="panel-heading"><div><h3>Điểm thi</h3></div></div>
         <div className="table-scroll">
           <table className="data-table">
             <thead><tr><th>KỲ THI</th><th>NGÀY THI</th><th>SỐ CÂU ĐÚNG</th><th>ĐIỂM</th></tr></thead>
             <tbody>
-              {coDiem.map((kt) => (
+              {coDiem?.map((kt) => (
                 <tr key={kt.maKT}>
                   <td><strong>{kt.tenKT}</strong></td>
-                  <td>{ngayThiNgan(kt)}</td>
-                  <td>{kt.ketQua!.soCauDung}/{kt.soCau}</td>
-                  <td><strong className="cand-score">{diemThi(kt.ketQua!.diem)}</strong></td>
+                  <td>{ngayThiNgan(kt.tgBatDau)}</td>
+                  <td>{kt.soCauDung ?? 0}/{kt.soCau}</td>
+                  <td><strong className="cand-score">{diemThi(kt.diem!)}</strong></td>
                 </tr>
               ))}
-              {coDiem.length === 0 && <tr><td className="cell-loading" colSpan={4}>Chưa có kết quả thi nào.</td></tr>}
+              <DongTrangThai ds={coDiem} loi={loi} soCot={4} trong="Chưa có kết quả thi nào." />
             </tbody>
           </table>
         </div>
@@ -291,29 +351,36 @@ export function TrangKetQuaThi() {
   );
 }
 
-/** Các lượt thi đã kết thúc, kể cả kỳ thi không hiện điểm và vắng thi. */
+/** Các lượt thi đã nộp, bị thu hoặc vắng, kể cả kỳ thi không hiện điểm. */
 export function TrangLichSuThi() {
-  const daXong = useKyThi().filter((kt) => !laKyThiSapToi(kt)).sort((a, b) => b.batDau.getTime() - a.batDau.getTime());
+  const { ds, loi } = useKyThiDaXong();
 
   return (
     <div className="student-dashboard">
-      <DauTrang moTa="Các kỳ thi đã kết thúc." tieuDe="Lịch sử thi" />
+      <DauTrang tieuDe="Lịch sử thi" />
       <section className="panel table-panel">
-        <div className="panel-heading"><div><h3>Lượt thi đã hoàn thành <NhanMinhHoa /></h3></div></div>
+        <div className="panel-heading"><div><h3>Lượt thi đã hoàn thành</h3></div></div>
         <div className="table-scroll">
           <table className="data-table">
             <thead><tr><th>KỲ THI</th><th>NGÀY THI</th><th>TRẠNG THÁI BÀI</th><th>ĐIỂM</th><th aria-label="Thao tác" /></tr></thead>
             <tbody>
-              {daXong.map((kt) => (
+              {ds?.map((kt) => (
                 <tr key={kt.maKT}>
                   <td><strong>{kt.tenKT}</strong></td>
-                  <td>{ngayThiNgan(kt)}</td>
-                  <td><TrangThai kt={kt} /></td>
-                  <td>{kt.ketQua ? <strong className="cand-score">{diemThi(kt.ketQua.diem)}</strong> : <span className="cand-muted">{kt.trangThai === "vang_thi" ? "—" : "Không hiển thị điểm"}</span>}</td>
-                  <td className="cell-action"><Link to={`/candidate/thi/${kt.maKT}`}>Chi tiết <BieuTuong name="arrow-right" size={14} /></Link></td>
+                  <td>{ngayThiNgan(kt.tgBatDau)}</td>
+                  <td><TrangThaiBai kt={kt} /></td>
+                  <td>
+                    {kt.diem !== null
+                      ? <strong className="cand-score">{diemThi(kt.diem)}</strong>
+                      : <span className="cand-muted">{kt.trangThaiBaiLam === "vang_thi" ? "—" : "Không hiển thị điểm"}</span>}
+                  </td>
+                  <td className="cell-action">
+                    {kt.duocXemLai && <Link to={`/candidate/thi/${kt.maKT}/xem-lai`}>Xem lại bài <BieuTuong name="eye" size={14} /></Link>}
+                    <Link to={`/candidate/thi/${kt.maKT}`}>Chi tiết <BieuTuong name="arrow-right" size={14} /></Link>
+                  </td>
                 </tr>
               ))}
-              {daXong.length === 0 && <tr><td className="cell-loading" colSpan={5}>Bạn chưa có lượt thi nào.</td></tr>}
+              <DongTrangThai ds={ds} loi={loi} soCot={5} trong="Bạn chưa có lượt thi nào." />
             </tbody>
           </table>
         </div>

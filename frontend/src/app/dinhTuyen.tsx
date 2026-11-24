@@ -14,7 +14,7 @@ import TrangSoanMaTran from "../features/ma-tran-de/TrangSoanMaTran";
 import TrangSinhDe from "../features/de-thi/TrangSinhDe";
 import TrangDanhSachDe from "../features/de-thi/TrangDanhSachDe";
 import TrangXemDe from "../features/de-thi/TrangXemDe";
-import TrangChuaTrienKhai from "../features/quan-tri/TrangChuaTrienKhai";
+import TrangBaoCaoKetQua from "../features/bao-cao/TrangBaoCaoKetQua";
 import TrangDoiMatKhau from "../features/xac-thuc/TrangDoiMatKhau";
 import TrangDangNhap from "../features/xac-thuc/TrangDangNhap";
 import YeuCauVaiTro, { ChuyenVeTrangChu } from "../features/xac-thuc/YeuCauVaiTro";
@@ -22,6 +22,7 @@ import TrangLamBai from "../features/phong-thi/TrangLamBai";
 import TrangTaiKhoan from "../features/cong-thi-sinh/TrangTaiKhoan";
 import { TrangChiTietKyThi, TrangKetQuaThi, TrangLichSuThi, TrangVaoThi } from "../features/cong-thi-sinh/TrangThiTrucTuyen";
 import TongQuanThiSinh from "../features/cong-thi-sinh/TongQuanThiSinh";
+import TrangXemLaiBai from "../features/cong-thi-sinh/TrangXemLaiBai";
 import BoCucQuanTri from "../layouts/BoCucQuanTri";
 import BoCucPhongThi from "../layouts/BoCucPhongThi";
 import BoCucThiSinh from "../layouts/BoCucThiSinh";
@@ -55,8 +56,8 @@ export const boDinhTuyen = createBrowserRouter([
           { path: "exam-monitoring", element: <TrangTheoDoiThi /> },
           { path: "candidates", element: <TrangQuanLyThiSinh /> },
           { path: "candidates/import", element: <TrangNhapThiSinh /> },
-          { path: "reports", element: <TrangChuaTrienKhai bieuTuong="activity" moTa="Điểm, tỷ lệ hoàn thành và thống kê theo kỳ thi, lớp, KQHT." tieuDe="Báo cáo kết quả" /> },
-          { path: "settings", element: <TrangChuaTrienKhai bieuTuong="lock" moTa="Tham số đăng nhập, thời gian phiên và chính sách hiển thị điểm." tieuDe="Cài đặt hệ thống" /> },
+          { path: "reports", element: <TrangBaoCaoKetQua /> },
+          { path: "settings", element: <Navigate to="/admin" replace /> },
           { path: "students", element: <Navigate to="/admin/candidates" replace /> },
           { path: "*", element: <Navigate to="/admin" replace /> },
         ],
@@ -76,6 +77,7 @@ export const boDinhTuyen = createBrowserRouter([
           { path: "thi/ket-qua", element: <TrangKetQuaThi /> },
           { path: "thi/lich-su", element: <TrangLichSuThi /> },
           { path: "thi/:maKT", element: <TrangChiTietKyThi /> },
+          { path: "thi/:maKT/xem-lai", element: <TrangXemLaiBai /> },
           { path: "tai-khoan", element: <TrangTaiKhoan /> },
           { path: "*", element: <Navigate to="/candidate" replace /> },
         ],

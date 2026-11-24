@@ -255,7 +255,7 @@ export default function TrangSoanMaTran() {
         <div className="matrix-setup">
           <section className="panel matrix-step">
             <header>
-              <div><h3>1. Chọn KQHT</h3><p>Bấm để thêm vào ma trận, mỗi KQHT mặc định {SO_CAU_MAC_DINH} câu.</p></div>
+              <h3>1. Chọn KQHT</h3>
               {kqhtConLai.length > 1 && <button className="button button-secondary" onClick={() => themKqht(kqhtConLai)} type="button"><BieuTuong name="plus" size={16} /> Thêm tất cả ({kqhtConLai.length})</button>}
             </header>
             {kqhtConLai.length > 0 ? (
@@ -273,7 +273,7 @@ export default function TrangSoanMaTran() {
 
           <section className="panel matrix-step">
             <header>
-              <div><h3>2. Tỷ lệ mức độ</h3><p>Áp dụng cho mọi KQHT, trừ KQHT đặt tỷ lệ riêng.</p></div>
+              <h3>2. Tỷ lệ mức độ</h3>
               <span className={tyLeHopLe(tyLeChung) ? "matrix-sum matrix-sum-ok" : "matrix-sum matrix-sum-bad"}>Tổng {tongTyLeChung}%</span>
             </header>
             <div className="matrix-ratio">
@@ -299,7 +299,7 @@ export default function TrangSoanMaTran() {
       )}
 
       <section className="panel table-panel">
-        {!chiXem && <div className="matrix-step-title"><h3>3. Số câu từng KQHT</h3><p>Chỉ cần nhập số câu, số câu từng mức tự tính theo tỷ lệ.</p></div>}
+        {!chiXem && <div className="matrix-step-title"><h3>3. Số câu từng KQHT</h3></div>}
         {loiTruong.cauTruc && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loiTruong.cauTruc}</span></div>}
 
         <div className="table-scroll">
