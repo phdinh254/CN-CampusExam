@@ -503,7 +503,6 @@ export type KyThiChiTiet = {
   thoiLuong: number;
   soPhutChoVaoTre: number;
   hienDiem: boolean;
-  choXemLai: boolean;
   cachPhanDe: CachPhanDe;
   trangThai: TrangThaiKyThi;
   ngayTao: string;
@@ -533,7 +532,6 @@ export type LuuKyThiRequest = {
   thoiLuong: number;
   soPhutChoVaoTre: number;
   hienDiem: boolean;
-  choXemLai: boolean;
   cachPhanDe: CachPhanDe;
 };
 
@@ -561,11 +559,8 @@ export type KyThiCuaToiApi = {
   trangThaiBaiLam: TrangThaiBaiCuaToi;
   duocVaoThi: boolean;
   hienDiem: boolean;
-  /** Chỉ có khi bài đã nộp/thu và kỳ thi cho hiện điểm. */
-  soCauDung: number | null;
+  /** Chỉ có khi bài đã nộp/thu và kỳ thi cho hiện điểm. Thí sinh chỉ thấy điểm, không thấy số câu đúng/sai. */
   diem: number | null;
-  /** Kỳ thi đã kết thúc, cho xem lại và thí sinh có bài đã nộp/thu. */
-  duocXemLai: boolean;
 };
 
 export type DanhSachKyThiCuaToi = { gioServer: string; duLieu: KyThiCuaToiApi[] };
@@ -589,19 +584,6 @@ export type BaiLam = {
   traLoi: { ttCau: number; dapAnChon: DapAn | null; danhDau: boolean }[];
 };
 
-/** Bài xem lại sau khi kỳ thi kết thúc; không có đáp án đúng. Điểm chỉ có khi kỳ thi cho hiện điểm. */
-export type BaiXemLai = {
-  tenKT: string;
-  monThi: string;
-  tenDeCon: string;
-  soCau: number;
-  tgNop: string;
-  trangThai: TrangThaiBaiCuaToi;
-  soCauDung: number | null;
-  diem: number | null;
-  cauHoi: (CauLamBai & { dapAnChon: DapAn | null; danhDau: boolean })[];
-};
-
 /** `dapAnChon`: "" bỏ chọn, bỏ trống là không đổi. */
 export type ThayDoiTraLoi = { ttCau: number; dapAnChon?: DapAn | ""; danhDau?: boolean };
 
@@ -614,8 +596,6 @@ export type KetQuaNop = {
   tgNop: string;
   hienDiem: boolean;
   diem: number | null;
-  soCauDung: number | null;
-  tongSoCau: number;
 };
 
 /* ---------- Theo dõi thi (/ky-thi/{maKT}/giam-sat) ---------- */
@@ -733,10 +713,43 @@ export type DongBangDiem = {
   soMay: string | null;
   tenDeCon: string | null;
   soCauDung: number | null;
+  /** Tổng số câu − số câu đúng (gồm câu bỏ trống); null khi chưa có bài. */
+  soCauSai: number | null;
   tongSoCau: number;
   diem: number | null;
   trangThai: TrangThaiKetQuaThiSinh;
   tgNop: string | null;
+};
+
+export type KetQuaCau = "dung" | "sai" | "bo_trong";
+
+/** Một câu trong bài của thí sinh, theo thứ tự và nhãn phương án của đề con thí sinh đã làm. */
+export type CauBaiLam = {
+  ttCau: number;
+  maCauHoi: string;
+  noiDung: string;
+  /** Phương án A–D theo thứ tự hiển thị. */
+  phuongAn: string[];
+  dapAnChon: DapAn | null;
+  dapAnDung: DapAn;
+  ketQua: KetQuaCau;
+};
+
+/** Bài làm chi tiết của một thí sinh (chỉ quản trị viên): điểm, số câu đúng/sai/bỏ trống, từng câu. */
+export type BaiLamChiTiet = {
+  msts: string;
+  hoTen: string;
+  lop: string | null;
+  soMay: string | null;
+  tenDeCon: string;
+  trangThai: TrangThaiKetQuaThiSinh;
+  tgNop: string | null;
+  diem: number | null;
+  soCauDung: number;
+  soCauSai: number;
+  soBoTrong: number;
+  tongSoCau: number;
+  cauHoi: CauBaiLam[];
 };
 
 export type TruyVanBangDiem = TruyVanTrang & { tuKhoa?: string; trangThai?: TrangThaiKetQuaThiSinh };

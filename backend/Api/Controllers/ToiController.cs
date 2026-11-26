@@ -115,18 +115,7 @@ public class ToiController(
         return ketQua.ThanhCong ? Ok(ketQua.GiaTri) : LoiApi.FromLoi(HttpContext, ketQua.Loi!);
     }
 
-    /// <summary>Xem lại bài đã nộp khi kỳ thi đã kết thúc và cho xem lại; không trả đáp án đúng.</summary>
-    [HttpGet("ky-thi/{maKT:int}/xem-lai")]
-    [ProducesResponseType<BaiXemLaiDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<BaiXemLaiDto>> XemLai(int maKT, CancellationToken cancellationToken)
-    {
-        var ketQua = await baiLamService.XemLaiAsync(Msts(), maKT, cancellationToken);
-        return ketQua.ThanhCong ? Ok(ketQua.GiaTri) : LoiApi.FromLoi(HttpContext, ketQua.Loi!);
-    }
-
-    /// <summary>Hình của câu theo vị trí hiển thị; khi đang làm bài hoặc khi được xem lại.</summary>
+    /// <summary>Hình của câu theo vị trí hiển thị; chỉ khi đang làm bài.</summary>
     [HttpGet("ky-thi/{maKT:int}/bai-lam/hinh-anh/{ttCau:int}/{viTri}/{thuTu:int}")]
     [ProducesResponseType<FileStreamResult>(StatusCodes.Status200OK)]
     [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]

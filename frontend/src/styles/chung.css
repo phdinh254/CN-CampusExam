@@ -326,8 +326,8 @@ body { color: var(--ink); background: var(--canvas); font-size: var(--fs-body); 
 .dashboard-page .activity-item small { font-size: var(--fs-sm); }
 
 /*
- * Thang chữ chung theo trang Tổng quan: tiêu đề trang 26, mô tả 15, tiêu đề khối 18,
- * chữ nhấn 15, nội dung 14, chú thích 13, nhãn nhỏ 12, số thống kê 28.
+ * Thang chữ quản trị theo trang Tổng quan: tiêu đề trang 24, mô tả 14, tiêu đề khối 18,
+ * chữ nhấn 16, nội dung 14, chú thích 13, nhãn nhỏ 12, số thống kê 28 (biến --fs-page-title … --fs-stat).
  * Đặt cuối tệp để thắng các quy tắc cũ cùng độ ưu tiên ở trang-quan-tri.css, tinh-chinh.css.
  */
 .welcome-row p, .page-heading-row p { font-size: var(--fs-page-subtitle); }
@@ -364,14 +364,12 @@ body { color: var(--ink); background: var(--canvas); font-size: var(--fs-body); 
 
 /* Ô nội dung riêng của các trang. */
 .outcomes-table code { font-family: inherit; font-size: var(--fs-micro); line-height: var(--lh-tight); }
-.page-kicker { font-size: var(--fs-micro); }
 .exam-overview-main > p { font-size: var(--fs-body); }
 .exam-overview-main h3 { font-size: var(--fs-section-title); }
 .live-stats strong { font-size: var(--fs-stat); line-height: var(--lh-tight); }
 .live-stats span, .live-clock > span, .live-clock small { font-size: var(--fs-caption); }
 .progress-cell strong, .candidate-count, .password-hint { font-size: var(--fs-caption); }
 .issue-list, .question-images > span, .question-image-fallback { font-size: var(--fs-caption); }
-.import-empty span, .import-confirm span { font-size: var(--fs-body); }
 .outcome-letter { font-size: var(--fs-emphasis); }
 
 /*

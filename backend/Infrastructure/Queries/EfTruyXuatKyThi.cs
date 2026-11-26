@@ -129,7 +129,6 @@ public sealed class EfTruyXuatKyThi(
             kt.ThoiLuong,
             kt.SoPhutChoVaoTre,
             kt.HienDiem == 1,
-            kt.ChoXemLai == 1,
             (CachPhanDe)kt.CachPhanDe,
             QuyTacKyThi.TrangThaiHienThi(kt.TrangThaiKyThi, kt.TgBatDau, kt.ThoiLuong, now),
             kt.NgayTao,

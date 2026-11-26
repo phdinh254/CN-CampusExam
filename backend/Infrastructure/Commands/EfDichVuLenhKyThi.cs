@@ -565,7 +565,6 @@ public sealed class EfDichVuLenhKyThi(
         kyThi.ThoiLuong = command.ThoiLuong;
         kyThi.SoPhutChoVaoTre = command.SoPhutChoVaoTre;
         kyThi.HienDiem = (short)(command.HienDiem ? 1 : 0);
-        kyThi.ChoXemLai = (short)(command.ChoXemLai ? 1 : 0);
         kyThi.CachPhanDe = (byte)command.CachPhanDe;
     }
 

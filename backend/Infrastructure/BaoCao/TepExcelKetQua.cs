@@ -8,7 +8,8 @@ using DocumentFormat.OpenXml.Spreadsheet;
 namespace CampusExam.Infrastructure.BaoCao;
 
 /// <summary>
-/// Tệp Excel kết quả một kỳ thi: sheet "Bảng điểm", "Thống kê" và "Theo KQHT", cùng số liệu với màn hình.
+/// Tệp Excel kết quả một kỳ thi: sheet "Bảng điểm", "Thống kê", "Theo KQHT" và "Chi tiết" (từng câu đúng/sai
+/// của mỗi thí sinh), cùng số liệu với màn hình.
 /// Chuỗi ghi dạng inline string; giờ đổi sang giờ Việt Nam (thi tập trung tại trường).
 /// </summary>
 public static class TepExcelKetQua
@@ -19,7 +20,7 @@ public static class TepExcelKetQua
 
     private static readonly TimeZoneInfo GioVietNam = TimGioVietNam();
 
-    public static byte[] Tao(ThongKeKetQuaDto thongKe, IReadOnlyList<DongBangDiemDto> bangDiem)
+    public static byte[] Tao(ThongKeKetQuaDto thongKe, IReadOnlyList<DongBangDiemDto> bangDiem, BangChiTietDto chiTiet)
     {
         using var stream = new MemoryStream();
         using (var taiLieu = SpreadsheetDocument.Create(stream, SpreadsheetDocumentType.Workbook))
@@ -38,10 +39,11 @@ public static class TepExcelKetQua
                     new CellFormat { FontId = 2, ApplyFont = true }));
 
             var sheets = workbook.Workbook.AppendChild(new Sheets());
-            ThemSheet(workbook, sheets, 1, "Bảng điểm", SheetBangDiem(thongKe.KyThi, bangDiem), [14, 26, 14, 9, 9, 13, 13, 9, 15, 18]);
+            ThemSheet(workbook, sheets, 1, "Bảng điểm", SheetBangDiem(thongKe.KyThi, bangDiem), [14, 26, 14, 9, 9, 13, 12, 13, 9, 15, 18]);
             ThemSheet(workbook, sheets, 2, "Thống kê", SheetThongKe(thongKe), [22, 60, 11, 11, 11, 11, 13]);
             var bang = thongKe.TyLeDungTheoKqht;
             ThemSheet(workbook, sheets, 3, "Theo KQHT", SheetTheoKqht(thongKe.KyThi, bang), [36, .. bang.MucDo.Select(_ => 16d), 16]);
+            ThemSheet(workbook, sheets, 4, "Chi tiết", SheetChiTiet(thongKe.KyThi, chiTiet), [14, 26, 9, 9, 8, 8, .. chiTiet.Cot.Select(_ => 12d)]);
             workbook.Workbook.Save();
         }
 
@@ -54,7 +56,7 @@ public static class TepExcelKetQua
         {
             Hang(1, [Chu(kt.TenKT, KieuTieuDe)]),
             Hang(2, [Chu($"Môn: {kt.MonThi} · Ngày thi: {GioVN(kt.TgBatDau).ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)} · {kt.ThoiLuong} phút")]),
-            Hang(4, new[] { "MSSV", "Họ tên", "Lớp", "Số máy", "Mã đề", "Số câu đúng", "Tổng số câu", "Điểm", "Trạng thái", "Giờ nộp" }
+            Hang(4, new[] { "MSSV", "Họ tên", "Lớp", "Số máy", "Mã đề", "Số câu đúng", "Số câu sai", "Tổng số câu", "Điểm", "Trạng thái", "Giờ nộp" }
                 .Select(t => Chu(t, KieuDam)).ToArray())
         };
         uint so = 5;
@@ -63,7 +65,7 @@ public static class TepExcelKetQua
             hang.Add(Hang(so++,
             [
                 Chu(d.Msts), Chu(d.HoTen), Chu(d.Lop), Chu(d.SoMay), Chu(d.TenDeCon),
-                So(d.SoCauDung), So(d.TongSoCau), So(d.Diem, KieuDiem), Chu(NhanTrangThai(d.TrangThai)),
+                So(d.SoCauDung), So(d.SoCauSai), So(d.TongSoCau), So(d.Diem, KieuDiem), Chu(NhanTrangThai(d.TrangThai)),
                 Chu(d.TgNop is { } nop ? GioVN(nop).ToString("dd/MM/yyyy HH:mm:ss", CultureInfo.InvariantCulture) : null)
             ]));
         }
@@ -104,6 +106,38 @@ public static class TepExcelKetQua
         if (tk.CauSaiNhieuNhat.Count == 0)
         {
             hang.Add(Hang(so, [Chu("Chưa có câu trả lời sai.")]));
+        }
+
+        return hang;
+    }
+
+    /// <summary>
+    /// Mỗi thí sinh đã thi một dòng, mỗi câu của đề gốc một cột (dòng tiêu đề thứ hai là mã câu hỏi):
+    /// "Đ" đúng, "S" chọn sai, "–" bỏ trống.
+    /// </summary>
+    private static List<Row> SheetChiTiet(KyThiKetQuaDto kt, BangChiTietDto chiTiet)
+    {
+        var hang = new List<Row>
+        {
+            Hang(1, [Chu(kt.TenKT, KieuTieuDe)]),
+            Hang(2, [Chu("Đ = đúng, S = sai, – = bỏ trống. Cột theo thứ tự câu của đề gốc (mỗi mã đề con xếp câu khác nhau); dòng 5 là mã câu hỏi.")]),
+            Hang(4, [.. new[] { "MSSV", "Họ tên", "Mã đề", "Điểm", "Đúng", "Sai" }.Select(t => Chu(t, KieuDam)),
+                .. chiTiet.Cot.Select(c => Chu($"Câu {c.ThuTu}", KieuDam))]),
+            Hang(5, [Chu(null), Chu(null), Chu(null), Chu(null), Chu(null), Chu(null), .. chiTiet.Cot.Select(c => Chu(c.MaCauHoi))])
+        };
+        uint so = 6;
+        foreach (var d in chiTiet.Dong)
+        {
+            hang.Add(Hang(so++,
+            [
+                Chu(d.Msts), Chu(d.HoTen), Chu(d.TenDeCon), So(d.Diem, KieuDiem), So(d.SoCauDung), So(d.SoCauSai),
+                .. d.KetQua.Select(k => Chu(k switch { KetQuaCau.Dung => "Đ", KetQuaCau.Sai => "S", _ => "–" }))
+            ]));
+        }
+
+        if (chiTiet.Dong.Count == 0)
+        {
+            hang.Add(Hang(so, [Chu("Chưa có bài đã nộp.")]));
         }
 
         return hang;

@@ -1,7 +1,6 @@
 using System.ComponentModel.DataAnnotations;
 using System.Text.Json.Serialization;
 using CampusExam.Application.Common.Json;
-using CampusExam.Application.KyThi;
 
 namespace CampusExam.Application.BaiLam;
 
@@ -42,17 +41,9 @@ public static class QuyTacBaiLam
     /// <summary>Điểm = số câu đúng ÷ tổng số câu × 10, làm tròn 2 chữ số.</summary>
     public static decimal Diem(int soCauDung, int tongSoCau) =>
         tongSoCau <= 0 ? 0 : Math.Round(soCauDung * 10m / tongSoCau, 2, MidpointRounding.AwayFromZero);
-
-    /// <summary>
-    /// Xem lại bài: kỳ thi đã đóng (trạng thái lưu 3), kỳ thi cho xem lại và thí sinh có bài đã nộp hoặc
-    /// hệ thống thu (1, 2). Dùng trạng thái lưu thay vì trạng thái theo giờ vì tác vụ nền chỉ đóng kỳ thi
-    /// khi không còn bài đang làm: thí sinh được cộng giờ có thể còn làm bài sau giờ kết thúc chung, khi
-    /// đó người đã nộp chưa được xem lại đề.
-    /// </summary>
-    public static bool DuocXemLai(byte trangThaiKyThiLuu, short choXemLai, byte? trangThaiBai) =>
-        trangThaiKyThiLuu == (byte)TrangThaiKyThi.DaKetThuc && choXemLai == 1 && trangThaiBai is 1 or 2;
 }
 
+/// <summary>Kỳ thi của thí sinh. Thí sinh chỉ thấy điểm (khi kỳ thi cho hiện điểm), không thấy số câu đúng/sai.</summary>
 public sealed record KyThiCuaToiDto(
     int MaKT,
     string TenKT,
@@ -67,9 +58,7 @@ public sealed record KyThiCuaToiDto(
     TrangThaiBaiCuaToi TrangThaiBaiLam,
     bool DuocVaoThi,
     bool HienDiem,
-    int? SoCauDung,
-    decimal? Diem,
-    bool DuocXemLai);
+    decimal? Diem);
 
 /// <summary><c>GioServer</c> để frontend tính độ lệch đồng hồ một lần.</summary>
 public sealed record DanhSachKyThiCuaToiDto(DateTime GioServer, IReadOnlyList<KyThiCuaToiDto> DuLieu);
@@ -98,37 +87,14 @@ public sealed record BaiLamDto(
     IReadOnlyList<CauLamBaiDto> CauHoi,
     IReadOnlyList<TraLoiDaLuuDto> TraLoi);
 
-/// <summary>Một câu khi xem lại: như lúc làm bài cộng lựa chọn của thí sinh; không có đáp án đúng.</summary>
-public sealed record CauXemLaiDto(
-    int TtCau,
-    string NoiDung,
-    IReadOnlyList<PhuongAnLamBaiDto> PhuongAn,
-    IReadOnlyList<HinhLamBaiDto> HinhAnh,
-    string? DapAnChon,
-    bool DanhDau);
-
-/// <summary>Bài xem lại; <c>SoCauDung</c>, <c>Diem</c> chỉ có khi kỳ thi cho hiện điểm.</summary>
-public sealed record BaiXemLaiDto(
-    string TenKT,
-    string MonThi,
-    string TenDeCon,
-    int SoCau,
-    DateTime TgNop,
-    TrangThaiBaiCuaToi TrangThai,
-    int? SoCauDung,
-    decimal? Diem,
-    IReadOnlyList<CauXemLaiDto> CauHoi);
-
 public sealed record KetQuaLuuDto(long LoDaLuu, DateTime LuuLuc, DateTime HanNop);
 
-/// <summary>Kết quả nộp; <c>Diem</c>, <c>SoCauDung</c> chỉ có khi kỳ thi cho hiện điểm.</summary>
+/// <summary>Kết quả nộp; <c>Diem</c> chỉ có khi kỳ thi cho hiện điểm. Thí sinh không thấy số câu đúng/sai.</summary>
 public sealed record KetQuaNopDto(
     TrangThaiBaiCuaToi TrangThai,
     DateTime TgNop,
     bool HienDiem,
-    decimal? Diem,
-    int? SoCauDung,
-    int TongSoCau);
+    decimal? Diem);
 
 /// <summary>Một thay đổi trong lô tự lưu. Trường để trống là không đổi.</summary>
 public sealed class ThayDoiTraLoi

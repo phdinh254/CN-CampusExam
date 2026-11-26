@@ -172,7 +172,7 @@ function diemCuaBai(kt: KyThiCuaToiApi) {
   if (kt.trangThaiBaiLam === "vang_thi") return "—";
   if (kt.trangThaiBaiLam !== "da_nop" && kt.trangThaiBaiLam !== "he_thong_thu") return "Có sau khi nộp bài";
   if (!kt.hienDiem || kt.diem === null) return "Kỳ thi không hiển thị điểm";
-  return `${diemThi(kt.diem)} điểm${kt.soCauDung === null ? "" : ` · đúng ${kt.soCauDung}/${kt.soCau} câu`}`;
+  return `${diemThi(kt.diem)} điểm`;
 }
 
 /**
@@ -302,7 +302,6 @@ export function TrangChiTietKyThi() {
             {daXong && (
               <>
                 <span>{kt.trangThaiBaiLam === "vang_thi" ? "Bạn đã không vào thi kỳ thi này." : "Bạn đã hoàn thành kỳ thi này."}</span>
-                {kt.duocXemLai && <Link className="row-link" to={`/candidate/thi/${kt.maKT}/xem-lai`}>Xem lại bài</Link>}
                 <Link className="row-link" to="/candidate/thi/ket-qua">Xem kết quả thi</Link>
               </>
             )}
@@ -332,17 +331,16 @@ export function TrangKetQuaThi() {
         <div className="panel-heading"><div><h3>Điểm thi</h3></div></div>
         <div className="table-scroll">
           <table className="data-table">
-            <thead><tr><th>KỲ THI</th><th>NGÀY THI</th><th>SỐ CÂU ĐÚNG</th><th>ĐIỂM</th></tr></thead>
+            <thead><tr><th>KỲ THI</th><th>NGÀY THI</th><th>ĐIỂM</th></tr></thead>
             <tbody>
               {coDiem?.map((kt) => (
                 <tr key={kt.maKT}>
                   <td><strong>{kt.tenKT}</strong></td>
                   <td>{ngayThiNgan(kt.tgBatDau)}</td>
-                  <td>{kt.soCauDung ?? 0}/{kt.soCau}</td>
                   <td><strong className="cand-score">{diemThi(kt.diem!)}</strong></td>
                 </tr>
               ))}
-              <DongTrangThai ds={coDiem} loi={loi} soCot={4} trong="Chưa có kết quả thi nào." />
+              <DongTrangThai ds={coDiem} loi={loi} soCot={3} trong="Chưa có kết quả thi nào." />
             </tbody>
           </table>
         </div>
@@ -375,7 +373,6 @@ export function TrangLichSuThi() {
                       : <span className="cand-muted">{kt.trangThaiBaiLam === "vang_thi" ? "—" : "Không hiển thị điểm"}</span>}
                   </td>
                   <td className="cell-action">
-                    {kt.duocXemLai && <Link to={`/candidate/thi/${kt.maKT}/xem-lai`}>Xem lại bài <BieuTuong name="eye" size={14} /></Link>}
                     <Link to={`/candidate/thi/${kt.maKT}`}>Chi tiết <BieuTuong name="arrow-right" size={14} /></Link>
                   </td>
                 </tr>

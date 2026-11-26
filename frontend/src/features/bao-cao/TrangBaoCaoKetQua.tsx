@@ -9,6 +9,7 @@ import { kyThiApi } from "../ky-thi/api";
 import { mocTruc } from "../quan-tri/KhungLuotThi";
 import { TrangThaiTrong } from "../quan-tri/TrangThaiTrong";
 import { baoCaoApi } from "./api";
+import { HopThoaiBaiLam } from "./HopThoaiBaiLam";
 
 /*
  * Báo cáo kết quả một kỳ thi đang thi hoặc đã kết thúc. Mọi số liệu do máy chủ tính (cùng nguồn với
@@ -136,6 +137,7 @@ export default function TrangBaoCaoKetQua() {
   const [lanTai, setLanTai] = useState(0);
   const [dangXuat, setDangXuat] = useState(false);
   const [loiXuat, setLoiXuat] = useState<string | null>(null);
+  const [xemBai, setXemBai] = useState<string | null>(null);
 
   useEffect(() => {
     const huy = new AbortController();
@@ -337,7 +339,7 @@ export default function TrangBaoCaoKetQua() {
               <>
                 <div className="table-scroll">
                   <table className="data-table">
-                    <thead><tr><th>MSSV</th><th>HỌ TÊN</th><th>LỚP</th><th>MÁY</th><th>MÃ ĐỀ</th><th>SỐ CÂU ĐÚNG</th><th>ĐIỂM</th><th>TRẠNG THÁI</th></tr></thead>
+                    <thead><tr><th>MSSV</th><th>HỌ TÊN</th><th>LỚP</th><th>MÁY</th><th>MÃ ĐỀ</th><th>ĐÚNG</th><th>SAI</th><th>ĐIỂM</th><th>TRẠNG THÁI</th><th><span className="sr-only">THAO TÁC</span></th></tr></thead>
                     <tbody>
                       {bangDiem?.duLieu.map((d) => (
                         <tr key={d.msts}>
@@ -347,14 +349,22 @@ export default function TrangBaoCaoKetQua() {
                           <td>{d.soMay ?? "—"}</td>
                           <td>{d.tenDeCon ?? "—"}</td>
                           <td>{d.soCauDung === null ? "—" : `${d.soCauDung}/${d.tongSoCau}`}</td>
+                          <td>{d.soCauSai ?? "—"}</td>
                           <td><strong>{diem(d.diem)}</strong></td>
                           <td><span className={`status-dot ${LOP_TRANG_THAI[d.trangThai]}`}>{NHAN_TRANG_THAI[d.trangThai]}</span></td>
+                          <td>
+                            {(d.trangThai === "da_nop" || d.trangThai === "he_thong_thu") && (
+                              <div className="row-actions">
+                                <button aria-label={`Xem bài của ${d.msts}`} className="row-action" onClick={() => setXemBai(d.msts)} title="Xem bài làm" type="button"><BieuTuong name="eye" size={16} /></button>
+                              </div>
+                            )}
+                          </td>
                         </tr>
                       ))}
                       {bangDiem && bangDiem.duLieu.length === 0 && (
-                        <tr><td className="cell-loading" colSpan={8}>{tuKhoa || trangThai ? "Không có thí sinh phù hợp." : "Kỳ thi chưa phân công thí sinh."}</td></tr>
+                        <tr><td className="cell-loading" colSpan={10}>{tuKhoa || trangThai ? "Không có thí sinh phù hợp." : "Kỳ thi chưa phân công thí sinh."}</td></tr>
                       )}
-                      {!bangDiem && <tr><td className="cell-loading" colSpan={8}>Đang tải…</td></tr>}
+                      {!bangDiem && <tr><td className="cell-loading" colSpan={10}>Đang tải…</td></tr>}
                     </tbody>
                   </table>
                 </div>
@@ -371,6 +381,8 @@ export default function TrangBaoCaoKetQua() {
           </section>
         </>
       )}
+
+      {xemBai && maKT !== null && <HopThoaiBaiLam maKT={maKT} msts={xemBai} onDong={() => setXemBai(null)} />}
     </div>
   );
 }

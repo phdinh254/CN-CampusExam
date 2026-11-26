@@ -116,7 +116,6 @@ public sealed record KyThiChiTietDto(
     int ThoiLuong,
     int SoPhutChoVaoTre,
     bool HienDiem,
-    bool ChoXemLai,
     CachPhanDe CachPhanDe,
     TrangThaiKyThi TrangThai,
     DateTime NgayTao,

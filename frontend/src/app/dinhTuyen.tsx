@@ -22,7 +22,6 @@ import TrangLamBai from "../features/phong-thi/TrangLamBai";
 import TrangTaiKhoan from "../features/cong-thi-sinh/TrangTaiKhoan";
 import { TrangChiTietKyThi, TrangKetQuaThi, TrangLichSuThi, TrangVaoThi } from "../features/cong-thi-sinh/TrangThiTrucTuyen";
 import TongQuanThiSinh from "../features/cong-thi-sinh/TongQuanThiSinh";
-import TrangXemLaiBai from "../features/cong-thi-sinh/TrangXemLaiBai";
 import BoCucQuanTri from "../layouts/BoCucQuanTri";
 import BoCucPhongThi from "../layouts/BoCucPhongThi";
 import BoCucThiSinh from "../layouts/BoCucThiSinh";
@@ -77,7 +76,6 @@ export const boDinhTuyen = createBrowserRouter([
           { path: "thi/ket-qua", element: <TrangKetQuaThi /> },
           { path: "thi/lich-su", element: <TrangLichSuThi /> },
           { path: "thi/:maKT", element: <TrangChiTietKyThi /> },
-          { path: "thi/:maKT/xem-lai", element: <TrangXemLaiBai /> },
           { path: "tai-khoan", element: <TrangTaiKhoan /> },
           { path: "*", element: <Navigate to="/candidate" replace /> },
         ],

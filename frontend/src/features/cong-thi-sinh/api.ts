@@ -1,5 +1,5 @@
 import { khachHttp } from "../../services/khachHttp";
-import type { BaiLam, BaiXemLai, DanhSachKyThiCuaToi, HoSoCaNhan, KetQuaLuu, KetQuaNop, KyThiCuaToiApi, LoTraLoi } from "../../types/api";
+import type { BaiLam, DanhSachKyThiCuaToi, HoSoCaNhan, KetQuaLuu, KetQuaNop, KyThiCuaToiApi, LoTraLoi } from "../../types/api";
 
 const baiLam = (maKT: number) => `/toi/ky-thi/${maKT}/bai-lam`;
 
@@ -20,7 +20,4 @@ export const toiApi = {
 
   /** Gửi kèm lô cuối; gọi lại trả kết quả lần đầu. */
   nop: (maKT: number, lo: LoTraLoi) => khachHttp.post<KetQuaNop>(`${baiLam(maKT)}/nop`, lo),
-
-  /** Chỉ khi kỳ thi đã kết thúc và cho xem lại; lỗi `REVIEW_NOT_AVAILABLE`, `EXAM_NOT_FOUND`. */
-  xemLai: (maKT: number, signal?: AbortSignal) => khachHttp.get<BaiXemLai>(`/toi/ky-thi/${maKT}/xem-lai`, { signal }),
 };

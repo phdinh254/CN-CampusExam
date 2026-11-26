@@ -46,7 +46,6 @@ public static class MaLoi
     public const string AttemptNotFound = "ATTEMPT_NOT_FOUND";
     public const string AttemptClosed = "ATTEMPT_CLOSED";
     public const string ExamNoResults = "EXAM_NO_RESULTS";
-    public const string ReviewNotAvailable = "REVIEW_NOT_AVAILABLE";
 
     public const string ConcurrencyConflict = "CONCURRENCY_CONFLICT";
 

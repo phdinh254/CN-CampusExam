@@ -317,43 +317,62 @@ export default function TrangNganHangCauHoi() {
                     {editingDetail && editingDetail.soDeDaDung > 0 && (
                       <div className="form-warning"><BieuTuong name="alert" size={16} /><span>Câu hỏi đã nằm trong {editingDetail.soDeDaDung} đề. Đề đã sinh giữ bản sao cũ; nội dung mới chỉ áp dụng cho đề sinh sau.</span></div>
                     )}
-                    <div className="dialog-field-grid">
-                      <label className="dialog-field"><span>Kết quả học tập <em>*</em></span>
-                        <select disabled={editor.mode === "edit"} onChange={(event) => capNhatForm("maKQHT", event.target.value === "" ? "" : Number(event.target.value))} value={form.maKQHT}>
-                          <option value="">Chọn KQHT</option>
-                          {(editor.mode === "create" ? kqhtDangDung : kqhtList).map((item) => <option key={item.maKQHT} value={item.maKQHT}>{item.kyHieu} — {item.tenKQHT}</option>)}
-                        </select>
-                        {formErrors.maKQHT && <small className="field-error">{formErrors.maKQHT}</small>}
-                      </label>
-                      <label className="dialog-field"><span>Mức độ <em>*</em></span>
-                        <select disabled={editor.mode === "edit"} onChange={(event) => capNhatForm("maMD", Number(event.target.value) as MaMucDo)} value={form.maMD}>
-                          {([1, 2, 3] as MaMucDo[]).map((md) => <option key={md} value={md}>{md} — {MUC_DO[md]}</option>)}
-                        </select>
-                        {formErrors.maMD && <small className="field-error">{formErrors.maMD}</small>}
-                      </label>
-                    </div>
-                    {editor.mode === "edit" && <small className="field-help">Không đổi được KQHT và mức độ sau khi tạo.</small>}
-                    <label className="dialog-field full" style={{ marginTop: 14 }}><span>Nội dung câu hỏi <em>*</em></span>
-                      <textarea autoFocus maxLength={GIOI_HAN.noiDung} onChange={(event) => capNhatForm("noiDung", event.target.value)} rows={4} value={form.noiDung} />
-                      {formErrors.noiDung && <small className="field-error">{formErrors.noiDung}</small>}
-                      <small className="field-counter">{form.noiDung.length}/{GIOI_HAN.noiDung}</small>
-                    </label>
-                    <div className="answer-grid" role="radiogroup" aria-label="Đáp án đúng">
-                      {DAP_AN.map((dapAn) => {
-                        const key = phuongAnKey(dapAn);
-                        return (
-                          <div className={`dialog-field answer-field${form.dapAnDung === dapAn ? " is-correct" : ""}`} key={dapAn}>
-                            <span>
-                              <label htmlFor={`phuong-an-${dapAn}`}>Phương án {dapAn} <em>*</em></label>
-                              <label className="correct-toggle"><input checked={form.dapAnDung === dapAn} name="dapAnDung" onChange={() => capNhatForm("dapAnDung", dapAn)} type="radio" /> Đáp án đúng</label>
-                            </span>
-                            <textarea id={`phuong-an-${dapAn}`} maxLength={GIOI_HAN.phuongAn} onChange={(event) => capNhatForm(key, event.target.value)} rows={2} value={form[key]} />
-                            {formErrors[key] && <small className="field-error">{formErrors[key]}</small>}
+                    <section className="qf-section">
+                      <div className="qf-section-head"><h4>Phân loại</h4>{editor.mode === "edit" && <small>Không đổi được sau khi tạo</small>}</div>
+                      <div className="qf-meta">
+                        <label className="dialog-field"><span>Kết quả học tập <em>*</em></span>
+                          <select disabled={editor.mode === "edit"} onChange={(event) => capNhatForm("maKQHT", event.target.value === "" ? "" : Number(event.target.value))} value={form.maKQHT}>
+                            <option value="">Chọn KQHT</option>
+                            {(editor.mode === "create" ? kqhtDangDung : kqhtList).map((item) => <option key={item.maKQHT} value={item.maKQHT}>{item.kyHieu} — {item.tenKQHT}</option>)}
+                          </select>
+                          {formErrors.maKQHT && <small className="field-error">{formErrors.maKQHT}</small>}
+                        </label>
+                        <div className="dialog-field"><span id="qf-level-label">Mức độ <em>*</em></span>
+                          <div aria-labelledby="qf-level-label" className="qf-levels" role="radiogroup">
+                            {([1, 2, 3] as MaMucDo[]).map((md) => (
+                              <label className={`qf-level ${levelClass[md]}${form.maMD === md ? " is-active" : ""}`} key={md}>
+                                <input checked={form.maMD === md} className="sr-only" disabled={editor.mode === "edit"} name="maMD" onChange={() => capNhatForm("maMD", md)} type="radio" />
+                                {MUC_DO[md]}
+                              </label>
+                            ))}
                           </div>
-                        );
-                      })}
-                    </div>
-                    {formErrors.dapAnDung && <small className="field-error">{formErrors.dapAnDung}</small>}
+                          {formErrors.maMD && <small className="field-error">{formErrors.maMD}</small>}
+                        </div>
+                      </div>
+                    </section>
+
+                    <section className="qf-section">
+                      <div className="qf-section-head"><h4><label htmlFor="qf-noi-dung">Nội dung câu hỏi <em>*</em></label></h4><small>{form.noiDung.length}/{GIOI_HAN.noiDung}</small></div>
+                      <div className="dialog-field qf-stem">
+                        <textarea autoFocus id="qf-noi-dung" maxLength={GIOI_HAN.noiDung} onChange={(event) => capNhatForm("noiDung", event.target.value)} placeholder="Nhập nội dung câu hỏi…" rows={4} value={form.noiDung} />
+                        {formErrors.noiDung && <small className="field-error">{formErrors.noiDung}</small>}
+                      </div>
+                    </section>
+
+                    <section className="qf-section">
+                      <div className="qf-section-head"><h4 id="qf-answer-label">Phương án trả lời <em>*</em></h4><small>Bấm chữ cái để chọn đáp án đúng</small></div>
+                      <div aria-labelledby="qf-answer-label" className="qf-options" role="radiogroup">
+                        {DAP_AN.map((dapAn) => {
+                          const key = phuongAnKey(dapAn);
+                          const dung = form.dapAnDung === dapAn;
+                          return (
+                            <div className={`qf-option${dung ? " is-correct" : ""}${formErrors[key] ? " has-error" : ""}`} key={dapAn}>
+                              <label className="qf-letter" title={dung ? "Đáp án đúng" : `Chọn ${dapAn} là đáp án đúng`}>
+                                <input aria-label={`Đáp án đúng là ${dapAn}`} checked={dung} className="sr-only" name="dapAnDung" onChange={() => capNhatForm("dapAnDung", dapAn)} type="radio" />
+                                {dung ? <BieuTuong name="check" size={17} /> : dapAn}
+                              </label>
+                              <div className="qf-option-body">
+                                <textarea aria-label={`Phương án ${dapAn}`} maxLength={GIOI_HAN.phuongAn} onChange={(event) => capNhatForm(key, event.target.value)} placeholder={`Phương án ${dapAn}`} rows={2} value={form[key]} />
+                                {formErrors[key] && <small className="field-error">{formErrors[key]}</small>}
+                              </div>
+                              {dung && <span className="qf-correct-tag">Đáp án đúng</span>}
+                            </div>
+                          );
+                        })}
+                      </div>
+                      {formErrors.dapAnDung && <small className="field-error">{formErrors.dapAnDung}</small>}
+                    </section>
+
                     {editingDetail && editingDetail.hinhAnh.length > 0 && (
                       <div className="question-images">
                         <span>Hình trong câu hỏi</span>
@@ -368,11 +387,11 @@ export default function TrangNganHangCauHoi() {
                         </div>
                       </div>
                     )}
-                    <label className="checkbox-field"><input checked={form.coDinhDapAn} onChange={(event) => capNhatForm("coDinhDapAn", event.target.checked)} type="checkbox" /><span>Giữ nguyên thứ tự phương án khi sinh đề</span></label>
                   </>
                 )}
               </div>
-              <footer>
+              <footer className="qf-footer">
+                {!editorLoading && (editor.mode === "create" || editingDetail) && <span className="qf-summary">Đáp án đúng: <strong>{form.dapAnDung}</strong></span>}
                 <button className="button button-secondary" disabled={submitting} onClick={() => setEditor(null)} type="button">Hủy</button>
                 <button className="button button-primary" disabled={submitting || editorLoading || (editor.mode === "edit" && !editingDetail)} type="submit">
                   {submitting ? "Đang lưu…" : editor.mode === "create" ? <><BieuTuong name="plus" size={16} /> Thêm câu hỏi</> : <><BieuTuong name="check" size={16} /> Lưu thay đổi</>}

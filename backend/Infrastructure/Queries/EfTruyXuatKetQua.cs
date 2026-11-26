@@ -126,12 +126,108 @@ public sealed class EfTruyXuatKetQua(
                 x.SoMay,
                 x.TenDeCon,
                 x.Bai?.SoCauDung,
+                x.Bai?.SoCauDung is int dung ? kt.TongSoCau - dung : null,
                 kt.TongSoCau,
                 x.Bai?.Diem,
                 QuyTacKetQua.TrangThai(x.Bai?.TrangThaiBaiLam, hetGioVao),
                 x.Bai?.TgNop))
             .ToList();
         return KetQua<IReadOnlyList<DongBangDiemDto>>.Ok(ketQua);
+    }
+
+    public async Task<KetQua<BaiLamChiTietDto>> BaiLamChiTietAsync(int maKT, string msts, CancellationToken cancellationToken)
+    {
+        var kyThi = await LayKyThiAsync(maKT, cancellationToken);
+        if (kyThi.Loi is not null)
+        {
+            return kyThi.Loi;
+        }
+
+        var phanCong = await (
+                from pc in dbContext.PhanCongThis.AsNoTracking()
+                join ts in dbContext.ThiSinhs.AsNoTracking() on pc.Msts equals ts.Msts
+                join dc in dbContext.DeCons.AsNoTracking() on pc.MaDeCon equals dc.MaDeCon
+                where pc.MaKT == maKT && pc.Msts == msts
+                select new { pc.MaPhanCong, pc.MaDeCon, pc.Msts, pc.SoMay, ts.HoTen, ts.Lop, dc.TenDeCon })
+            .SingleOrDefaultAsync(cancellationToken);
+        if (phanCong is null)
+        {
+            return new LoiNghiepVu(LoaiLoi.KhongTimThay, MaLoi.ExamAssignmentNotFound, "Không tìm thấy phân công",
+                $"Thí sinh {msts} không được phân công vào kỳ thi này.");
+        }
+
+        var bai = await dbContext.BaiLams
+            .AsNoTracking()
+            .Where(bl => bl.MaPhanCong == phanCong.MaPhanCong && BaiDaThi.Contains(bl.TrangThaiBaiLam))
+            .Select(bl => new { bl.MaBL, bl.TrangThaiBaiLam, bl.Diem, bl.TgNop })
+            .SingleOrDefaultAsync(cancellationToken);
+        if (bai is null)
+        {
+            return new LoiNghiepVu(LoaiLoi.KhongTimThay, MaLoi.AttemptNotFound, "Chưa có bài làm",
+                "Thí sinh chưa nộp bài hoặc bài chưa được thu.");
+        }
+
+        var cau = await (
+                from hv in dbContext.HoanVis.AsNoTracking()
+                join g in dbContext.GomCaus.AsNoTracking() on new { hv.MaDe, hv.MaCH } equals new { g.MaDe, g.MaCH }
+                join ch in dbContext.CauHois.AsNoTracking() on hv.MaCH equals ch.MaCH
+                where hv.MaDeCon == phanCong.MaDeCon
+                orderby hv.TtCau
+                select new
+                {
+                    hv.MaCH,
+                    hv.TtCau,
+                    hv.TtDapAn,
+                    hv.DapAnDungHienThi,
+                    ch.MaCauHoi,
+                    g.NoiDung,
+                    g.PhuongAnA,
+                    g.PhuongAnB,
+                    g.PhuongAnC,
+                    g.PhuongAnD
+                })
+            .ToListAsync(cancellationToken);
+        var traLoi = await dbContext.TraLois
+            .AsNoTracking()
+            .Where(tl => tl.MaBL == bai.MaBL)
+            .Select(tl => new { tl.MaCH, tl.DapAnChon, tl.LaDung })
+            .ToDictionaryAsync(tl => tl.MaCH, cancellationToken);
+
+        var cauHoi = cau
+            .Select(c =>
+            {
+                var goc = new Dictionary<char, string> { ['A'] = c.PhuongAnA, ['B'] = c.PhuongAnB, ['C'] = c.PhuongAnC, ['D'] = c.PhuongAnD };
+                // TtDapAn: phương án gốc ở từng vị trí hiển thị A, B, C, D.
+                var phuongAn = c.TtDapAn.Select(nhanGoc => QuyTacKetQua.ThayHinh(goc.GetValueOrDefault(nhanGoc) ?? "")).ToList();
+                var tl = traLoi.GetValueOrDefault(c.MaCH);
+                var dapAnChon = string.IsNullOrEmpty(tl?.DapAnChon) ? null : tl.DapAnChon;
+                return new CauBaiLamDto(
+                    c.TtCau,
+                    c.MaCauHoi,
+                    QuyTacKetQua.ThayHinh(c.NoiDung),
+                    phuongAn,
+                    dapAnChon,
+                    c.DapAnDungHienThi,
+                    QuyTacKetQua.KetQuaCua(dapAnChon, tl?.LaDung, c.DapAnDungHienThi));
+            })
+            .ToList();
+
+        var soDung = cauHoi.Count(c => c.KetQua == KetQuaCau.Dung);
+        var soBoTrong = cauHoi.Count(c => c.KetQua == KetQuaCau.BoTrong);
+        return KetQua<BaiLamChiTietDto>.Ok(new BaiLamChiTietDto(
+            phanCong.Msts,
+            phanCong.HoTen,
+            phanCong.Lop,
+            phanCong.SoMay,
+            phanCong.TenDeCon,
+            QuyTacKetQua.TrangThai(bai.TrangThaiBaiLam, true),
+            bai.TgNop,
+            bai.Diem,
+            soDung,
+            cauHoi.Count - soDung,
+            soBoTrong,
+            cauHoi.Count,
+            cauHoi));
     }
 
     public async Task<KetQua<TepKetQuaDto>> XuatExcelAsync(int maKT, NguoiThucHien nguoiThucHien, CancellationToken cancellationToken)
@@ -149,7 +245,8 @@ public sealed class EfTruyXuatKetQua(
         }
 
         var now = timeProvider.GetUtcNow().UtcDateTime;
-        var noiDung = TepExcelKetQua.Tao(thongKe.GiaTri!, bangDiem.GiaTri!);
+        var chiTiet = await BangChiTietAsync(maKT, cancellationToken);
+        var noiDung = TepExcelKetQua.Tao(thongKe.GiaTri!, bangDiem.GiaTri!, chiTiet);
         var tenKT = thongKe.GiaTri!.KyThi.TenKT;
         dbContext.NhatKyHoatDongs.Add(new NhatKyHoatDong
         {
@@ -164,6 +261,60 @@ public sealed class EfTruyXuatKetQua(
         await dbContext.SaveChangesAsync(cancellationToken);
 
         return KetQua<TepKetQuaDto>.Ok(new TepKetQuaDto(noiDung, $"ket-qua-{maKT}-{TepExcelKetQua.GioVN(now).ToString("yyyyMMdd", CultureInfo.InvariantCulture)}.xlsx"));
+    }
+
+    /// <summary>
+    /// Ma trận thí sinh đã thi × câu của đề gốc (theo thứ tự đề gốc) cho sheet "Chi tiết". Mỗi đề con hoán vị
+    /// thứ tự câu nên cột theo mã câu hỏi, không theo số thứ tự câu thí sinh nhìn thấy.
+    /// </summary>
+    private async Task<BangChiTietDto> BangChiTietAsync(int maKT, CancellationToken cancellationToken)
+    {
+        var maDe = await dbContext.KyThis.Where(x => x.MaKT == maKT).Select(x => x.MaDe).SingleAsync(cancellationToken);
+        var cot = await (
+                from g in dbContext.GomCaus.AsNoTracking()
+                join ch in dbContext.CauHois.AsNoTracking() on g.MaCH equals ch.MaCH
+                where g.MaDe == maDe
+                orderby g.ThuTuTrongDeGoc
+                select new { g.MaCH, g.ThuTuTrongDeGoc, ch.MaCauHoi })
+            .ToListAsync(cancellationToken);
+
+        var bai = await (
+                from bl in BaiDaThiCua(maKT)
+                join pc in dbContext.PhanCongThis.AsNoTracking() on bl.MaPhanCong equals pc.MaPhanCong
+                join ts in dbContext.ThiSinhs.AsNoTracking() on pc.Msts equals ts.Msts
+                join dc in dbContext.DeCons.AsNoTracking() on bl.MaDeCon equals dc.MaDeCon
+                orderby pc.Msts
+                select new { bl.MaBL, bl.MaDeCon, bl.Diem, pc.Msts, ts.HoTen, dc.TenDeCon })
+            .ToListAsync(cancellationToken);
+
+        var traLoi = await (
+                from tl in dbContext.TraLois.AsNoTracking()
+                join bl in BaiDaThiCua(maKT) on tl.MaBL equals bl.MaBL
+                select new { tl.MaBL, tl.MaCH, tl.DapAnChon, tl.LaDung })
+            .ToDictionaryAsync(x => (x.MaBL, x.MaCH), cancellationToken);
+
+        var maDeCon = bai.Select(x => x.MaDeCon).Distinct().ToList();
+        var dapAnDung = await dbContext.HoanVis
+            .AsNoTracking()
+            .Where(hv => maDeCon.Contains(hv.MaDeCon))
+            .Select(hv => new { hv.MaDeCon, hv.MaCH, hv.DapAnDungHienThi })
+            .ToDictionaryAsync(x => (x.MaDeCon, x.MaCH), x => x.DapAnDungHienThi, cancellationToken);
+
+        var dong = bai
+            .Select(b =>
+            {
+                var ketQua = cot
+                    .Select(c =>
+                    {
+                        var tl = traLoi.GetValueOrDefault((b.MaBL, c.MaCH));
+                        return QuyTacKetQua.KetQuaCua(tl?.DapAnChon, tl?.LaDung, dapAnDung.GetValueOrDefault((b.MaDeCon, c.MaCH)) ?? "");
+                    })
+                    .ToList();
+                var soDung = ketQua.Count(k => k == KetQuaCau.Dung);
+                return new DongChiTietDto(b.Msts, b.HoTen, b.TenDeCon, b.Diem, soDung, ketQua.Count - soDung, ketQua);
+            })
+            .ToList();
+        return new BangChiTietDto(cot.Select(c => new CotCauChiTietDto(c.ThuTuTrongDeGoc, c.MaCauHoi)).ToList(), dong);
     }
 
     private IQueryable<BaiLam> BaiDaThiCua(int maKT) =>

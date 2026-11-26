@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { BieuTuong } from "../../components/BieuTuong";
+import { VungTaiTep, type TrangThaiTep } from "../../components/VungTaiTep";
 import { LoiApiHttp } from "../../services/khachHttp";
 import type { LanImport, TrangDuLieu, XemTruocNhapThiSinh } from "../../types/api";
 import { dinhDangDungLuong, dinhDangGio } from "../ngan-hang-cau-hoi/hienThiNhap";
@@ -20,7 +21,6 @@ function thongBaoLoi(error: unknown) {
 }
 
 export default function TrangNhapThiSinh() {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [tep, setTep] = useState<File | null>(null);
   const [xemTruoc, setXemTruoc] = useState<XemTruocNhapThiSinh | null>(null);
   const [dangDoc, setDangDoc] = useState(false);
@@ -51,10 +51,14 @@ export default function TrangNhapThiSinh() {
     }
   }
 
-  async function chonTep(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-    if (!file) return;
+  function xoaTep() {
+    setTep(null);
+    setXemTruoc(null);
+    setLoi(null);
+    setChiDongLoi(false);
+  }
+
+  async function xuLyTep(file: File) {
     setLoi(null);
     setThanhCong(null);
     setXemTruoc(null);
@@ -103,24 +107,20 @@ export default function TrangNhapThiSinh() {
   }
 
   const dongHienThi = xemTruoc ? xemTruoc.dong.filter((dong) => !chiDongLoi || !dong.hopLe) : [];
+  const trangThaiTep: TrangThaiTep | null = dangDoc ? { nhan: "Đang kiểm tra…", loai: "busy" }
+    : xemTruoc?.maXemTruoc ? { nhan: "Hợp lệ", loai: "ok" }
+    : xemTruoc ? { nhan: xemTruoc.tongDong === 0 ? "Không có thí sinh" : `${xemTruoc.soDongLoi} dòng lỗi`, loai: "error" }
+    : null;
 
   return (
     <div className="page-stack">
       <section className="page-heading-row">
-        <div>
-          <span className="page-kicker"><Link to="/admin/candidates">THÍ SINH</Link></span>
-          <h2>Nhập thí sinh từ Excel</h2>
-        </div>
+        <div><h2>Nhập thí sinh từ Excel</h2></div>
         <div className="heading-actions">
+          <Link className="button button-secondary" to="/admin/candidates"><BieuTuong name="chevron-left" size={17} /> Thí sinh</Link>
           <button className="button button-secondary" onClick={() => void taiTepMau()} type="button"><BieuTuong name="file" size={17} /> Tải tệp mẫu</button>
-          <input accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet" className="sr-only" onChange={(event) => void chonTep(event)} ref={inputRef} tabIndex={-1} type="file" />
-          <button className="button button-primary" disabled={dangDoc || dangGhi} onClick={() => inputRef.current?.click()} type="button">
-            <BieuTuong name="plus" size={17} /> {dangDoc ? "Đang đọc tệp…" : xemTruoc ? "Chọn tệp khác" : "Chọn tệp .xlsx"}
-          </button>
         </div>
       </section>
-
-      {loi && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loi}</span></div>}
 
       {thanhCong && (
         <div className="success-banner" role="status">
@@ -129,39 +129,54 @@ export default function TrangNhapThiSinh() {
         </div>
       )}
 
-      {!xemTruoc && !dangDoc && (
-        <section className="panel import-empty">
-          <BieuTuong name="file" size={30} />
-          <strong>Chưa chọn tệp</strong>
-          <span>Hệ thống đọc tệp và hiển thị từng dòng để bạn kiểm tra. Chỉ khi mọi dòng hợp lệ mới thêm thí sinh, và thêm tất cả cùng lúc.</span>
-        </section>
-      )}
+      <VungTaiTep
+        accept=".xlsx,application/vnd.openxmlformats-officedocument.spreadsheetml.sheet"
+        banXuLy={dangDoc || dangGhi}
+        ghiChu="Chỉ nhận tệp .xlsx theo tệp mẫu, tối đa 5 MB."
+        nhanNut="Chọn tệp .xlsx"
+        onChon={(file) => void xuLyTep(file)}
+        onXoa={xoaTep}
+        tep={tep}
+        tieuDe="Kéo thả tệp Excel vào đây"
+        trangThai={trangThaiTep}
+      />
+
+      {loi && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loi}</span></div>}
 
       {xemTruoc && (
         <>
-          <section className="mini-stats-grid">
-            <div><p><small>TỔNG DÒNG</small><strong>{xemTruoc.tongDong}</strong></p><em>{tep ? dinhDangDungLuong(tep.size) : ""}</em></div>
-            <div><p><small>HỢP LỆ</small><strong>{xemTruoc.soDongHopLe}</strong></p></div>
-            <div><p><small>CÓ LỖI</small><strong>{xemTruoc.soDongLoi}</strong></p></div>
+          {/* Kết quả kiểm tra tệp. */}
+          <section className={`panel import-result ${xemTruoc.maXemTruoc ? "is-ok" : "is-error"}`} role="status">
+            <span className="import-result-icon"><BieuTuong name={xemTruoc.maXemTruoc ? "check" : "alert"} size={20} /></span>
+            <div>
+              {xemTruoc.maXemTruoc ? (
+                <>
+                  <strong>Tệp hợp lệ — sẵn sàng thêm {xemTruoc.tongDong} thí sinh.</strong>
+                  <span>Bản xem trước giữ tới {xemTruoc.hetHan ? dinhDangGio(xemTruoc.hetHan) : "—"}.</span>
+                </>
+              ) : xemTruoc.tongDong === 0 ? (
+                <>
+                  <strong>Tệp không có dòng thí sinh nào.</strong>
+                  <span>Kiểm tra lại dữ liệu bên dưới dòng tiêu đề.</span>
+                </>
+              ) : (
+                <>
+                  <strong>Chưa thể nhập: {xemTruoc.soDongLoi}/{xemTruoc.tongDong} dòng có lỗi.</strong>
+                  <span>Sửa các dòng lỗi trong tệp Excel rồi chọn lại tệp. Chưa có thí sinh nào được thêm.</span>
+                </>
+              )}
+            </div>
+            {xemTruoc.maXemTruoc && (
+              <button className="button button-primary" disabled={dangDoc || dangGhi} onClick={() => void xacNhan()} type="button">
+                {dangGhi ? "Đang ghi…" : <><BieuTuong name="check" size={16} /> Xác nhận nhập</>}
+              </button>
+            )}
           </section>
 
-          <section className="panel import-confirm">
-            {xemTruoc.maXemTruoc ? (
-              <>
-                <div>
-                  <strong>Sẵn sàng thêm {xemTruoc.tongDong} thí sinh{tep ? ` từ ${tep.name}` : ""}.</strong>
-                  <span>Bản xem trước giữ tới {xemTruoc.hetHan ? dinhDangGio(xemTruoc.hetHan) : "—"}. Hệ thống kiểm tra lại trước khi ghi.</span>
-                </div>
-                <button className="button button-primary" disabled={dangGhi} onClick={() => void xacNhan()} type="button">
-                  {dangGhi ? "Đang ghi…" : <><BieuTuong name="check" size={16} /> Xác nhận nhập</>}
-                </button>
-              </>
-            ) : (
-              <div>
-                <strong>{xemTruoc.tongDong === 0 ? "Tệp không có dòng thí sinh nào." : "Chưa thể nhập."}</strong>
-                <span>{xemTruoc.tongDong === 0 ? "Kiểm tra lại dữ liệu bên dưới dòng tiêu đề." : "Sửa các dòng lỗi trong tệp Excel rồi chọn lại tệp. Chưa có thí sinh nào được thêm."}</span>
-              </div>
-            )}
+          <section className="mini-stats-grid">
+            <div><p><small>TỔNG DÒNG</small><strong>{xemTruoc.tongDong}</strong></p></div>
+            <div><p><small>HỢP LỆ</small><strong>{xemTruoc.soDongHopLe}</strong></p></div>
+            <div><p><small>CÓ LỖI</small><strong>{xemTruoc.soDongLoi}</strong></p></div>
           </section>
 
           <section className="panel table-panel">

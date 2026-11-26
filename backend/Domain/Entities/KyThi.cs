@@ -35,6 +35,7 @@ public class KyThi
 
     public int SoPhutChoVaoTre { get; set; }
 
+    /// <summary>Không còn dùng (thí sinh chỉ xem điểm, không có xem lại bài); giữ cột để không đổi schema.</summary>
     public short ChoXemLai { get; set; }
 
     public byte[] PhienBan { get; set; } = [];

@@ -39,6 +39,17 @@ public class KetQuaController(ITruyXuatKetQua ketQuaQuery) : ControllerBase
         return ketQua.ThanhCong ? Ok(ketQua.GiaTri) : LoiApi.FromLoi(HttpContext, ketQua.Loi!);
     }
 
+    /// <summary>Bài làm chi tiết của một thí sinh: điểm, số câu đúng/sai/bỏ trống và từng câu đúng hay sai.</summary>
+    [HttpGet("thi-sinh/{msts}")]
+    [ProducesResponseType<BaiLamChiTietDto>(StatusCodes.Status200OK)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
+    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
+    public async Task<ActionResult<BaiLamChiTietDto>> BaiLamChiTiet(int maKT, string msts, CancellationToken cancellationToken)
+    {
+        var ketQua = await ketQuaQuery.BaiLamChiTietAsync(maKT, msts, cancellationToken);
+        return ketQua.ThanhCong ? Ok(ketQua.GiaTri) : LoiApi.FromLoi(HttpContext, ketQua.Loi!);
+    }
+
     /// <summary>Tệp Excel cùng số liệu với màn hình; ghi nhật ký "Xuất kết quả".</summary>
     [HttpGet("xuat-excel")]
     [ProducesResponseType<FileContentResult>(StatusCodes.Status200OK, LoaiTepExcel)]

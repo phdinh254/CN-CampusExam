@@ -16,6 +16,12 @@ public interface ITruyXuatKetQua
     /// <summary>Toàn bộ bảng điểm, sắp theo mã số, cho tệp Excel.</summary>
     Task<KetQua<IReadOnlyList<DongBangDiemDto>>> ToanBoBangDiemAsync(int maKT, CancellationToken cancellationToken);
 
-    /// <summary>Tệp Excel (bảng điểm + thống kê) và ghi nhật ký "Xuất kết quả" (nhóm KYTHI).</summary>
+    /// <summary>
+    /// Bài làm chi tiết của một thí sinh (từng câu đúng/sai). Không được phân công trả <c>EXAM_ASSIGNMENT_NOT_FOUND</c>;
+    /// chưa có bài đã nộp hoặc hệ thống thu trả <c>ATTEMPT_NOT_FOUND</c>.
+    /// </summary>
+    Task<KetQua<BaiLamChiTietDto>> BaiLamChiTietAsync(int maKT, string msts, CancellationToken cancellationToken);
+
+    /// <summary>Tệp Excel (bảng điểm, thống kê, theo KQHT, chi tiết từng câu) và ghi nhật ký "Xuất kết quả" (nhóm KYTHI).</summary>
     Task<KetQua<TepKetQuaDto>> XuatExcelAsync(int maKT, NguoiThucHien nguoiThucHien, CancellationToken cancellationToken);
 }

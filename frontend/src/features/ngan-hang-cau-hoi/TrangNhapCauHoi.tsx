@@ -1,7 +1,8 @@
-import { useEffect, useRef, useState, type ChangeEvent } from "react";
+import { useEffect, useState } from "react";
 import { Link } from "react-router-dom";
 
 import { BieuTuong } from "../../components/BieuTuong";
+import { VungTaiTep, type TrangThaiTep } from "../../components/VungTaiTep";
 import { LoiApiHttp } from "../../services/khachHttp";
 import type { LanImport, TrangDuLieu, XemTruocNhapCauHoi } from "../../types/api";
 import { KICH_THUOC_TEP_TOI_DA, nhapCauHoiApi } from "./apiNhapCauHoi";
@@ -26,7 +27,6 @@ function thongBaoLoi(error: unknown) {
 }
 
 export default function TrangNhapCauHoi() {
-  const inputRef = useRef<HTMLInputElement>(null);
   const [tep, setTep] = useState<File | null>(null);
   const [xemTruoc, setXemTruoc] = useState<XemTruocNhapCauHoi | null>(null);
   const [dangDoc, setDangDoc] = useState(false);
@@ -43,10 +43,16 @@ export default function TrangNhapCauHoi() {
     return () => controller.abort();
   }, [reloadKey]);
 
-  async function chonTep(event: ChangeEvent<HTMLInputElement>) {
-    const file = event.target.files?.[0];
-    event.target.value = "";
-    if (!file) return;
+  const banXuLy = dangDoc || dangGhi;
+
+  function xoaTep() {
+    setTep(null);
+    setXemTruoc(null);
+    setLoi(null);
+    setChiCoVanDe(false);
+  }
+
+  async function xuLyTep(file: File) {
     setLoi(null);
     setThanhCong(null);
     setXemTruoc(null);
@@ -97,23 +103,19 @@ export default function TrangNhapCauHoi() {
 
   const dongHienThi = xemTruoc ? locDong(xemTruoc.dong, chiCoVanDe) : [];
   const canhBao = xemTruoc ? soCanhBao(xemTruoc.dong) : 0;
+  const trangThaiTep: TrangThaiTep | null = dangDoc ? { nhan: "Đang kiểm tra…", loai: "busy" }
+    : xemTruoc?.maXemTruoc ? { nhan: "Hợp lệ", loai: "ok" }
+    : xemTruoc ? { nhan: xemTruoc.tongDong === 0 ? "Không có câu hỏi" : `${xemTruoc.soDongLoi} dòng lỗi`, loai: "error" }
+    : null;
 
   return (
     <div className="page-stack">
       <section className="page-heading-row">
-        <div>
-          <span className="page-kicker"><Link to="/admin/questions">NGÂN HÀNG CÂU HỎI</Link></span>
-          <h2>Nhập câu hỏi từ Word</h2>
-        </div>
+        <div><h2>Nhập câu hỏi từ Word</h2></div>
         <div className="heading-actions">
-          <input accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document" className="sr-only" onChange={(event) => void chonTep(event)} ref={inputRef} tabIndex={-1} type="file" />
-          <button className="button button-primary" disabled={dangDoc || dangGhi} onClick={() => inputRef.current?.click()} type="button">
-            <BieuTuong name="file" size={17} /> {dangDoc ? "Đang đọc tệp…" : xemTruoc ? "Chọn tệp khác" : "Chọn tệp .docx"}
-          </button>
+          <Link className="button button-secondary" to="/admin/questions"><BieuTuong name="chevron-left" size={17} /> Ngân hàng câu hỏi</Link>
         </div>
       </section>
-
-      {loi && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loi}</span></div>}
 
       {thanhCong && (
         <div className="success-banner" role="status">
@@ -122,40 +124,55 @@ export default function TrangNhapCauHoi() {
         </div>
       )}
 
-      {!xemTruoc && !dangDoc && (
-        <section className="panel import-empty">
-          <BieuTuong name="file" size={30} />
-          <strong>Chưa chọn tệp</strong>
-          <span>Hệ thống đọc tệp và hiển thị từng dòng để bạn kiểm tra. Chỉ khi mọi dòng hợp lệ mới ghi vào ngân hàng câu hỏi, và ghi tất cả cùng lúc.</span>
-        </section>
-      )}
+      <VungTaiTep
+        accept=".docx,application/vnd.openxmlformats-officedocument.wordprocessingml.document"
+        banXuLy={banXuLy}
+        ghiChu="Chỉ nhận tệp .docx, tối đa 20 MB."
+        nhanNut="Chọn tệp .docx"
+        onChon={(file) => void xuLyTep(file)}
+        onXoa={xoaTep}
+        tep={tep}
+        tieuDe="Kéo thả tệp Word vào đây"
+        trangThai={trangThaiTep}
+      />
+
+      {loi && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loi}</span></div>}
 
       {xemTruoc && (
         <>
+          {/* Kết quả kiểm tra tệp. */}
+          <section className={`panel import-result ${xemTruoc.maXemTruoc ? "is-ok" : "is-error"}`} role="status">
+            <span className="import-result-icon"><BieuTuong name={xemTruoc.maXemTruoc ? "check" : "alert"} size={20} /></span>
+            <div>
+              {xemTruoc.maXemTruoc ? (
+                <>
+                  <strong>Tệp hợp lệ — sẵn sàng nhập {xemTruoc.tongDong} câu hỏi.</strong>
+                  <span>Bản xem trước giữ tới {xemTruoc.hetHan ? dinhDangGio(xemTruoc.hetHan) : "—"}.{canhBao > 0 ? ` Có ${canhBao} cảnh báo, nên xem lại trước khi nhập.` : ""}</span>
+                </>
+              ) : xemTruoc.tongDong === 0 ? (
+                <>
+                  <strong>Tệp không có dòng câu hỏi nào.</strong>
+                  <span>Kiểm tra lại bảng câu hỏi trong tệp.</span>
+                </>
+              ) : (
+                <>
+                  <strong>Chưa thể nhập: {xemTruoc.soDongLoi}/{xemTruoc.tongDong} dòng có lỗi.</strong>
+                  <span>Sửa các dòng lỗi trong tệp Word rồi chọn lại tệp. Chưa có dòng nào được ghi.</span>
+                </>
+              )}
+            </div>
+            {xemTruoc.maXemTruoc && (
+              <button className="button button-primary" disabled={banXuLy} onClick={() => void xacNhan()} type="button">
+                {dangGhi ? "Đang ghi…" : <><BieuTuong name="check" size={16} /> Xác nhận nhập</>}
+              </button>
+            )}
+          </section>
+
           <section className="mini-stats-grid">
-            <div><p><small>TỔNG DÒNG</small><strong>{xemTruoc.tongDong}</strong></p><em>{tep ? dinhDangDungLuong(tep.size) : ""}</em></div>
+            <div><p><small>TỔNG DÒNG</small><strong>{xemTruoc.tongDong}</strong></p></div>
             <div><p><small>HỢP LỆ</small><strong>{xemTruoc.soDongHopLe}</strong></p></div>
             <div><p><small>CÓ LỖI</small><strong>{xemTruoc.soDongLoi}</strong></p>{canhBao > 0 && <em>{canhBao} cảnh báo</em>}</div>
             <div><p><small>HÌNH ẢNH</small><strong>{xemTruoc.tongHinhAnh}</strong></p></div>
-          </section>
-
-          <section className="panel import-confirm">
-            {xemTruoc.maXemTruoc ? (
-              <>
-                <div>
-                  <strong>Sẵn sàng nhập {xemTruoc.tongDong} câu hỏi{tep ? ` từ ${tep.name}` : ""}.</strong>
-                  <span>Bản xem trước giữ tới {xemTruoc.hetHan ? dinhDangGio(xemTruoc.hetHan) : "—"}. Hệ thống kiểm tra lại trước khi ghi.</span>
-                </div>
-                <button className="button button-primary" disabled={dangGhi} onClick={() => void xacNhan()} type="button">
-                  {dangGhi ? "Đang ghi…" : <><BieuTuong name="check" size={16} /> Xác nhận nhập</>}
-                </button>
-              </>
-            ) : (
-              <div>
-                <strong>{xemTruoc.tongDong === 0 ? "Tệp không có dòng câu hỏi nào." : "Chưa thể nhập."}</strong>
-                <span>{xemTruoc.tongDong === 0 ? "Kiểm tra lại bảng câu hỏi trong tệp." : "Sửa các dòng lỗi trong tệp Word rồi chọn lại tệp. Không có dòng nào được ghi."}</span>
-              </div>
-            )}
           </section>
 
           <section className="panel table-panel">

@@ -23,13 +23,7 @@ public interface IDichVuBaiLam
     /// <summary>Lưu lô cuối rồi nộp và chấm; gọi lại trả kết quả lần đầu.</summary>
     Task<KetQua<KetQuaNopDto>> NopAsync(string msts, int maKT, LoTraLoiRequest lo, CancellationToken cancellationToken);
 
-    /// <summary>
-    /// Xem lại bài đã nộp/thu khi kỳ thi đã kết thúc và cho xem lại. Không được phân công trả
-    /// <c>EXAM_NOT_FOUND</c>; chưa đủ điều kiện trả <c>REVIEW_NOT_AVAILABLE</c>.
-    /// </summary>
-    Task<KetQua<BaiXemLaiDto>> XemLaiAsync(string msts, int maKT, CancellationToken cancellationToken);
-
-    /// <summary>Hình của câu theo vị trí hiển thị; khi bài đang làm hoặc khi được xem lại.</summary>
+    /// <summary>Hình của câu theo vị trí hiển thị; chỉ khi bài đang làm.</summary>
     Task<HinhLuuTruBaiLamDto?> HinhAsync(string msts, int maKT, int ttCau, string viTri, short thuTu, CancellationToken cancellationToken);
 
     /// <summary>Tác vụ nền: thu và chấm bài quá hạn, chuyển trạng thái kỳ thi theo giờ. Trả số bài đã thu.</summary>

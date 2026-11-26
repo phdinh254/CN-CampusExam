@@ -22,7 +22,6 @@ type Form = {
   soPhutChoVaoTre: number;
   cachPhanDe: CachPhanDe;
   hienDiem: boolean;
-  choXemLai: boolean;
 };
 
 type LoiForm = Partial<Record<"tenKT" | "monThi" | "tgBatDau" | "thoiLuong" | "soPhutChoVaoTre", string>>;
@@ -39,9 +38,9 @@ function formTu(kyThi: KyThiChiTiet | null): Form {
   return kyThi
     ? {
         tenKT: kyThi.tenKT, monThi: kyThi.monThi, tgBatDau: sangGioDiaPhuong(kyThi.tgBatDau), thoiLuong: kyThi.thoiLuong,
-        soPhutChoVaoTre: kyThi.soPhutChoVaoTre, cachPhanDe: kyThi.cachPhanDe, hienDiem: kyThi.hienDiem, choXemLai: kyThi.choXemLai,
+        soPhutChoVaoTre: kyThi.soPhutChoVaoTre, cachPhanDe: kyThi.cachPhanDe, hienDiem: kyThi.hienDiem,
       }
-    : { tenKT: "", monThi: "", tgBatDau: gioMacDinh(), thoiLuong: 60, soPhutChoVaoTre: 10, cachPhanDe: "can_bang", hienDiem: true, choXemLai: false };
+    : { tenKT: "", monThi: "", tgBatDau: gioMacDinh(), thoiLuong: 60, soPhutChoVaoTre: 10, cachPhanDe: "can_bang", hienDiem: true };
 }
 
 /** Hộp thoại tạo/sửa kỳ thi nháp. */
@@ -120,7 +119,6 @@ export function HopThoaiKyThi({ kyThi, onDong, onDaLuu }: Props) {
               </label>
             </div>
             <label className="checkbox-field"><input checked={form.hienDiem} onChange={(event) => capNhat("hienDiem", event.target.checked)} type="checkbox" /><span>Hiện điểm ngay sau khi nộp bài</span></label>
-            <label className="checkbox-field"><input checked={form.choXemLai} onChange={(event) => capNhat("choXemLai", event.target.checked)} type="checkbox" /><span>Cho xem lại bài làm sau khi kỳ thi kết thúc</span></label>
           </div>
           <footer>
             <button className="button button-secondary" disabled={dangLuu} onClick={onDong} type="button">Hủy</button>

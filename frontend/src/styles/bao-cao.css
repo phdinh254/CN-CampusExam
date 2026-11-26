@@ -43,3 +43,51 @@
 .bc-o.bc-cao strong { color: var(--success-text); }
 .bc-o-trong { color: var(--muted); }
 .bc-bang-kqht tfoot td { border-top: 1px solid var(--line); background: var(--canvas); }
+
+/* Bài làm chi tiết của một thí sinh (hộp thoại). */
+.bc-bai-lam { display: flex; flex-direction: column; width: min(860px, 100%); height: calc(100vh - 48px); }
+.bc-bai-lam > .dialog-body { flex: 1; min-height: 0; max-height: none; }
+.bc-bai-lam > header > div { min-width: 0; }
+.form-dialog header small.bc-bai-lam-phu { display: block; margin: 3px 0 0; color: var(--muted); font-size: var(--fs-caption); font-weight: 500; letter-spacing: 0; text-transform: none; }
+.bc-bai-lam-tong { display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 12px; margin: 0 0 16px; }
+.bc-bai-lam-tong > div { display: grid; gap: 4px; padding: 12px 14px; border: 1px solid var(--line); border-radius: 8px; background: var(--canvas); }
+.bc-bai-lam-tong dt { color: var(--muted); font-size: var(--fs-caption); font-weight: 600; }
+.bc-bai-lam-tong dd { margin: 0; color: var(--ink); font-size: var(--fs-2xl); font-weight: 700; line-height: var(--lh-tight); font-variant-numeric: tabular-nums; }
+.bc-bai-lam-tong dd small { color: var(--muted); font-size: var(--fs-caption); font-weight: 500; }
+.bc-bai-lam-tong .is-dung dd { color: var(--success-text); }
+.bc-bai-lam-tong .is-sai dd { color: var(--danger); }
+
+.bc-bai-lam-loc { display: inline-flex; gap: 4px; margin-bottom: 14px; padding: 4px; border: 1px solid var(--line); border-radius: 8px; background: var(--canvas); }
+.bc-bai-lam-loc button { padding: 6px 12px; border: 0; border-radius: 6px; color: var(--muted); background: transparent; font: inherit; font-size: var(--fs-caption); font-weight: 600; cursor: pointer; }
+.bc-bai-lam-loc button.is-active { color: var(--ink); background: #fff; box-shadow: 0 1px 2px rgba(32,43,60,.12); }
+
+.bc-cau-list { display: grid; gap: 12px; margin: 0; padding: 0; list-style: none; }
+.bc-cau { padding: 14px 16px; border: 1px solid var(--line); border-left: 4px solid var(--line); border-radius: 8px; }
+.bc-cau.is-dung { border-left-color: var(--success); }
+.bc-cau.is-sai { border-left-color: var(--danger); }
+.bc-cau.is-bo_trong { border-left-color: var(--warning); }
+.bc-cau-dau { display: flex; flex-wrap: wrap; align-items: center; gap: 8px; margin-bottom: 8px; }
+.bc-cau-dau strong { color: var(--ink); font-size: var(--fs-body); }
+.bc-ket-qua { margin-left: auto; padding: 2px 8px; border-radius: 999px; font-size: var(--fs-xs); font-weight: 700; }
+.bc-ket-qua.is-dung { color: var(--success-text); background: var(--success-soft); }
+.bc-ket-qua.is-sai { color: var(--danger); background: var(--danger-soft); }
+.bc-ket-qua.is-bo_trong { color: var(--warning-text); background: var(--warning-soft); }
+.bc-cau-de { margin: 0 0 10px; color: var(--ink); font-size: var(--fs-body); line-height: var(--lh-relaxed); white-space: pre-line; }
+.bc-phuong-an { display: grid; gap: 6px; margin: 0; padding: 0; list-style: none; }
+.bc-phuong-an li { display: flex; align-items: flex-start; gap: 10px; padding: 7px 10px; border: 1px solid #EEF1F5; border-radius: 6px; color: var(--ink); font-size: var(--fs-body); line-height: var(--lh-normal); }
+.bc-phuong-an li.is-dung { border-color: #A8DCC3; background: var(--success-soft); }
+.bc-phuong-an li.is-chon-sai { border-color: #EFB4B4; background: var(--danger-soft); }
+.bc-nhan { display: grid; flex: none; place-items: center; width: 24px; height: 24px; border: 1px solid var(--line); border-radius: 50%; color: var(--muted); background: #fff; font-size: var(--fs-xs); font-weight: 700; }
+.bc-phuong-an li.is-dung .bc-nhan { border-color: var(--success); color: #fff; background: var(--success); }
+.bc-phuong-an li.is-chon-sai .bc-nhan { border-color: var(--danger); color: #fff; background: var(--danger); }
+.bc-phuong-an-chu { flex: 1; min-width: 0; padding-top: 1px; }
+.bc-danh-dau { flex: none; align-self: center; color: var(--muted); font-size: var(--fs-xs); font-weight: 700; }
+.bc-phuong-an li.is-dung .bc-danh-dau { color: var(--success-text); }
+.bc-phuong-an li.is-chon-sai .bc-danh-dau { color: var(--danger); }
+.bc-cau-trong { padding: 24px; color: var(--muted); text-align: center; }
+
+@media (max-width: 620px) {
+  .bc-bai-lam-tong { grid-template-columns: 1fr 1fr; }
+  .bc-bai-lam-tong > div:first-child { grid-column: 1 / -1; }
+  .bc-danh-dau { display: none; }
+}

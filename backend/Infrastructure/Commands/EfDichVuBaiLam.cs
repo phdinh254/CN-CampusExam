@@ -204,53 +204,6 @@ public sealed class EfDichVuBaiLam(
         return (cauHoi, ttCauTheoMa);
     }
 
-    public async Task<KetQua<BaiXemLaiDto>> XemLaiAsync(string msts, int maKT, CancellationToken cancellationToken)
-    {
-        var nc = await TruyVanNguCanh(msts).SingleOrDefaultAsync(x => x.MaKT == maKT, cancellationToken);
-        if (nc is null)
-        {
-            return KhongCoKyThi(maKT);
-        }
-
-        if (!DuocXemLai(nc))
-        {
-            return new LoiNghiepVu(
-                LoaiLoi.XungDot,
-                MaLoi.ReviewNotAvailable,
-                "Chưa xem lại được bài làm",
-                "Chỉ xem lại được khi kỳ thi đã kết thúc, kỳ thi cho phép xem lại và bạn đã nộp bài.");
-        }
-
-        var bai = nc.BaiLam!;
-        var (cauHoi, ttCauTheoMa) = await DungDeAsync(nc, maKT, cancellationToken);
-        var traLoi = (await dbContext.TraLois
-                .AsNoTracking()
-                .Where(tl => tl.MaBL == bai.MaBL)
-                .Select(tl => new { tl.MaCH, tl.DapAnChon, tl.DanhDau })
-                .ToListAsync(cancellationToken))
-            .Where(tl => ttCauTheoMa.ContainsKey(tl.MaCH))
-            .ToDictionary(tl => ttCauTheoMa[tl.MaCH]);
-
-        var cauXemLai = cauHoi
-            .Select(c =>
-            {
-                var tl = traLoi.GetValueOrDefault(c.TtCau);
-                return new CauXemLaiDto(c.TtCau, c.NoiDung, c.PhuongAn, c.HinhAnh, tl?.DapAnChon, tl?.DanhDau == 1);
-            })
-            .ToList();
-
-        return KetQua<BaiXemLaiDto>.Ok(new BaiXemLaiDto(
-            nc.TenKT,
-            nc.MonThi,
-            nc.TenDeCon,
-            nc.SoCau,
-            bai.TgNop!.Value,
-            bai.TrangThaiBaiLam == BaiLam.DaNop ? TrangThaiBaiCuaToi.DaNop : TrangThaiBaiCuaToi.HeThongThu,
-            nc.HienDiem ? bai.SoCauDung : null,
-            nc.HienDiem ? bai.Diem : null,
-            cauXemLai));
-    }
-
     public async Task<KetQua<KetQuaLuuDto>> LuuAsync(
         string msts,
         int maKT,
@@ -332,16 +285,14 @@ public sealed class EfDichVuBaiLam(
         var ketQua = await dbContext.BaiLams
             .AsNoTracking()
             .Where(bl => bl.MaBL == bai.MaBL)
-            .Select(bl => new { bl.TrangThaiBaiLam, bl.TgNop, bl.Diem, bl.SoCauDung })
+            .Select(bl => new { bl.TrangThaiBaiLam, bl.TgNop, bl.Diem })
             .SingleAsync(cancellationToken);
 
         return KetQua<KetQuaNopDto>.Ok(new KetQuaNopDto(
             ketQua.TrangThaiBaiLam == BaiLam.DaNop ? TrangThaiBaiCuaToi.DaNop : TrangThaiBaiCuaToi.HeThongThu,
             ketQua.TgNop!.Value,
             nc.HienDiem,
-            nc.HienDiem ? ketQua.Diem : null,
-            nc.HienDiem ? ketQua.SoCauDung : null,
-            nc.SoCau));
+            nc.HienDiem ? ketQua.Diem : null));
     }
 
     public async Task<HinhLuuTruBaiLamDto?> HinhAsync(
@@ -354,10 +305,10 @@ public sealed class EfDichVuBaiLam(
     {
         var now = Now();
         var nc = await TruyVanNguCanh(msts).SingleOrDefaultAsync(x => x.MaKT == maKT, cancellationToken);
-        // Mở khi đang làm bài (trước hạn nộp) hoặc khi được xem lại sau khi kỳ thi kết thúc.
+        // Chỉ mở khi đang làm bài (trước hạn nộp).
         var dangLam = nc?.BaiLam is { TrangThaiBaiLam: BaiLam.DangLam } bai
             && now < QuyTacBaiLam.HanNop(nc.TgBatDau, nc.ThoiLuong, bai.PhutCongThem);
-        if (nc is null || !(dangLam || DuocXemLai(nc)))
+        if (nc is null || !dangLam)
         {
             return null;
         }
@@ -620,7 +571,6 @@ public sealed class EfDichVuBaiLam(
             ThoiLuong = kt.ThoiLuong,
             SoPhutChoVaoTre = kt.SoPhutChoVaoTre,
             HienDiem = kt.HienDiem == 1,
-            ChoXemLai = kt.ChoXemLai,
             TrangThaiKyThi = kt.TrangThaiKyThi,
             TenDeCon = dc.TenDeCon,
             SoCau = dbContext.HoanVis.Count(hv => hv.MaDeCon == pc.MaDeCon),
@@ -631,7 +581,6 @@ public sealed class EfDichVuBaiLam(
                     MaBL = bl.MaBL,
                     TrangThaiBaiLam = bl.TrangThaiBaiLam,
                     PhutCongThem = bl.PhutCongThem,
-                    SoCauDung = bl.SoCauDung,
                     Diem = bl.Diem,
                     TgNop = bl.TgNop
                 })
@@ -662,13 +611,8 @@ public sealed class EfDichVuBaiLam(
             x.MaKT, x.TenKT, x.MonThi, x.TgBatDau, x.ThoiLuong, x.SoCau, x.SoMay,
             x.TgBatDau, dongCong, ketThuc, trangThai, duocVao,
             x.HienDiem,
-            coDiem ? x.BaiLam!.SoCauDung : null,
-            coDiem ? x.BaiLam!.Diem : null,
-            DuocXemLai(x));
+            coDiem ? x.BaiLam!.Diem : null);
     }
-
-    private static bool DuocXemLai(NguCanh x) =>
-        QuyTacBaiLam.DuocXemLai(x.TrangThaiKyThi, x.ChoXemLai, x.BaiLam?.TrangThaiBaiLam);
 
     /// <summary>Vị trí gốc (NOIDUNG, DAA…) → vị trí hiển thị theo hoán vị phương án.</summary>
     private static string? ViTriHienThi(string viTriGoc, string ttDapAn)
@@ -746,8 +690,6 @@ public sealed class EfDichVuBaiLam(
 
         public bool HienDiem { get; init; }
 
-        public short ChoXemLai { get; init; }
-
         public byte TrangThaiKyThi { get; init; }
 
         public string TenDeCon { get; init; } = string.Empty;
@@ -764,8 +706,6 @@ public sealed class EfDichVuBaiLam(
         public byte TrangThaiBaiLam { get; init; }
 
         public int PhutCongThem { get; init; }
-
-        public int? SoCauDung { get; init; }
 
         public decimal? Diem { get; init; }
 

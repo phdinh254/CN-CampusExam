@@ -89,6 +89,7 @@ public sealed record ThongKeKetQuaDto(
     IReadOnlyList<CauSaiDto> CauSaiNhieuNhat,
     BangTyLeDungDto TyLeDungTheoKqht);
 
+/// <summary>Một dòng bảng điểm. <c>SoCauSai</c> = tổng số câu − số câu đúng (gồm câu bỏ trống); null khi chưa có bài.</summary>
 public sealed record DongBangDiemDto(
     string Msts,
     string HoTen,
@@ -96,10 +97,70 @@ public sealed record DongBangDiemDto(
     string? SoMay,
     string? TenDeCon,
     int? SoCauDung,
+    int? SoCauSai,
     int TongSoCau,
     decimal? Diem,
     TrangThaiKetQuaThiSinh TrangThai,
     DateTime? TgNop);
+
+/// <summary>Kết quả một câu trong bài làm.</summary>
+[JsonConverter(typeof(BoChuyenEnumChuoi<KetQuaCau>))]
+public enum KetQuaCau : byte
+{
+    [JsonStringEnumMemberName("dung")]
+    Dung = 0,
+
+    [JsonStringEnumMemberName("sai")]
+    Sai = 1,
+
+    [JsonStringEnumMemberName("bo_trong")]
+    BoTrong = 2
+}
+
+/// <summary>
+/// Một câu trong bài của thí sinh, theo thứ tự và nhãn phương án của đề con thí sinh đã làm. Nội dung lấy từ
+/// bản chụp trong đề (GOM_CAU); chỗ chèn ảnh thay bằng "[hình]".
+/// </summary>
+public sealed record CauBaiLamDto(
+    int TtCau,
+    string MaCauHoi,
+    string NoiDung,
+    IReadOnlyList<string> PhuongAn,
+    string? DapAnChon,
+    string DapAnDung,
+    KetQuaCau KetQua);
+
+/// <summary>Bài làm chi tiết của một thí sinh cho quản trị viên: điểm, số câu đúng/sai/bỏ trống, từng câu đúng hay sai.</summary>
+public sealed record BaiLamChiTietDto(
+    string Msts,
+    string HoTen,
+    string? Lop,
+    string? SoMay,
+    string TenDeCon,
+    TrangThaiKetQuaThiSinh TrangThai,
+    DateTime? TgNop,
+    decimal? Diem,
+    int SoCauDung,
+    int SoCauSai,
+    int SoBoTrong,
+    int TongSoCau,
+    IReadOnlyList<CauBaiLamDto> CauHoi);
+
+/// <summary>Cột của sheet "Chi tiết": một câu của đề gốc, theo thứ tự đề gốc.</summary>
+public sealed record CotCauChiTietDto(int ThuTu, string MaCauHoi);
+
+/// <summary>Một thí sinh đã thi trong sheet "Chi tiết": kết quả từng câu theo thứ tự cột.</summary>
+public sealed record DongChiTietDto(
+    string Msts,
+    string HoTen,
+    string? TenDeCon,
+    decimal? Diem,
+    int SoCauDung,
+    int SoCauSai,
+    IReadOnlyList<KetQuaCau> KetQua);
+
+/// <summary>Ma trận thí sinh × câu cho sheet "Chi tiết".</summary>
+public sealed record BangChiTietDto(IReadOnlyList<CotCauChiTietDto> Cot, IReadOnlyList<DongChiTietDto> Dong);
 
 /// <summary>Nội dung tệp Excel và tên tệp gợi ý.</summary>
 public sealed record TepKetQuaDto(byte[] NoiDung, string TenTep);
@@ -172,8 +233,20 @@ public static class QuyTacKetQua
     /// </summary>
     public static string RutGon(string noiDung)
     {
-        var khongMarker = System.Text.RegularExpressions.Regex.Replace(noiDung, @"\{\{media:[^{}]*\}\}", " [hình] ");
-        var chu = System.Text.RegularExpressions.Regex.Replace(khongMarker, @"\s+", " ").Trim();
+        var chu = ThayHinh(noiDung);
         return chu.Length <= DoDaiNoiDungRutGon ? chu : chu[..(DoDaiNoiDungRutGon - 1)].TrimEnd() + "…";
     }
+
+    /// <summary>Đổi chỗ chèn ảnh thành "[hình]" và gom khoảng trắng, không cắt ngắn.</summary>
+    public static string ThayHinh(string noiDung)
+    {
+        var khongMarker = System.Text.RegularExpressions.Regex.Replace(noiDung, @"\{\{media:[^{}]*\}\}", " [hình] ");
+        return System.Text.RegularExpressions.Regex.Replace(khongMarker, @"\s+", " ").Trim();
+    }
+
+    /// <summary>Kết quả một câu: không chọn là bỏ trống; có chọn thì theo cột chấm LADUNG, chưa chấm thì so với đáp án hiển thị.</summary>
+    public static KetQuaCau KetQuaCua(string? dapAnChon, short? laDung, string dapAnDungHienThi) =>
+        string.IsNullOrEmpty(dapAnChon) ? KetQuaCau.BoTrong
+        : (laDung ?? (dapAnChon == dapAnDungHienThi ? (short)1 : (short)0)) == 1 ? KetQuaCau.Dung
+        : KetQuaCau.Sai;
 }

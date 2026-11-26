@@ -316,7 +316,6 @@ export default function TrangLamBai() {
             {manHinh.ketQua.hienDiem && manHinh.ketQua.diem !== null ? (
               <div className="pt-result-score">
                 <div><span>Điểm</span><strong>{dinhDangDiem.format(manHinh.ketQua.diem)}</strong><small>/ 10</small></div>
-                <div><span>Số câu đúng</span><strong>{manHinh.ketQua.soCauDung}</strong><small>/ {manHinh.ketQua.tongSoCau}</small></div>
               </div>
             ) : (
               <p className="pt-result-hidden">Kỳ thi này không hiển thị điểm ngay. Bài làm của bạn đã được ghi nhận.</p>

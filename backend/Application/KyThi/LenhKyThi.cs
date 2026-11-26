@@ -24,8 +24,6 @@ public class LuuKyThiCommand : IValidatableObject
 
     public bool HienDiem { get; init; } = true;
 
-    public bool ChoXemLai { get; init; }
-
     public CachPhanDe CachPhanDe { get; init; } = CachPhanDe.CanBang;
 
     /// <summary>Giờ bắt đầu quy về UTC; giờ không ghi múi được coi là UTC.</summary>
