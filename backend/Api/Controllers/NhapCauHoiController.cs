@@ -96,7 +96,7 @@ public sealed class NhapCauHoiController(
     {
         var ketQua = await importService.XacNhanAsync(maXemTruoc, NguoiThucHien(), cancellationToken);
         return ketQua.ThanhCong
-            ? CreatedAtAction(nameof(GetById), new { maLanImport = ketQua.GiaTri!.MaLanImport }, ketQua.GiaTri)
+            ? StatusCode(StatusCodes.Status201Created, ketQua.GiaTri)
             : LoiApi.FromLoi(HttpContext, ketQua.Loi!);
     }
 
@@ -108,18 +108,6 @@ public sealed class NhapCauHoiController(
         [FromQuery] TruyVanTrang truyVan,
         CancellationToken cancellationToken) =>
         Ok(await importService.GetPageAsync(truyVan, cancellationToken));
-
-    [HttpGet("{maLanImport:int}")]
-    [ProducesResponseType<LanImportDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<LanImportDto>> GetById(int maLanImport, CancellationToken cancellationToken)
-    {
-        var lan = await importService.GetByIdAsync(maLanImport, cancellationToken);
-        return lan is null
-            ? NotFound(LoiApi.Create(HttpContext, StatusCodes.Status404NotFound, "Không tìm thấy lần nhập",
-                MaLoi.ImportNotFound, $"Không tồn tại lần nhập có mã {maLanImport}."))
-            : Ok(lan);
-    }
 
     private NguoiThucHien NguoiThucHien() => new(
         int.Parse(User.FindFirst(TenClaim.MaTaiKhoan)!.Value),

@@ -183,7 +183,7 @@ export default function TrangSoanMaTran() {
     setLoiTruong({});
     try {
       const luu = chiTiet ? await maTranApi.sua(chiTiet.maMT, { ...body, phienBan: chiTiet.phienBan }) : await maTranApi.tao(body);
-      navigate(`/admin/exam-matrices/${luu.maMT}`, { replace: true });
+      navigate(`/quan-tri/ma-tran-de/${luu.maMT}`, { replace: true });
       apDungChiTiet(luu);
       setSubmitError(null);
     } catch (error) {
@@ -207,7 +207,7 @@ export default function TrangSoanMaTran() {
 
   function dongHopThoai() {
     setSuaThongTin(false);
-    if (!tenMT) navigate("/admin/exam-matrices");
+    if (!tenMT) navigate("/quan-tri/ma-tran-de");
   }
 
   if (loading) {
@@ -217,7 +217,7 @@ export default function TrangSoanMaTran() {
   if (loadError) {
     return (
       <div className="page-stack">
-        <div className="empty-state error-state"><BieuTuong name="alert" size={28} /><strong>Chưa tải được ma trận</strong><span>{loadError}</span><Link className="button button-secondary" to="/admin/exam-matrices">Về danh sách</Link></div>
+        <div className="empty-state error-state"><BieuTuong name="alert" size={28} /><strong>Chưa tải được ma trận</strong><span>{loadError}</span><Link className="button button-secondary" to="/quan-tri/ma-tran-de">Về danh sách</Link></div>
       </div>
     );
   }
@@ -230,7 +230,7 @@ export default function TrangSoanMaTran() {
     <form className="page-stack matrix-editor" noValidate onSubmit={handleSubmit}>
       <section className="page-heading-row">
         <div>
-          <Link className="back-link" to="/admin/exam-matrices"><BieuTuong name="arrow-left" size={15} /> Danh sách ma trận</Link>
+          <Link className="back-link" to="/quan-tri/ma-tran-de"><BieuTuong name="arrow-left" size={15} /> Danh sách ma trận</Link>
           <h2>{tenMT || "Tạo ma trận đề"}</h2>
           <p>
             {chiTiet ? <span className={`status-dot ${lopTrangThaiMaTran[chiTiet.trangThai]}`}>{nhanTrangThaiMaTran[chiTiet.trangThai]}</span> : <span className="status-dot">Chưa lưu</span>}

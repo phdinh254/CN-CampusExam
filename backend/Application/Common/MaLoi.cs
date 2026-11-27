@@ -66,6 +66,5 @@ public static class MaLoi
     public const string StudentImportHasErrors = "STUDENT_IMPORT_HAS_ERRORS";
     public const string ImportPreviewNotFound = "IMPORT_PREVIEW_NOT_FOUND";
     public const string ImportPreviewExpired = "IMPORT_PREVIEW_EXPIRED";
-    public const string ImportNotFound = "IMPORT_NOT_FOUND";
     public const string QuestionMediaNotFound = "QUESTION_MEDIA_NOT_FOUND";
 }

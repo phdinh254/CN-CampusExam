@@ -9,8 +9,6 @@ public interface IDichVuXacThuc
 
     Task DangXuatAsync(string refreshToken, NguCanhYeuCau nguCanh, CancellationToken cancellationToken);
 
-    Task<TaiKhoanHienTaiDto?> LayTaiKhoanAsync(int mtk, CancellationToken cancellationToken);
-
     /// <summary>Đổi mật khẩu, thu hồi mọi phiên cũ và cấp phiên mới.</summary>
     Task<DoiMatKhauResult> DoiMatKhauAsync(
         int mtk,

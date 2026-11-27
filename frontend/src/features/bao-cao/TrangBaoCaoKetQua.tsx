@@ -239,7 +239,7 @@ export default function TrangBaoCaoKetQua() {
       {dsKyThi && dsKyThi.length === 0 && (
         <div className="panel">
           <TrangThaiTrong bieuTuong="activity" moTa="Kết quả có khi kỳ thi bắt đầu. Hãy tạo và phát hành kỳ thi." tieuDe="Chưa có kỳ thi nào có kết quả">
-            <Link className="button button-secondary" to="/admin/exams">Tới quản lý kỳ thi</Link>
+            <Link className="button button-secondary" to="/quan-tri/ky-thi">Tới quản lý kỳ thi</Link>
           </TrangThaiTrong>
         </div>
       )}
@@ -327,7 +327,7 @@ export default function TrangBaoCaoKetQua() {
 
           <section className="panel table-panel">
             <div className="table-toolbar">
-              <div className="search-box"><BieuTuong name="search" size={18} /><input aria-label="Tìm thí sinh" maxLength={100} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm MSSV hoặc họ tên" value={query} /></div>
+              <div className="search-box"><BieuTuong name="search" size={18} /><input aria-label="Tìm thí sinh" maxLength={100} onChange={(event) => setQuery(event.target.value)} placeholder="Tìm mã số hoặc họ tên" value={query} /></div>
               <select aria-label="Trạng thái bài" onChange={(event) => { setTrangThai(event.target.value as TrangThaiKetQuaThiSinh | ""); setTrang(1); }} value={trangThai}>
                 <option value="">Tất cả trạng thái</option>
                 {(Object.keys(NHAN_TRANG_THAI) as TrangThaiKetQuaThiSinh[]).map((tt) => <option key={tt} value={tt}>{NHAN_TRANG_THAI[tt]}</option>)}
@@ -339,7 +339,7 @@ export default function TrangBaoCaoKetQua() {
               <>
                 <div className="table-scroll">
                   <table className="data-table">
-                    <thead><tr><th>MSSV</th><th>HỌ TÊN</th><th>LỚP</th><th>MÁY</th><th>MÃ ĐỀ</th><th>ĐÚNG</th><th>SAI</th><th>ĐIỂM</th><th>TRẠNG THÁI</th><th><span className="sr-only">THAO TÁC</span></th></tr></thead>
+                    <thead><tr><th>MÃ SỐ</th><th>HỌ TÊN</th><th>LỚP</th><th>MÁY</th><th>MÃ ĐỀ</th><th>ĐÚNG</th><th>SAI</th><th>ĐIỂM</th><th>TRẠNG THÁI</th><th><span className="sr-only">THAO TÁC</span></th></tr></thead>
                     <tbody>
                       {bangDiem?.duLieu.map((d) => (
                         <tr key={d.msts}>

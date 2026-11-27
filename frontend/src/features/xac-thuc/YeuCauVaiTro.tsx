@@ -25,7 +25,7 @@ export default function YeuCauVaiTro({ vaiTro }: Props) {
   if (trangThai === "dang_tai") return <ManHinhCho />;
 
   if (!taiKhoan) {
-    return <Navigate to="/login" replace state={{ from: location.pathname + location.search }} />;
+    return <Navigate to="/dang-nhap" replace state={{ from: location.pathname + location.search }} />;
   }
 
   if (vaiTro && taiKhoan.vaiTro !== vaiTro) {
@@ -39,5 +39,5 @@ export default function YeuCauVaiTro({ vaiTro }: Props) {
 export function ChuyenVeTrangChu() {
   const { trangThai, taiKhoan } = useXacThuc();
   if (trangThai === "dang_tai") return <ManHinhCho />;
-  return <Navigate to={taiKhoan ? trangChuTheoVaiTro(taiKhoan.vaiTro) : "/login"} replace />;
+  return <Navigate to={taiKhoan ? trangChuTheoVaiTro(taiKhoan.vaiTro) : "/dang-nhap"} replace />;
 }

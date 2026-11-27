@@ -1,7 +1,7 @@
 namespace CampusExam.Domain.Entities;
 
 /// <summary>
-/// Số lần nhập sai mật khẩu theo cặp tên đăng nhập + IP (D-AUTH-KHOA-01). Khóa theo tên đăng nhập
+/// Số lần nhập sai mật khẩu theo cặp tên đăng nhập + IP. Khóa theo tên đăng nhập
 /// chứ không theo tài khoản, để tên không tồn tại cũng bị khóa như tên có thật.
 /// </summary>
 public class KhoaDangNhap

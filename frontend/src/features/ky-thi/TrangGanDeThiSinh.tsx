@@ -192,7 +192,7 @@ export default function TrangGanDeThiSinh() {
             <BieuTuong name="calendar" size={28} />
             <strong>Chọn một kỳ thi để bắt đầu</strong>
             <span>{kyThiChonDuoc.length ? "Dùng ô chọn kỳ thi ở góc trên bên phải." : "Chưa có kỳ thi nào còn phân công được."}</span>
-            <Link className="button button-secondary" to="/admin/exams">Tới quản lý kỳ thi</Link>
+            <Link className="button button-secondary" to="/quan-tri/ky-thi">Tới quản lý kỳ thi</Link>
           </div>
         </section>
       ) : loadError ? (
@@ -227,7 +227,7 @@ export default function TrangGanDeThiSinh() {
                     <small>{chiTiet.deGoc.tongSoCau} câu · {chiTiet.deGoc.soDeCon} đề con</small>
                   </div>
                   <div className="assign-paper-actions">
-                    <Link className="button button-secondary" to={`/admin/exam-papers/${chiTiet.deGoc.maDe}`}><BieuTuong name="eye" size={16} /> Xem đề</Link>
+                    <Link className="button button-secondary" to={`/quan-tri/de-thi/${chiTiet.deGoc.maDe}`}><BieuTuong name="eye" size={16} /> Xem đề</Link>
                     {laNhap && <button className="button button-secondary" disabled={!doiDeDuoc || dangXuLy} onClick={() => void chay(async () => { await kyThiApi.ganDeGoc(chiTiet.maKT, null); return "Đã gỡ đề gốc khỏi kỳ thi."; })} title={doiDeDuoc ? undefined : "Gỡ hết thí sinh trước khi đổi đề"} type="button">Gỡ đề</button>}
                   </div>
                   {laNhap && !doiDeDuoc && <small className="field-help">Đã phân công thí sinh nên không đổi đề được. Gỡ hết thí sinh nếu cần đổi.</small>}
@@ -239,7 +239,7 @@ export default function TrangGanDeThiSinh() {
                     {dsDe.map((de) => <option key={de.maDe} value={de.maDe}>{de.maDeGocHienThi} — {de.tenMT} ({de.tongSoCau} câu, {de.soDeCon} đề con)</option>)}
                   </select>
                   <button className="button button-primary" disabled={!deChon || dangXuLy} onClick={() => void chay(async () => { await kyThiApi.ganDeGoc(chiTiet.maKT, Number(deChon)); setDeChon(""); return "Đã gắn đề gốc cho kỳ thi."; })} type="button"><BieuTuong name="check" size={16} /> Gắn đề</button>
-                  {dsDe.length === 0 && <Link className="field-help" to="/admin/exam-generation">Sinh đề mới →</Link>}
+                  {dsDe.length === 0 && <Link className="field-help" to="/quan-tri/sinh-de">Sinh đề mới →</Link>}
                 </div>
               ) : (
                 <p className="matrix-muted">Kỳ thi không có đề gốc.</p>

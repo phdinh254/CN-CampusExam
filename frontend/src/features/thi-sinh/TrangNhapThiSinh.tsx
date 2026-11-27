@@ -117,14 +117,14 @@ export default function TrangNhapThiSinh() {
       <section className="page-heading-row">
         <div><h2>Nhập thí sinh từ Excel</h2></div>
         <div className="heading-actions">
-          <Link className="button button-secondary" to="/admin/candidates"><BieuTuong name="chevron-left" size={17} /> Thí sinh</Link>
+          <Link className="button button-secondary" to="/quan-tri/thi-sinh"><BieuTuong name="chevron-left" size={17} /> Thí sinh</Link>
           <button className="button button-secondary" onClick={() => void taiTepMau()} type="button"><BieuTuong name="file" size={17} /> Tải tệp mẫu</button>
         </div>
       </section>
 
       {thanhCong && (
         <div className="success-banner" role="status">
-          <span><BieuTuong name="check" size={17} /> Đã thêm {thanhCong.soThanhCong} thí sinh từ {thanhCong.tenFile}. <Link to="/admin/candidates">Xem danh sách thí sinh</Link></span>
+          <span><BieuTuong name="check" size={17} /> Đã thêm {thanhCong.soThanhCong} thí sinh từ {thanhCong.tenFile}. <Link to="/quan-tri/thi-sinh">Xem danh sách thí sinh</Link></span>
           <button aria-label="Đóng thông báo" onClick={() => setThanhCong(null)} type="button"><BieuTuong name="x" size={16} /></button>
         </div>
       )}

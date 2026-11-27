@@ -64,7 +64,7 @@ function KhoiNoiBat({ kyThi }: { kyThi: KyThiTomTat }) {
       <div className="live-clock">
         <span>{dangThi ? "CÒN LẠI" : "BẮT ĐẦU SAU"}</span>
         <strong>{demNguoc(conLai)}</strong>
-        <Link className="exam-overview-link" to={`/admin/exam-assignments?maKT=${kyThi.maKT}`}>Gán đề và thí sinh <BieuTuong name="arrow-right" size={14} /></Link>
+        <Link className="exam-overview-link" to={`/quan-tri/phan-cong-thi?maKT=${kyThi.maKT}`}>Gán đề và thí sinh <BieuTuong name="arrow-right" size={14} /></Link>
       </div>
     </section>
   );
@@ -192,7 +192,7 @@ export default function TrangKyThi() {
                         <td><span className={`exam-status ${mauTrangThaiKyThi[item.trangThai]}`}>{nhanTrangThaiKyThi[item.trangThai]}</span></td>
                         <td>
                           <div className="row-actions">
-                            <Link aria-label={`Gán đề và thí sinh cho ${item.tenKT}`} className="row-action" title="Gán đề và thí sinh" to={`/admin/exam-assignments?maKT=${item.maKT}`}><BieuTuong name="users" size={16} /></Link>
+                            <Link aria-label={`Gán đề và thí sinh cho ${item.tenKT}`} className="row-action" title="Gán đề và thí sinh" to={`/quan-tri/phan-cong-thi?maKT=${item.maKT}`}><BieuTuong name="users" size={16} /></Link>
                             {item.trangThai === "nhap" && <button aria-label={`Sửa ${item.tenKT}`} className="row-action" disabled={dangMoSua === item.maKT} onClick={() => void moSua(item.maKT)} title="Sửa" type="button"><BieuTuong name="edit" size={16} /></button>}
                             {(item.trangThai === "da_phat_hanh" || item.trangThai === "dang_thi") && <button aria-label={`Hủy ${item.tenKT}`} className="row-action danger" onClick={() => { setConfirmError(null); setConfirm({ hanhDong: "huy", item }); }} title="Hủy kỳ thi" type="button"><BieuTuong name="lock" size={16} /></button>}
                             {item.trangThai === "nhap" && <button aria-label={`Xóa ${item.tenKT}`} className="row-action danger" onClick={() => { setConfirmError(null); setConfirm({ hanhDong: "xoa", item }); }} title="Xóa" type="button"><BieuTuong name="x" size={16} /></button>}

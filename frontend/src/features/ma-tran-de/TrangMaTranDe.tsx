@@ -128,7 +128,7 @@ export default function TrangMaTranDe() {
                 <tbody>
                   {items.map((item) => (
                     <tr key={item.maMT}>
-                      <td><Link className="matrix-name" to={`/admin/exam-matrices/${item.maMT}`}><strong>{item.tenMT}</strong></Link></td>
+                      <td><Link className="matrix-name" to={`/quan-tri/ma-tran-de/${item.maMT}`}><strong>{item.tenMT}</strong></Link></td>
                       <td>{item.soKQHT}</td>
                       <td><strong>{item.tongSoCau}</strong></td>
                       <td>{item.thoiGianLam} phút</td>
@@ -137,7 +137,7 @@ export default function TrangMaTranDe() {
                       <td><span className="muted-cell">{dinhDangNgay(item.ngayCapNhat ?? item.ngayTao)}</span></td>
                       <td>
                         <div className="row-actions">
-                          <Link aria-label={`Xem ${item.tenMT}`} className="row-action" title={item.trangThai === "dang_soan" && !item.daSinhDe ? "Sửa" : "Xem"} to={`/admin/exam-matrices/${item.maMT}`}>
+                          <Link aria-label={`Xem ${item.tenMT}`} className="row-action" title={item.trangThai === "dang_soan" && !item.daSinhDe ? "Sửa" : "Xem"} to={`/quan-tri/ma-tran-de/${item.maMT}`}>
                             <BieuTuong name={item.trangThai === "dang_soan" && !item.daSinhDe ? "edit" : "eye"} size={16} />
                           </Link>
                           {hanhDongCho(item).map((hanhDong) => (
@@ -176,7 +176,7 @@ export default function TrangMaTranDe() {
         <HopThoaiThongTinMaTran
           nutXacNhan={<>Tiếp tục <BieuTuong name="arrow-right" size={16} /></>}
           onDong={() => setShowForm(false)}
-          onXacNhan={(tenMT, thoiGianLam) => navigate("/admin/exam-matrices/moi", { state: { tenMT, thoiGianLam } })}
+          onXacNhan={(tenMT, thoiGianLam) => navigate("/quan-tri/ma-tran-de/moi", { state: { tenMT, thoiGianLam } })}
           tieuDe="Tạo ma trận đề"
         />
       )}

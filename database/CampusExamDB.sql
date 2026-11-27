@@ -39,7 +39,7 @@ CREATE TABLE dbo.TAIKHOAN (
 );
 GO
 
--- Đếm số lần nhập sai mật khẩu theo cặp tên đăng nhập + IP (D-AUTH-KHOA-01).
+-- Đếm số lần nhập sai mật khẩu theo cặp tên đăng nhập + IP.
 -- Khóa theo TENDN (không FK) để tên không tồn tại cũng bị khóa như tên có thật.
 CREATE TABLE dbo.KHOADANGNHAP (
     TENDN       varchar(50)  NOT NULL, -- chữ thường, đã cắt khoảng trắng

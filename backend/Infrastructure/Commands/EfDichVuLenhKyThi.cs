@@ -561,7 +561,7 @@ public sealed class EfDichVuLenhKyThi(
     {
         kyThi.TenKT = command.TenKT.Trim();
         kyThi.MonThi = command.MonThi.Trim();
-        kyThi.TgBatDau = command.TgBatDauUtc;
+        kyThi.TgBatDau = command.TgBatDauUtc();
         kyThi.ThoiLuong = command.ThoiLuong;
         kyThi.SoPhutChoVaoTre = command.SoPhutChoVaoTre;
         kyThi.HienDiem = (short)(command.HienDiem ? 1 : 0);

@@ -26,8 +26,11 @@ public class LuuKyThiCommand : IValidatableObject
 
     public CachPhanDe CachPhanDe { get; init; } = CachPhanDe.CanBang;
 
-    /// <summary>Giờ bắt đầu quy về UTC; giờ không ghi múi được coi là UTC.</summary>
-    public DateTime TgBatDauUtc => TgBatDau!.Value.Kind switch
+    /// <summary>
+    /// Giờ bắt đầu quy về UTC; giờ không ghi múi được coi là UTC. Là phương thức để bước kiểm tra
+    /// dữ liệu của MVC (đọc mọi thuộc tính) không gọi tới khi thiếu giờ bắt đầu.
+    /// </summary>
+    public DateTime TgBatDauUtc() => TgBatDau!.Value.Kind switch
     {
         DateTimeKind.Utc => TgBatDau.Value,
         DateTimeKind.Local => TgBatDau.Value.ToUniversalTime(),

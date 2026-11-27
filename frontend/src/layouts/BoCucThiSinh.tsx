@@ -13,9 +13,9 @@ import "../styles/cong-thi-sinh.css";
  * dự thi mở từ danh sách kỳ thi được phân công, không có mục menu riêng.
  */
 const thiTrucTuyen = [
-  { label: "Kỳ thi được phân công", to: "/candidate/thi/tham-gia" },
-  { label: "Kết quả thi", to: "/candidate/thi/ket-qua" },
-  { label: "Lịch sử thi", to: "/candidate/thi/lich-su" },
+  { label: "Kỳ thi được phân công", to: "/thi-sinh/thi/tham-gia" },
+  { label: "Kết quả thi", to: "/thi-sinh/thi/ket-qua" },
+  { label: "Lịch sử thi", to: "/thi-sinh/thi/lich-su" },
 ];
 
 export default function BoCucThiSinh() {
@@ -24,7 +24,7 @@ export default function BoCucThiSinh() {
   const location = useLocation();
   const [moMenuThi, setMoMenuThi] = useState(false);
   const menuThiRef = useRef<HTMLLIElement>(null);
-  const dangOTrangThi = location.pathname.startsWith("/candidate/thi");
+  const dangOTrangThi = location.pathname.startsWith("/thi-sinh/thi");
 
   // Đóng menu con khi chuyển trang, bấm ra ngoài hoặc nhấn Escape.
   useEffect(() => setMoMenuThi(false), [location.pathname]);
@@ -48,11 +48,10 @@ export default function BoCucThiSinh() {
       {/* Dải hero: logo và tên đồ án trên cùng, thanh điều hướng ngay bên dưới. */}
       <header className="cand-header">
         <div className="cand-topbar">
-          <Link aria-label="CampusExam — về trang chủ" className="cand-brand" to="/candidate">
+          <Link aria-label="CampusExam — về trang chủ" className="cand-brand" to="/thi-sinh">
             <LogoCampusExam className="cand-logo" nen="toi" size={36} />
             <span className="cand-brand-text">
               <strong>Campus<em className="brand-exam">Exam</em></strong>
-              <span>Hệ thống thi trắc nghiệm</span>
             </span>
           </Link>
 
@@ -61,7 +60,7 @@ export default function BoCucThiSinh() {
             dongPhu={`Mã số thí sinh: ${taiKhoan.msts}`}
             hoTen={taiKhoan.hoTen}
             muc={[
-              { to: "/candidate/tai-khoan", nhan: "Tài khoản cá nhân", icon: "users" },
+              { to: "/thi-sinh/tai-khoan", nhan: "Tài khoản cá nhân", icon: "users" },
               { to: DUONG_DAN_DOI_MAT_KHAU, nhan: "Đổi mật khẩu", icon: "lock" },
             ]}
             onDangXuat={() => void dangXuat()}
@@ -71,7 +70,7 @@ export default function BoCucThiSinh() {
         {/* Thanh điều hướng ngang: các mục ngăn bằng vạch dọc mảnh, không bo góc. */}
         <nav aria-label="Điều hướng thí sinh" className="cand-navbar">
           <ul>
-            <li><NavLink end to="/candidate"><BieuTuong name="home" size={16} /> Trang chủ</NavLink></li>
+            <li><NavLink end to="/thi-sinh"><BieuTuong name="home" size={16} /> Trang chủ</NavLink></li>
             <li className="cand-nav-dropdown" ref={menuThiRef}>
               <button
                 aria-controls="menu-thi-truc-tuyen"

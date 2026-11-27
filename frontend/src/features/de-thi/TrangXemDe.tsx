@@ -52,7 +52,7 @@ export default function TrangXemDe() {
   if (loadError || !deGoc) {
     return (
       <div className="page-stack">
-        <div className="empty-state error-state"><BieuTuong name="alert" size={28} /><strong>Chưa tải được đề</strong><span>{loadError}</span><Link className="button button-secondary" to="/admin/exam-papers">Về danh sách đề</Link></div>
+        <div className="empty-state error-state"><BieuTuong name="alert" size={28} /><strong>Chưa tải được đề</strong><span>{loadError}</span><Link className="button button-secondary" to="/quan-tri/de-thi">Về danh sách đề</Link></div>
       </div>
     );
   }
@@ -61,7 +61,7 @@ export default function TrangXemDe() {
     <div className="page-stack paper-page">
       <section className="page-heading-row">
         <div>
-          <Link className="back-link" to="/admin/exam-papers"><BieuTuong name="arrow-left" size={15} /> Danh sách đề thi</Link>
+          <Link className="back-link" to="/quan-tri/de-thi"><BieuTuong name="arrow-left" size={15} /> Danh sách đề thi</Link>
           <h2>Đề {deGoc.maDeGocHienThi}</h2>
           <p>Ma trận {deGoc.tenMT} · {deGoc.tongSoCau} câu · {deGoc.deCon.length} đề con · sinh ngày {dinhDangNgay(deGoc.ngayTao)}{deGoc.daGanKyThi && " · đã gắn kỳ thi"}</p>
         </div>

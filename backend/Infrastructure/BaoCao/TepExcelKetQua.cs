@@ -39,11 +39,11 @@ public static class TepExcelKetQua
                     new CellFormat { FontId = 2, ApplyFont = true }));
 
             var sheets = workbook.Workbook.AppendChild(new Sheets());
-            ThemSheet(workbook, sheets, 1, "Bảng điểm", SheetBangDiem(thongKe.KyThi, bangDiem), [14, 26, 14, 9, 9, 13, 12, 13, 9, 15, 18]);
+            ThemSheet(workbook, sheets, 1, "Bảng điểm", SheetBangDiem(thongKe.KyThi, bangDiem), [17, 26, 14, 9, 9, 13, 12, 13, 9, 15, 18]);
             ThemSheet(workbook, sheets, 2, "Thống kê", SheetThongKe(thongKe), [22, 60, 11, 11, 11, 11, 13]);
             var bang = thongKe.TyLeDungTheoKqht;
             ThemSheet(workbook, sheets, 3, "Theo KQHT", SheetTheoKqht(thongKe.KyThi, bang), [36, .. bang.MucDo.Select(_ => 16d), 16]);
-            ThemSheet(workbook, sheets, 4, "Chi tiết", SheetChiTiet(thongKe.KyThi, chiTiet), [14, 26, 9, 9, 8, 8, .. chiTiet.Cot.Select(_ => 12d)]);
+            ThemSheet(workbook, sheets, 4, "Chi tiết", SheetChiTiet(thongKe.KyThi, chiTiet), [17, 26, 9, 9, 8, 8, .. chiTiet.Cot.Select(_ => 12d)]);
             workbook.Workbook.Save();
         }
 
@@ -56,7 +56,7 @@ public static class TepExcelKetQua
         {
             Hang(1, [Chu(kt.TenKT, KieuTieuDe)]),
             Hang(2, [Chu($"Môn: {kt.MonThi} · Ngày thi: {GioVN(kt.TgBatDau).ToString("dd/MM/yyyy HH:mm", CultureInfo.InvariantCulture)} · {kt.ThoiLuong} phút")]),
-            Hang(4, new[] { "MSSV", "Họ tên", "Lớp", "Số máy", "Mã đề", "Số câu đúng", "Số câu sai", "Tổng số câu", "Điểm", "Trạng thái", "Giờ nộp" }
+            Hang(4, new[] { "Mã số thí sinh", "Họ tên", "Lớp", "Số máy", "Mã đề", "Số câu đúng", "Số câu sai", "Tổng số câu", "Điểm", "Trạng thái", "Giờ nộp" }
                 .Select(t => Chu(t, KieuDam)).ToArray())
         };
         uint so = 5;
@@ -121,7 +121,7 @@ public static class TepExcelKetQua
         {
             Hang(1, [Chu(kt.TenKT, KieuTieuDe)]),
             Hang(2, [Chu("Đ = đúng, S = sai, – = bỏ trống. Cột theo thứ tự câu của đề gốc (mỗi mã đề con xếp câu khác nhau); dòng 5 là mã câu hỏi.")]),
-            Hang(4, [.. new[] { "MSSV", "Họ tên", "Mã đề", "Điểm", "Đúng", "Sai" }.Select(t => Chu(t, KieuDam)),
+            Hang(4, [.. new[] { "Mã số thí sinh", "Họ tên", "Mã đề", "Điểm", "Đúng", "Sai" }.Select(t => Chu(t, KieuDam)),
                 .. chiTiet.Cot.Select(c => Chu($"Câu {c.ThuTu}", KieuDam))]),
             Hang(5, [Chu(null), Chu(null), Chu(null), Chu(null), Chu(null), Chu(null), .. chiTiet.Cot.Select(c => Chu(c.MaCauHoi))])
         };

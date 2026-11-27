@@ -14,12 +14,12 @@ const buocDuThi: { title: string; text: string; links?: { to: string; label: str
     title: "Kiểm tra thông tin",
     text: "Kiểm tra thông tin cá nhân và môn thi đã được kích hoạt: giờ thi và số máy của bạn.",
     links: [
-      { to: "/candidate/tai-khoan", label: "Thông tin cá nhân" },
-      { to: "/candidate/thi/tham-gia", label: "Kỳ thi được phân công" },
+      { to: "/thi-sinh/tai-khoan", label: "Thông tin cá nhân" },
+      { to: "/thi-sinh/thi/tham-gia", label: "Kỳ thi được phân công" },
     ],
   },
   { title: "Làm bài", text: "Làm bài trong thời gian quy định. Liên hệ giám thị ngay nếu có sự cố về máy hoặc mạng." },
-  { title: "Nộp bài", text: "Nộp bài khi làm xong. Hết giờ mà chưa nộp, hệ thống tự động nộp bài.", links: [{ to: "/candidate/thi/ket-qua", label: "Kết quả thi" }] },
+  { title: "Nộp bài", text: "Nộp bài khi làm xong. Hết giờ mà chưa nộp, hệ thống tự động nộp bài.", links: [{ to: "/thi-sinh/thi/ket-qua", label: "Kết quả thi" }] },
 ];
 
 const luuY = [

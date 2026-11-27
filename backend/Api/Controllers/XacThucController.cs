@@ -103,19 +103,6 @@ public sealed class XacThucController(
         return NoContent();
     }
 
-    [HttpGet("toi")]
-    [Authorize]
-    [ProducesResponseType<TaiKhoanHienTaiDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status401Unauthorized)]
-    public async Task<ActionResult<TaiKhoanHienTaiDto>> Toi(CancellationToken cancellationToken)
-    {
-        var taiKhoan = await authService.LayTaiKhoanAsync(MaTaiKhoan(), cancellationToken);
-        return taiKhoan is null
-            ? Unauthorized(LoiApi.Create(HttpContext, StatusCodes.Status401Unauthorized,
-                "Chưa đăng nhập", MaLoi.AuthUnauthenticated))
-            : Ok(taiKhoan);
-    }
-
     [HttpPost("doi-mat-khau")]
     [Authorize]
     // Dùng chung hạn mức với đăng nhập: chặn dò mật khẩu cũ bằng access token bị lộ.

@@ -159,7 +159,7 @@ public sealed partial class EfDichVuNhapCauHoi(
         return new TrangDuLieu<LanImportDto>(duLieu, truyVan.Trang, truyVan.KichThuocTrang, tong);
     }
 
-    public Task<LanImportDto?> GetByIdAsync(int maLanImport, CancellationToken cancellationToken) =>
+    private Task<LanImportDto?> GetByIdAsync(int maLanImport, CancellationToken cancellationToken) =>
         ChieuDto(dbContext.LanImports.AsNoTracking()
                 .Where(x => x.LoaiImport == LanImport.LoaiCauHoi && x.MaLanImport == maLanImport))
             .SingleOrDefaultAsync(cancellationToken);

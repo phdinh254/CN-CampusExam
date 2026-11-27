@@ -4,8 +4,8 @@ import type { TaiKhoanHienTai, VaiTro } from "../../types/api";
 export const DUONG_DAN_DOI_MAT_KHAU = "/doi-mat-khau";
 
 const TRANG_CHU: Record<VaiTro, string> = {
-  ADMIN: "/admin",
-  THISINH: "/candidate",
+  ADMIN: "/quan-tri",
+  THISINH: "/thi-sinh",
 };
 
 export function trangChuTheoVaiTro(vaiTro: VaiTro): string {
@@ -29,19 +29,13 @@ export function chuCaiDau(hoTen: string): string {
   return chon.map((t) => t[0].toLocaleUpperCase("vi-VN")).join("");
 }
 
-/** Tên gọi trong lời chào: hai từ cuối của họ tên, ví dụ "Minh Long". */
-export function tenGoi(hoTen: string): string {
-  const tu = hoTen.trim().split(/\s+/).filter(Boolean);
-  return tu.slice(-2).join(" ") || hoTen;
-}
-
 const dinhDangGio = new Intl.DateTimeFormat("vi-VN", {
   hour: "2-digit",
   minute: "2-digit",
   timeZone: "Asia/Ho_Chi_Minh",
 });
 
-/** Khóa áp dụng cho cặp tài khoản + IP (D-AUTH-KHOA-01), nên chỉ máy này bị chặn. */
+/** Khóa áp dụng cho cặp tài khoản + IP, nên chỉ máy này bị chặn. */
 function thongBaoTamKhoa(error: LoiApiHttp): string {
   const khoaDen = error.problem?.khoaDen ? new Date(error.problem.khoaDen) : null;
   return khoaDen && !Number.isNaN(khoaDen.getTime())

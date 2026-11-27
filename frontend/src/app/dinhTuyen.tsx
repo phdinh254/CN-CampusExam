@@ -25,40 +25,44 @@ import TongQuanThiSinh from "../features/cong-thi-sinh/TongQuanThiSinh";
 import BoCucQuanTri from "../layouts/BoCucQuanTri";
 import BoCucPhongThi from "../layouts/BoCucPhongThi";
 import BoCucThiSinh from "../layouts/BoCucThiSinh";
+import { useTaiKhoan } from "../features/xac-thuc/NhaCungCapXacThuc";
+
+/** Trang dùng chung cho hai vai trò (đổi mật khẩu) nằm trong khung giao diện của vai trò đang đăng nhập. */
+function BoCucTheoVaiTro() {
+  return useTaiKhoan().vaiTro === "ADMIN" ? <BoCucQuanTri /> : <BoCucThiSinh />;
+}
 
 export const boDinhTuyen = createBrowserRouter([
   { path: "/", element: <ChuyenVeTrangChu /> },
-  { path: "/login", element: <TrangDangNhap /> },
+  { path: "/dang-nhap", element: <TrangDangNhap /> },
   {
     element: <YeuCauVaiTro />,
-    children: [{ path: "/doi-mat-khau", element: <TrangDoiMatKhau /> }],
+    children: [{ path: "/doi-mat-khau", element: <BoCucTheoVaiTro />, children: [{ index: true, element: <TrangDoiMatKhau /> }] }],
   },
   {
     element: <YeuCauVaiTro vaiTro="ADMIN" />,
     children: [
       {
-        path: "/admin",
+        path: "/quan-tri",
         element: <BoCucQuanTri />,
         children: [
           { index: true, element: <TongQuanQuanTri /> },
-          { path: "learning-outcomes", element: <TrangKetQuaHocTap /> },
-          { path: "questions", element: <TrangNganHangCauHoi /> },
-          { path: "questions/import", element: <TrangNhapCauHoi /> },
-          { path: "exam-matrices", element: <TrangMaTranDe /> },
-          { path: "exam-matrices/moi", element: <TrangSoanMaTran /> },
-          { path: "exam-matrices/:maMT", element: <TrangSoanMaTran /> },
-          { path: "exam-generation", element: <TrangSinhDe /> },
-          { path: "exam-papers", element: <TrangDanhSachDe /> },
-          { path: "exam-papers/:maDe", element: <TrangXemDe /> },
-          { path: "exams", element: <TrangKyThi /> },
-          { path: "exam-assignments", element: <TrangGanDeThiSinh /> },
-          { path: "exam-monitoring", element: <TrangTheoDoiThi /> },
-          { path: "candidates", element: <TrangQuanLyThiSinh /> },
-          { path: "candidates/import", element: <TrangNhapThiSinh /> },
-          { path: "reports", element: <TrangBaoCaoKetQua /> },
-          { path: "settings", element: <Navigate to="/admin" replace /> },
-          { path: "students", element: <Navigate to="/admin/candidates" replace /> },
-          { path: "*", element: <Navigate to="/admin" replace /> },
+          { path: "ket-qua-hoc-tap", element: <TrangKetQuaHocTap /> },
+          { path: "cau-hoi", element: <TrangNganHangCauHoi /> },
+          { path: "cau-hoi/nhap", element: <TrangNhapCauHoi /> },
+          { path: "ma-tran-de", element: <TrangMaTranDe /> },
+          { path: "ma-tran-de/moi", element: <TrangSoanMaTran /> },
+          { path: "ma-tran-de/:maMT", element: <TrangSoanMaTran /> },
+          { path: "sinh-de", element: <TrangSinhDe /> },
+          { path: "de-thi", element: <TrangDanhSachDe /> },
+          { path: "de-thi/:maDe", element: <TrangXemDe /> },
+          { path: "ky-thi", element: <TrangKyThi /> },
+          { path: "phan-cong-thi", element: <TrangGanDeThiSinh /> },
+          { path: "theo-doi-thi", element: <TrangTheoDoiThi /> },
+          { path: "thi-sinh", element: <TrangQuanLyThiSinh /> },
+          { path: "thi-sinh/nhap", element: <TrangNhapThiSinh /> },
+          { path: "bao-cao", element: <TrangBaoCaoKetQua /> },
+          { path: "*", element: <Navigate to="/quan-tri" replace /> },
         ],
       },
     ],
@@ -67,29 +71,25 @@ export const boDinhTuyen = createBrowserRouter([
     element: <YeuCauVaiTro vaiTro="THISINH" />,
     children: [
       {
-        path: "/candidate",
+        path: "/thi-sinh",
         element: <BoCucThiSinh />,
         children: [
           { index: true, element: <TongQuanThiSinh /> },
-          { path: "thi", element: <Navigate to="/candidate/thi/tham-gia" replace /> },
+          { path: "thi", element: <Navigate to="/thi-sinh/thi/tham-gia" replace /> },
           { path: "thi/tham-gia", element: <TrangVaoThi /> },
           { path: "thi/ket-qua", element: <TrangKetQuaThi /> },
           { path: "thi/lich-su", element: <TrangLichSuThi /> },
           { path: "thi/:maKT", element: <TrangChiTietKyThi /> },
           { path: "tai-khoan", element: <TrangTaiKhoan /> },
-          { path: "*", element: <Navigate to="/candidate" replace /> },
+          { path: "*", element: <Navigate to="/thi-sinh" replace /> },
         ],
       },
       {
-        path: "/exam",
+        path: "/phong-thi",
         element: <BoCucPhongThi />,
-        children: [
-          { index: true, element: <Navigate to="session" replace /> },
-          { path: "session", element: <TrangLamBai /> },
-        ],
+        children: [{ index: true, element: <TrangLamBai /> }],
       },
     ],
   },
-  { path: "/student/*", element: <Navigate to="/candidate" replace /> },
   { path: "*", element: <ChuyenVeTrangChu /> },
 ]);

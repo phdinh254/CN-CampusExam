@@ -302,7 +302,7 @@ export default function TrangLamBai() {
             <span aria-hidden="true" className="pt-result-icon pt-result-icon-info"><BieuTuong name="alert" size={30} /></span>
             <h1 id="pt-thong-bao">{manHinh.tieuDe}</h1>
             <p className="pt-result-meta">{manHinh.noiDung}</p>
-            <Link className="button button-primary button-lg" to={maKT ? `/candidate/thi/${maKT}` : "/candidate/thi/tham-gia"}>Về trang kỳ thi</Link>
+            <Link className="button button-primary button-lg" to={maKT ? `/thi-sinh/thi/${maKT}` : "/thi-sinh/thi/tham-gia"}>Về trang kỳ thi</Link>
           </section>
         </main>
       )}
@@ -320,7 +320,7 @@ export default function TrangLamBai() {
             ) : (
               <p className="pt-result-hidden">Kỳ thi này không hiển thị điểm ngay. Bài làm của bạn đã được ghi nhận.</p>
             )}
-            <button className="button button-primary button-lg" onClick={() => navigate("/candidate")} type="button">Về trang chủ</button>
+            <button className="button button-primary button-lg" onClick={() => navigate("/thi-sinh")} type="button">Về trang chủ</button>
           </section>
         </main>
       )}

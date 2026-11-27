@@ -55,6 +55,4 @@ public interface IDichVuNhapCauHoi
         CancellationToken cancellationToken);
 
     Task<TrangDuLieu<LanImportDto>> GetPageAsync(TruyVanTrang truyVan, CancellationToken cancellationToken);
-
-    Task<LanImportDto?> GetByIdAsync(int maLanImport, CancellationToken cancellationToken);
 }

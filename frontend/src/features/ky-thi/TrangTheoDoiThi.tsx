@@ -229,7 +229,7 @@ export default function TrangTheoDoiThi() {
             <BieuTuong name="activity" size={28} />
             <strong>{dsKyThi.length ? "Chọn kỳ thi cần theo dõi" : "Chưa có kỳ thi nào đã phát hành"}</strong>
             <span>Kỳ thi đang diễn ra sẽ được chọn tự động.</span>
-            <Link className="button button-secondary" to="/admin/exams">Tới quản lý kỳ thi</Link>
+            <Link className="button button-secondary" to="/quan-tri/ky-thi">Tới quản lý kỳ thi</Link>
           </div>
         </section>
       ) : !giamSat ? (
@@ -299,7 +299,7 @@ export default function TrangTheoDoiThi() {
                 </tbody>
               </table>
             </div>
-            {giamSat.thiSinh.length === 0 && <div className="empty-state"><BieuTuong name="users" size={28} /><strong>Kỳ thi chưa có thí sinh</strong><Link className="button button-secondary" to={`/admin/exam-assignments?maKT=${giamSat.maKT}`}>Phân công thí sinh</Link></div>}
+            {giamSat.thiSinh.length === 0 && <div className="empty-state"><BieuTuong name="users" size={28} /><strong>Kỳ thi chưa có thí sinh</strong><Link className="button button-secondary" to={`/quan-tri/phan-cong-thi?maKT=${giamSat.maKT}`}>Phân công thí sinh</Link></div>}
             {giamSat.thiSinh.length > 0 && hienThi.length === 0 && <div className="empty-state"><BieuTuong name="search" size={28} /><strong>Không có thí sinh khớp bộ lọc</strong></div>}
             <div className="table-footer"><span><strong>{hienThi.length}</strong> / {giamSat.thiSinh.length} thí sinh</span><span>Dòng tô vàng: đang làm nhưng không có hoạt động quá 2 phút</span></div>
           </section>

@@ -75,7 +75,7 @@ export default function TrangDanhSachDe() {
           <h2>Danh sách đề thi</h2>
         </div>
         <div className="heading-actions">
-          <Link className="button button-primary" to="/admin/exam-generation"><BieuTuong name="sparkles" size={17} /> Sinh đề</Link>
+          <Link className="button button-primary" to="/quan-tri/sinh-de"><BieuTuong name="sparkles" size={17} /> Sinh đề</Link>
         </div>
       </section>
 
@@ -105,7 +105,7 @@ export default function TrangDanhSachDe() {
                 <tbody>
                   {items.map((item) => (
                     <tr key={item.maDe}>
-                      <td><Link className="matrix-name" to={`/admin/exam-papers/${item.maDe}`}><strong>{item.maDeGocHienThi}</strong></Link></td>
+                      <td><Link className="matrix-name" to={`/quan-tri/de-thi/${item.maDe}`}><strong>{item.maDeGocHienThi}</strong></Link></td>
                       <td>{item.tenMT}</td>
                       <td>{item.tongSoCau}</td>
                       <td>{item.soDeCon}</td>
@@ -113,7 +113,7 @@ export default function TrangDanhSachDe() {
                       <td><span className="muted-cell">{dinhDangNgay(item.ngayTao)}</span></td>
                       <td>
                         <div className="row-actions">
-                          <Link aria-label={`Xem ${item.maDeGocHienThi}`} className="row-action" title="Xem đề" to={`/admin/exam-papers/${item.maDe}`}><BieuTuong name="eye" size={16} /></Link>
+                          <Link aria-label={`Xem ${item.maDeGocHienThi}`} className="row-action" title="Xem đề" to={`/quan-tri/de-thi/${item.maDe}`}><BieuTuong name="eye" size={16} /></Link>
                           {!item.daGanKyThi && (
                             <button aria-label={`Xóa ${item.maDeGocHienThi}`} className="row-action danger" onClick={() => { setXoaError(null); setXoa(item); }} title="Xóa đề" type="button"><BieuTuong name="x" size={16} /></button>
                           )}

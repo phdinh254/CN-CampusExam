@@ -55,8 +55,6 @@ public interface IDichVuNhapThiSinh
     Task<KetQua<LanImportDto>> XacNhanAsync(string maXemTruoc, NguoiThucHien nguoi, CancellationToken cancellationToken);
 
     Task<TrangDuLieu<LanImportDto>> GetPageAsync(TruyVanTrang truyVan, CancellationToken cancellationToken);
-
-    Task<LanImportDto?> GetByIdAsync(int maLanImport, CancellationToken cancellationToken);
 }
 
 public sealed class LoiDinhDangNhapThiSinh(string message, Exception? innerException = null)

@@ -216,7 +216,7 @@ export default function TrangQuanLyThiSinh() {
       <section className="page-heading-row">
         <div><h2>Quản lý thí sinh</h2></div>
         <div className="heading-actions">
-          <Link className="button button-secondary" to="/admin/candidates/import"><BieuTuong name="file" size={17} /> Nhập từ Excel</Link>
+          <Link className="button button-secondary" to="/quan-tri/thi-sinh/nhap"><BieuTuong name="file" size={17} /> Nhập từ Excel</Link>
           <button className="button button-primary" onClick={moThem} type="button"><BieuTuong name="plus" size={17} /> Thêm thí sinh</button>
         </div>
       </section>
@@ -316,7 +316,7 @@ export default function TrangQuanLyThiSinh() {
                   <>
                     <div className="dialog-field-grid">
                       <label className="dialog-field"><span>Mã số thí sinh <em>*</em></span>
-                        <input autoFocus={editor.mode === "create"} disabled={editor.mode === "edit"} maxLength={20} onChange={(event) => capNhatForm("msts", event.target.value)} placeholder="Ví dụ: SV20230082" value={form.msts} />
+                        <input autoFocus={editor.mode === "create"} disabled={editor.mode === "edit"} maxLength={20} onChange={(event) => capNhatForm("msts", event.target.value)} placeholder="Ví dụ: TS2026001" value={form.msts} />
                         {formErrors.msts && <small className="field-error">{formErrors.msts}</small>}
                         {editor.mode === "edit" && <small className="field-help">Không đổi được mã số.</small>}
                       </label>

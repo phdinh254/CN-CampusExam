@@ -73,7 +73,7 @@ export default function TrangSinhDe() {
       ) : loadError ? (
         <div className="empty-state error-state"><BieuTuong name="alert" size={28} /><strong>Chưa tải được ma trận</strong><span>{loadError}</span></div>
       ) : dsMaTran.length === 0 ? (
-        <div className="empty-state"><BieuTuong name="layers" size={28} /><strong>Chưa có ma trận đang sử dụng</strong><span>Kích hoạt một ma trận trước khi sinh đề.</span><Link className="button button-secondary" to="/admin/exam-matrices">Tới ma trận đề</Link></div>
+        <div className="empty-state"><BieuTuong name="layers" size={28} /><strong>Chưa có ma trận đang sử dụng</strong><span>Kích hoạt một ma trận trước khi sinh đề.</span><Link className="button button-secondary" to="/quan-tri/ma-tran-de">Tới ma trận đề</Link></div>
       ) : (
         <div className="paper-layout">
         <form className="panel paper-generate" noValidate onSubmit={handleSubmit}>
@@ -136,7 +136,7 @@ export default function TrangSinhDe() {
             <strong>Đã sinh đề {ketQua.maDeGocHienThi}</strong>
             <p>{ketQua.tongSoCau} câu · {ketQua.soDeCon} đề con · trùng {ketQua.soCauTrung}/{ketQua.tongSoCau} câu với các đề trước</p>
           </div>
-          <Link className="button button-secondary" to={`/admin/exam-papers/${ketQua.maDe}`}><BieuTuong name="eye" size={16} /> Xem đề</Link>
+          <Link className="button button-secondary" to={`/quan-tri/de-thi/${ketQua.maDe}`}><BieuTuong name="eye" size={16} /> Xem đề</Link>
         </section>
       )}
     </div>

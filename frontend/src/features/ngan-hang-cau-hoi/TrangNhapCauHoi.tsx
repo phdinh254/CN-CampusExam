@@ -113,13 +113,13 @@ export default function TrangNhapCauHoi() {
       <section className="page-heading-row">
         <div><h2>Nhập câu hỏi từ Word</h2></div>
         <div className="heading-actions">
-          <Link className="button button-secondary" to="/admin/questions"><BieuTuong name="chevron-left" size={17} /> Ngân hàng câu hỏi</Link>
+          <Link className="button button-secondary" to="/quan-tri/cau-hoi"><BieuTuong name="chevron-left" size={17} /> Ngân hàng câu hỏi</Link>
         </div>
       </section>
 
       {thanhCong && (
         <div className="success-banner" role="status">
-          <span><BieuTuong name="check" size={17} /> Đã nhập {thanhCong.soThanhCong} câu hỏi từ {thanhCong.tenFile}. <Link to="/admin/questions">Xem ngân hàng câu hỏi</Link></span>
+          <span><BieuTuong name="check" size={17} /> Đã nhập {thanhCong.soThanhCong} câu hỏi từ {thanhCong.tenFile}. <Link to="/quan-tri/cau-hoi">Xem ngân hàng câu hỏi</Link></span>
           <button aria-label="Đóng thông báo" onClick={() => setThanhCong(null)} type="button"><BieuTuong name="x" size={16} /></button>
         </div>
       )}

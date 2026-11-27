@@ -213,7 +213,7 @@ export default function TrangNganHangCauHoi() {
       <section className="page-heading-row">
         <div><h2>Ngân hàng câu hỏi</h2></div>
         <div className="heading-actions">
-          <Link className="button button-secondary" to="/admin/questions/import"><BieuTuong name="file" size={17} /> Nhập từ Word</Link>
+          <Link className="button button-secondary" to="/quan-tri/cau-hoi/nhap"><BieuTuong name="file" size={17} /> Nhập từ Word</Link>
           <button className="button button-primary" disabled={kqhtDangDung.length === 0} onClick={moThem} title={kqhtDangDung.length === 0 ? "Cần ít nhất một KQHT đang sử dụng" : undefined} type="button">
             <BieuTuong name="plus" size={17} /> Thêm câu hỏi
           </button>

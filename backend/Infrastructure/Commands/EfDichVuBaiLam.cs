@@ -46,12 +46,6 @@ public sealed class EfDichVuBaiLam(
         return new DanhSachKyThiCuaToiDto(now, duLieu);
     }
 
-    public async Task<KyThiCuaToiDto?> ChiTietKyThiAsync(string msts, int maKT, CancellationToken cancellationToken)
-    {
-        var x = await TruyVanNguCanh(msts).SingleOrDefaultAsync(nc => nc.MaKT == maKT, cancellationToken);
-        return x is null ? null : SangKyThiCuaToi(x, Now());
-    }
-
     public async Task<KetQua<BaiLamDto>> BatDauAsync(
         string msts,
         int maKT,
@@ -102,7 +96,8 @@ public sealed class EfDichVuBaiLam(
         return await LayAsync(msts, maKT, cancellationToken);
     }
 
-    public async Task<KetQua<BaiLamDto>> LayAsync(string msts, int maKT, CancellationToken cancellationToken)
+    /// <summary>Đề đã hoán vị, câu trả lời đã lưu và hạn nộp; bài hết hạn được thu ngay.</summary>
+    private async Task<KetQua<BaiLamDto>> LayAsync(string msts, int maKT, CancellationToken cancellationToken)
     {
         var now = Now();
         var nc = await TruyVanNguCanh(msts).SingleOrDefaultAsync(x => x.MaKT == maKT, cancellationToken);

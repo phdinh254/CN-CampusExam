@@ -52,18 +52,6 @@ public class ToiController(
         return Ok(await baiLamService.DanhSachKyThiAsync(Msts(), cancellationToken));
     }
 
-    [HttpGet("ky-thi/{maKT:int}")]
-    [ProducesResponseType<KyThiCuaToiDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    public async Task<ActionResult<KyThiCuaToiDto>> GetKyThiById(int maKT, CancellationToken cancellationToken)
-    {
-        var kyThi = await baiLamService.ChiTietKyThiAsync(Msts(), maKT, cancellationToken);
-        return kyThi is null
-            ? NotFound(LoiApi.Create(HttpContext, StatusCodes.Status404NotFound, "Không tìm thấy kỳ thi",
-                MaLoi.ExamNotFound, $"Bạn không được phân công vào kỳ thi {maKT} hoặc kỳ thi chưa được phát hành."))
-            : Ok(kyThi);
-    }
-
     /// <summary>Bắt đầu hoặc tiếp tục bài làm; gọi nhiều lần vẫn chỉ một bài.</summary>
     [HttpPost("ky-thi/{maKT:int}/bai-lam")]
     [ProducesResponseType<BaiLamDto>(StatusCodes.Status200OK)]
@@ -73,16 +61,6 @@ public class ToiController(
     {
         var ketQua = await baiLamService.BatDauAsync(
             Msts(), maKT, HttpContext.Connection.RemoteIpAddress?.ToString(), cancellationToken);
-        return ketQua.ThanhCong ? Ok(ketQua.GiaTri) : LoiApi.FromLoi(HttpContext, ketQua.Loi!);
-    }
-
-    [HttpGet("ky-thi/{maKT:int}/bai-lam")]
-    [ProducesResponseType<BaiLamDto>(StatusCodes.Status200OK)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status404NotFound)]
-    [ProducesResponseType<ProblemDetails>(StatusCodes.Status409Conflict)]
-    public async Task<ActionResult<BaiLamDto>> GetBaiLam(int maKT, CancellationToken cancellationToken)
-    {
-        var ketQua = await baiLamService.LayAsync(Msts(), maKT, cancellationToken);
         return ketQua.ThanhCong ? Ok(ketQua.GiaTri) : LoiApi.FromLoi(HttpContext, ketQua.Loi!);
     }
 

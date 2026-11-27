@@ -54,8 +54,9 @@ export function kiemTraForm(form: TrangThaiBieuMauThiSinh, taoMoi: boolean, now 
   return errors;
 }
 
+const rong = (value: string) => value.trim() || null;
+
 export function hoSoGui(form: TrangThaiBieuMauThiSinh): HoSoThiSinh {
-  const rong = (value: string) => value.trim() || null;
   return {
     hoTen: form.hoTen.trim(),
     ngaySinh: form.ngaySinh,

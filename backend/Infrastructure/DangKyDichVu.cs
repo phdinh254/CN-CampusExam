@@ -11,7 +11,6 @@ using CampusExam.Infrastructure.Services;
 using CampusExam.Application.Interfaces.Security;
 using CampusExam.Application.Kqht;
 using CampusExam.Application.MaTran;
-using CampusExam.Application.MucDo;
 using CampusExam.Application.NhapCauHoi;
 using CampusExam.Application.NhapThiSinh;
 using CampusExam.Application.ThiSinh;
@@ -36,7 +35,6 @@ public static class DangKyDichVu
         services.AddScoped<IDichVuLenhThiSinh, EfDichVuLenhThiSinh>();
         services.AddScoped<IDichVuNhapCauHoi, EfDichVuNhapCauHoi>();
         services.AddScoped<IDichVuNhapThiSinh, EfDichVuNhapThiSinh>();
-        services.AddScoped<ITruyXuatMucDo, EfTruyXuatMucDo>();
         services.AddScoped<ITruyXuatMaTran, EfTruyXuatMaTran>();
         services.AddScoped<IDichVuLenhMaTran, EfDichVuLenhMaTran>();
         services.AddScoped<ITruyXuatDeThi, EfTruyXuatDeThi>();

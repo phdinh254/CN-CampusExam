@@ -183,25 +183,25 @@ export default function TongQuanQuanTri() {
       nhan: "Tổng số câu hỏi",
       giaTri: tongCauHoi ? dinhDangSo.format(tongCauHoi.tong) : "…",
       phu: tongCauHoi ? `${dinhDangSo.format(tongCauHoi.dangDung)} câu đang sử dụng` : "Đang tải",
-      den: "/admin/questions",
+      den: "/quan-tri/cau-hoi",
     },
     {
       nhan: "Kỳ thi đang diễn ra",
       giaTri: dsKyThi ? String(dangThi.length) : "…",
       phu: dsKyThi ? `${sapToi.length} kỳ thi sắp diễn ra trong 7 ngày` : "Đang tải",
-      den: dangThi.length ? "/admin/exam-monitoring" : "/admin/exams",
+      den: dangThi.length ? "/quan-tri/theo-doi-thi" : "/quan-tri/ky-thi",
     },
     {
       nhan: "Tổng số thí sinh",
       giaTri: tongThiSinh ? dinhDangSo.format(tongThiSinh.tong) : "…",
       phu: tongThiSinh ? `${dinhDangSo.format(tongThiSinh.chuaDoiMatKhau)} chưa đổi mật khẩu` : "Đang tải",
-      den: "/admin/candidates",
+      den: "/quan-tri/thi-sinh",
     },
     {
       nhan: "Tỷ lệ hoàn thành bài thi",
       giaTri: !dsKyThi ? "…" : tongPhanCong ? `${dinhDangPhanTram.format((tongDaNop * 100) / tongPhanCong)}%` : "—",
       phu: !dsKyThi ? "Đang tải" : tongPhanCong ? `${dinhDangSo.format(tongDaNop)}/${dinhDangSo.format(tongPhanCong)} bài, 30 ngày qua` : "Chưa có kỳ thi kết thúc trong 30 ngày",
-      den: "/admin/reports",
+      den: "/quan-tri/bao-cao",
       dinhNghia: "Số bài đã nộp (kể cả hệ thống tự thu) chia số thí sinh được phân công, tính trên các kỳ thi đã kết thúc trong 30 ngày gần nhất.",
     },
   ];
@@ -266,7 +266,7 @@ export default function TongQuanQuanTri() {
                     ) : <span className="tq-exam-progress"><small>{kt.soThiSinh} thí sinh</small></span>}
                   </div>
                   <span className={`exam-status ${mauTrangThaiKyThi[kt.trangThai]}`}>{nhanTrangThaiKyThi[kt.trangThai]}</span>
-                  <Link aria-label={`${dang ? "Theo dõi" : "Chi tiết"} kỳ thi ${kt.tenKT}`} className="row-link" to={dang ? `/admin/exam-monitoring?maKT=${kt.maKT}` : `/admin/exam-assignments?maKT=${kt.maKT}`}>{dang ? "Theo dõi" : "Chi tiết"}</Link>
+                  <Link aria-label={`${dang ? "Theo dõi" : "Chi tiết"} kỳ thi ${kt.tenKT}`} className="row-link" to={dang ? `/quan-tri/theo-doi-thi?maKT=${kt.maKT}` : `/quan-tri/phan-cong-thi?maKT=${kt.maKT}`}>{dang ? "Theo dõi" : "Chi tiết"}</Link>
                 </li>
               );
             })}
@@ -277,12 +277,12 @@ export default function TongQuanQuanTri() {
               moTa="Tạo kỳ thi, gắn đề và thí sinh rồi phát hành để kỳ thi xuất hiện tại đây."
               tieuDe={loc === "dang_thi" ? "Không có kỳ thi đang diễn ra" : loc === "da_phat_hanh" ? "Không có kỳ thi trong 7 ngày tới" : "Chưa có kỳ thi đang hoặc sắp diễn ra"}
             >
-              <Link className="button button-secondary" to="/admin/exams"><BieuTuong name="plus" size={16} /> Tạo kỳ thi</Link>
+              <Link className="button button-secondary" to="/quan-tri/ky-thi"><BieuTuong name="plus" size={16} /> Tạo kỳ thi</Link>
             </TrangThaiTrong>
           )}
           {!dsKyThi && <div className="outcomes-loading" aria-label="Đang tải">{[1, 2, 3].map((x) => <span key={x} />)}</div>}
           {dsHienThi.length > 0 && (
-            <Link className="tq-more tq-panel-foot" to="/admin/exams">
+            <Link className="tq-more tq-panel-foot" to="/quan-tri/ky-thi">
               {dsHienThi.length > SO_KY_THI ? `Xem tất cả (còn ${dsHienThi.length - SO_KY_THI} kỳ thi)` : "Xem tất cả kỳ thi"} <BieuTuong name="chevron-right" size={15} />
             </Link>
           )}

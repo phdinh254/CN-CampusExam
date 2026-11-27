@@ -2,7 +2,6 @@ import { useState, type FormEvent } from "react";
 import { Navigate, useLocation, useNavigate } from "react-router-dom";
 
 import { BieuTuong } from "../../components/BieuTuong";
-import { LogoCampusExam } from "../../components/LogoCampusExam";
 import { useXacThuc } from "./NhaCungCapXacThuc";
 import { duongDanSauDangNhap, thongBaoLoiDangNhap } from "./tienIchXacThuc";
 import { ManHinhCho } from "./YeuCauVaiTro";
@@ -51,23 +50,6 @@ export default function TrangDangNhap() {
     <main className="login-photo-page">
       <div className="login-photo-shade" aria-hidden="true" />
 
-      <header className="photo-brand">
-        <LogoCampusExam className="photo-logo" nen="toi" size={40} />
-        <span className="brand-text"><strong>Campus<em className="brand-exam">Exam</em></strong><small className="brand-tagline">Hệ thống tổ chức thi trắc nghiệm</small></span>
-      </header>
-
-      <section className="photo-intro" aria-label="Thông tin kỳ thi">
-        <h1>Sẵn sàng<br />cho kỳ thi.</h1>
-        <div className="exam-notes">
-          <strong>Lưu ý trước khi thi</strong>
-          <ul>
-            <li><BieuTuong name="clock" size={16} /><span>Có mặt trước giờ thi 10 phút</span></li>
-            <li><BieuTuong name="check" size={16} /><span>Kiểm tra mạng và thiết bị</span></li>
-            <li><BieuTuong name="file" size={16} /><span>Hết giờ, hệ thống tự nộp bài</span></li>
-          </ul>
-        </div>
-      </section>
-
       <section className="photo-login-panel">
         <div className="photo-login-card">
           <div className="photo-login-heading">
@@ -91,7 +73,7 @@ export default function TrangDangNhap() {
                 autoComplete="username"
                 id="username"
                 onChange={(event) => setTenDN(event.target.value)}
-                placeholder={laThiSinh ? "VD: SV20230082" : "Nhập tên đăng nhập"}
+                placeholder={laThiSinh ? "Nhập mã số thí sinh" : "Nhập tên đăng nhập"}
                 spellCheck={false}
                 value={tenDN}
               />
@@ -103,10 +85,9 @@ export default function TrangDangNhap() {
               <input autoComplete="current-password" id="password" onChange={(event) => setMatKhau(event.target.value)} placeholder="Nhập mật khẩu" type={showPassword ? "text" : "password"} value={matKhau} />
               <button aria-label={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"} onClick={() => setShowPassword((value) => !value)} title={showPassword ? "Ẩn mật khẩu" : "Hiện mật khẩu"} type="button"><BieuTuong name={showPassword ? "eye-off" : "eye"} size={19} /></button>
             </div>
-            {laThiSinh && <p className="photo-field-hint">Lần đầu đăng nhập: mật khẩu là ngày sinh dạng ddMMyyyy.</p>}
 
             <button className="button button-primary photo-login-submit" disabled={dangGui} type="submit">
-              {dangGui ? <><span className="button-spinner" /> Đang đăng nhập…</> : <>Đăng nhập <BieuTuong name="arrow-right" size={18} /></>}
+              {dangGui ? <><span className="button-spinner" /> Đang đăng nhập…</> : "Đăng nhập"}
             </button>
           </form>
 

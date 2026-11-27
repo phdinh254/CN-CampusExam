@@ -2,7 +2,6 @@ import { useState, type FormEvent } from "react";
 import { useNavigate } from "react-router-dom";
 
 import { BieuTuong } from "../../components/BieuTuong";
-import { LogoCampusExam } from "../../components/LogoCampusExam";
 import { LoiApiHttp } from "../../services/khachHttp";
 import { useXacThuc, useTaiKhoan } from "./NhaCungCapXacThuc";
 import { thongBaoLoiDoiMatKhau, trangChuTheoVaiTro } from "./tienIchXacThuc";
@@ -21,19 +20,6 @@ export default function TrangDoiMatKhau() {
   const [loiChung, setLoiChung] = useState<string | null>(null);
   const [dangGui, setDangGui] = useState(false);
 
-  const tenDN = (taiKhoan.msts ?? taiKhoan.tenDN).toLowerCase();
-
-  // Thí sinh chỉ cần tối thiểu 8 ký tự: không hiện danh sách điều kiện, chỉ báo lỗi khi
-  // gửi. Quản trị viên theo chính sách đầy đủ, kiểm tra ngay khi gõ. Server luôn kiểm tra lại.
-  const laThiSinh = taiKhoan.vaiTro === "THISINH";
-  const dieuKien = laThiSinh
-    ? []
-    : [
-        { nhan: "Từ 8 đến 128 ký tự", dat: matKhauMoi.length >= 8 && matKhauMoi.length <= 128 },
-        { nhan: "Có cả chữ và số", dat: /\p{L}/u.test(matKhauMoi) && /\d/.test(matKhauMoi) },
-        { nhan: "Không chứa tên đăng nhập", dat: matKhauMoi.length > 0 && !matKhauMoi.toLowerCase().includes(tenDN) },
-        { nhan: "Khác mật khẩu hiện tại", dat: matKhauMoi.length > 0 && matKhauMoi !== matKhauCu },
-      ];
   const khop = xacNhan.length > 0 && xacNhan === matKhauMoi;
 
   async function handleSubmit(event: FormEvent) {
@@ -41,7 +27,8 @@ export default function TrangDoiMatKhau() {
     const loi: LoiTruong = {};
     if (!matKhauCu) loi.matKhauCu = "Nhập mật khẩu hiện tại.";
     if (!matKhauMoi) loi.matKhauMoi = "Nhập mật khẩu mới.";
-    else if (laThiSinh && matKhauMoi.length < 8) loi.matKhauMoi = "Mật khẩu phải có ít nhất 8 ký tự.";
+    // Chỉ kiểm tra độ dài tối thiểu; các điều kiện còn lại do server kiểm tra và trả lỗi về trường này.
+    else if (matKhauMoi.length < 8) loi.matKhauMoi = "Mật khẩu phải có ít nhất 8 ký tự.";
     if (matKhauMoi && xacNhan !== matKhauMoi) loi.xacNhan = "Mật khẩu nhập lại không khớp.";
     setLoiTruong(loi);
     setLoiChung(null);
@@ -66,68 +53,44 @@ export default function TrangDoiMatKhau() {
   }
 
   return (
-    <div className="dmk-page">
-      <header className="dmk-band">
-        <LogoCampusExam className="dmk-logo" nen="toi" size={46} />
-        <span className="dmk-brand"><strong>Campus<em className="brand-exam">Exam</em></strong><small>Hệ thống tổ chức thi trắc nghiệm</small></span>
-      </header>
+    <div className="dmk-main">
+      <section aria-labelledby="dmk-tieu-de" className="dmk-card">
+        <div className="dmk-head">
+          <h1 id="dmk-tieu-de">Đổi mật khẩu</h1>
+          <p>Tài khoản <strong>{taiKhoan.msts ?? taiKhoan.tenDN}</strong> · {taiKhoan.hoTen}</p>
+        </div>
 
-      <main className="dmk-main">
-        <section aria-labelledby="dmk-tieu-de" className="dmk-card">
-          <div className="dmk-head">
-            <span aria-hidden="true" className="dmk-icon"><BieuTuong name="lock" size={22} /></span>
-            <div>
-              <h1 id="dmk-tieu-de">Đổi mật khẩu</h1>
-              <p>Tài khoản <strong>{taiKhoan.msts ?? taiKhoan.tenDN}</strong> · {taiKhoan.hoTen}</p>
-            </div>
-          </div>
+        <form noValidate onSubmit={handleSubmit}>
+          {loiChung && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loiChung}</span></div>}
 
+          <TruongMatKhau
+            autoComplete="current-password"
+            id="matKhauCu"
+            label="Mật khẩu hiện tại"
+            loi={loiTruong.matKhauCu}
+            onChange={setMatKhauCu}
+            value={matKhauCu}
+          />
+          <TruongMatKhau autoComplete="new-password" id="matKhauMoi" label="Mật khẩu mới" loi={loiTruong.matKhauMoi} onChange={setMatKhauMoi} value={matKhauMoi} />
+          <TruongMatKhau
+            autoComplete="new-password"
+            goiY={xacNhan.length > 0 ? (khop ? { dat: true, text: "Mật khẩu nhập lại khớp." } : { dat: false, text: "Chưa khớp với mật khẩu mới." }) : undefined}
+            id="xacNhan"
+            label="Nhập lại mật khẩu mới"
+            loi={loiTruong.xacNhan}
+            onChange={setXacNhan}
+            value={xacNhan}
+          />
 
-          <form noValidate onSubmit={handleSubmit}>
-            {loiChung && <div className="form-alert" role="alert"><BieuTuong name="alert" size={16} /><span>{loiChung}</span></div>}
+          <button className="button button-primary button-lg dmk-submit" disabled={dangGui} type="submit">
+            {dangGui ? "Đang lưu…" : "Lưu mật khẩu mới"}
+          </button>
+        </form>
 
-            <TruongMatKhau
-              autoComplete="current-password"
-              id="matKhauCu"
-              label="Mật khẩu hiện tại"
-              loi={loiTruong.matKhauCu}
-              onChange={setMatKhauCu}
-              value={matKhauCu}
-            />
-            <TruongMatKhau autoComplete="new-password" id="matKhauMoi" label="Mật khẩu mới" loi={loiTruong.matKhauMoi} onChange={setMatKhauMoi} value={matKhauMoi} />
-
-            {dieuKien.length > 0 && (
-              <ul aria-label="Điều kiện mật khẩu mới" className="dmk-rules">
-                {dieuKien.map((dk) => (
-                  <li className={dk.dat ? "dat" : ""} key={dk.nhan}>
-                    <span aria-hidden="true" className="dmk-rule-dot">{dk.dat && <BieuTuong name="check" size={12} />}</span>
-                    {dk.nhan}
-                    <span className="sr-only">{dk.dat ? " (đã đạt)" : " (chưa đạt)"}</span>
-                  </li>
-                ))}
-              </ul>
-            )}
-
-            <TruongMatKhau
-              autoComplete="new-password"
-              goiY={xacNhan.length > 0 ? (khop ? { dat: true, text: "Mật khẩu nhập lại khớp." } : { dat: false, text: "Chưa khớp với mật khẩu mới." }) : undefined}
-              id="xacNhan"
-              label="Nhập lại mật khẩu mới"
-              loi={loiTruong.xacNhan}
-              onChange={setXacNhan}
-              value={xacNhan}
-            />
-
-            <button className="button button-primary button-lg dmk-submit" disabled={dangGui} type="submit">
-              {dangGui ? "Đang lưu…" : "Lưu mật khẩu mới"}
-            </button>
-          </form>
-
-          <div className="dmk-foot">
-            <button className="button button-ghost" onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(trangChuTheoVaiTro(taiKhoan.vaiTro)))} type="button"><BieuTuong name="arrow-left" size={16} /> Quay lại</button>
-          </div>
-        </section>
-      </main>
+        <div className="dmk-foot">
+          <button className="button button-ghost" onClick={() => (window.history.length > 1 ? navigate(-1) : navigate(trangChuTheoVaiTro(taiKhoan.vaiTro)))} type="button"><BieuTuong name="arrow-left" size={16} /> Quay lại</button>
+        </div>
+      </section>
     </div>
   );
 }

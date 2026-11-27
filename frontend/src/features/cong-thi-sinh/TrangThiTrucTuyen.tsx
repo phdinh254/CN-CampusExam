@@ -127,7 +127,7 @@ export function TrangVaoThi() {
                   <span>{dinhDangNgayThang.format(batDau)} · {gioThiThat(kt)} · {kt.thoiLuong} phút · {kt.soCau} câu · {soMayThat(kt)}</span>
                 </div>
                 <TrangThaiBai kt={kt} />
-                <Link className={kt.duocVaoThi ? "button button-primary" : "row-link"} to={`/candidate/thi/${kt.maKT}`}>
+                <Link className={kt.duocVaoThi ? "button button-primary" : "row-link"} to={`/thi-sinh/thi/${kt.maKT}`}>
                   {kt.trangThaiBaiLam === "dang_lam" ? "Tiếp tục" : kt.duocVaoThi ? "Vào thi" : "Chi tiết"}
                 </Link>
               </li>
@@ -141,6 +141,8 @@ export function TrangVaoThi() {
   );
 }
 
+const gioPhut = (iso: string) => dinhDangGioPhut.format(new Date(iso));
+
 /** Đếm ngược còn dưới 5 phút thì tô cảnh báo. */
 const SAP_HET_MS = 5 * 60 * 1000;
 
@@ -149,23 +151,22 @@ const SAP_HET_MS = 5 * 60 * 1000;
  * làm bài) và thời gian còn lại theo giờ máy chủ.
  */
 function thoiGianConLai(kt: KyThiCuaToiApi, now: number): { chu: ReactNode; sapHet: boolean } {
-  const gio = (iso: string) => dinhDangGioPhut.format(new Date(iso));
   if (kt.trangThaiBaiLam === "dang_lam") {
     const con = new Date(kt.ketThucLuc).getTime() - now;
-    return { chu: <>Kết thúc lúc {gio(kt.ketThucLuc)} · còn <strong>{demNguocNgan(con)}</strong></>, sapHet: con <= SAP_HET_MS };
+    return { chu: <>Kết thúc lúc {gioPhut(kt.ketThucLuc)} · còn <strong>{demNguocNgan(con)}</strong></>, sapHet: con <= SAP_HET_MS };
   }
   if (kt.trangThaiBaiLam !== "chua_vao") {
     // Nộp sớm thì kỳ thi có thể vẫn đang diễn ra với thí sinh khác.
     const daKetThuc = new Date(kt.ketThucLuc).getTime() <= now;
     const truoc = kt.trangThaiBaiLam === "vang_thi" ? "Không vào thi" : kt.trangThaiBaiLam === "he_thong_thu" ? "Hệ thống đã thu bài" : "Đã nộp bài";
-    return { chu: `${truoc} · kỳ thi ${daKetThuc ? "đã kết thúc" : "kết thúc"} lúc ${gio(kt.ketThucLuc)}`, sapHet: false };
+    return { chu: `${truoc} · kỳ thi ${daKetThuc ? "đã kết thúc" : "kết thúc"} lúc ${gioPhut(kt.ketThucLuc)}`, sapHet: false };
   }
   if (kt.duocVaoThi) {
     const con = new Date(kt.dongCongLuc).getTime() - now;
-    return { chu: <>Phòng thi đang mở · vào muộn nhất {gio(kt.dongCongLuc)} (còn <strong>{demNguocNgan(con)}</strong>)</>, sapHet: con <= SAP_HET_MS };
+    return { chu: <>Phòng thi đang mở · vào muộn nhất {gioPhut(kt.dongCongLuc)} (còn <strong>{demNguocNgan(con)}</strong>)</>, sapHet: con <= SAP_HET_MS };
   }
   const mo = new Date(kt.moCongLuc).getTime() - now;
-  return { chu: mo > 0 ? <>Phòng thi mở lúc {gio(kt.moCongLuc)} · còn <strong>{demNguocNgan(mo)}</strong></> : "Đang mở phòng thi…", sapHet: false };
+  return { chu: mo > 0 ? <>Phòng thi mở lúc {gioPhut(kt.moCongLuc)} · còn <strong>{demNguocNgan(mo)}</strong></> : "Đang mở phòng thi…", sapHet: false };
 }
 
 function diemCuaBai(kt: KyThiCuaToiApi) {
@@ -238,7 +239,7 @@ export function TrangChiTietKyThi() {
   return (
     <div className="student-dashboard">
       <section className="cand-detail-head">
-        <Link className="cand-back" to={daXong ? "/candidate/thi/lich-su" : "/candidate/thi/tham-gia"}>
+        <Link className="cand-back" to={daXong ? "/thi-sinh/thi/lich-su" : "/thi-sinh/thi/tham-gia"}>
           <BieuTuong name="arrow-left" size={15} /> {daXong ? "Lịch sử thi" : "Kỳ thi được phân công"}
         </Link>
         <div className="cand-banner">
@@ -284,7 +285,7 @@ export function TrangChiTietKyThi() {
                   <input checked={dongY} onChange={(event) => setDongY(event.target.checked)} type="checkbox" />
                   <span>Tôi xác nhận thông tin trên là đúng{kt.soMay ? `, đang ngồi đúng máy số ${kt.soMay}` : ""} và đã đọc quy định thi.</span>
                 </label>
-                <button className="button button-primary button-lg" disabled={!dongY} onClick={() => navigate(`/exam/session?maKT=${kt.maKT}`)} type="button">
+                <button className="button button-primary button-lg" disabled={!dongY} onClick={() => navigate(`/phong-thi?maKT=${kt.maKT}`)} type="button">
                   Vào phòng thi <BieuTuong name="arrow-right" size={16} />
                 </button>
               </>
@@ -292,7 +293,7 @@ export function TrangChiTietKyThi() {
             {kt.duocVaoThi && kt.trangThaiBaiLam === "dang_lam" && (
               <>
                 <span>Bạn đang làm bài dở. Bài làm đã được lưu, tiếp tục để làm tiếp.</span>
-                <button className="button button-primary button-lg" onClick={() => navigate(`/exam/session?maKT=${kt.maKT}`)} type="button">
+                <button className="button button-primary button-lg" onClick={() => navigate(`/phong-thi?maKT=${kt.maKT}`)} type="button">
                   Tiếp tục làm bài <BieuTuong name="arrow-right" size={16} />
                 </button>
               </>
@@ -302,7 +303,7 @@ export function TrangChiTietKyThi() {
             {daXong && (
               <>
                 <span>{kt.trangThaiBaiLam === "vang_thi" ? "Bạn đã không vào thi kỳ thi này." : "Bạn đã hoàn thành kỳ thi này."}</span>
-                <Link className="row-link" to="/candidate/thi/ket-qua">Xem kết quả thi</Link>
+                <Link className="row-link" to="/thi-sinh/thi/ket-qua">Xem kết quả thi</Link>
               </>
             )}
           </section>
@@ -373,7 +374,7 @@ export function TrangLichSuThi() {
                       : <span className="cand-muted">{kt.trangThaiBaiLam === "vang_thi" ? "—" : "Không hiển thị điểm"}</span>}
                   </td>
                   <td className="cell-action">
-                    <Link to={`/candidate/thi/${kt.maKT}`}>Chi tiết <BieuTuong name="arrow-right" size={14} /></Link>
+                    <Link to={`/thi-sinh/thi/${kt.maKT}`}>Chi tiết <BieuTuong name="arrow-right" size={14} /></Link>
                   </td>
                 </tr>
               ))}
@@ -389,7 +390,7 @@ export function TrangLichSuThi() {
 function KhongTimThay() {
   return (
     <div className="student-dashboard">
-      <DauTrang quayLai={{ to: "/candidate/thi/tham-gia", nhan: "Kỳ thi được phân công" }} tieuDe="Không tìm thấy kỳ thi" />
+      <DauTrang quayLai={{ to: "/thi-sinh/thi/tham-gia", nhan: "Kỳ thi được phân công" }} tieuDe="Không tìm thấy kỳ thi" />
       <section className="panel cand-empty-panel">Kỳ thi không tồn tại hoặc bạn không được phân công vào kỳ thi này.</section>
     </div>
   );

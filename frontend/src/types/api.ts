@@ -69,11 +69,6 @@ export type TrangThaiSuDung = "dang_su_dung" | "ngung_su_dung";
 /** 1 dễ, 2 trung bình, 3 khó. */
 export type MaMucDo = 1 | 2 | 3;
 
-export type MucDoDto = {
-  maMD: MaMucDo;
-  tenMD: string;
-};
-
 export type KqhtDto = {
   maKQHT: number;
   tenKQHT: string;
@@ -90,10 +85,6 @@ export type SuaKqhtRequest = {
   tenKQHT: string;
   thuTu: number;
   moTa?: string | null;
-};
-
-export type DoiTrangThaiRequest = {
-  trangThai: TrangThaiSuDung;
 };
 
 export type CauHoiTomTat = {

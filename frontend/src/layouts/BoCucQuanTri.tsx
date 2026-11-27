@@ -17,34 +17,34 @@ const nhomMenu: NhomMenu[] = [
     tieuDe: "Ngân hàng câu hỏi",
     icon: "book",
     muc: [
-      { label: "Danh mục KQHT", to: "/admin/learning-outcomes" },
-      { label: "Danh sách câu hỏi", to: "/admin/questions" },
+      { label: "Danh mục KQHT", to: "/quan-tri/ket-qua-hoc-tap" },
+      { label: "Danh sách câu hỏi", to: "/quan-tri/cau-hoi" },
     ],
   },
   {
     tieuDe: "Xây dựng đề thi",
     icon: "layers",
     muc: [
-      { label: "Ma trận đề", to: "/admin/exam-matrices" },
-      { label: "Sinh đề thi", to: "/admin/exam-generation" },
-      { label: "Danh sách đề thi", to: "/admin/exam-papers" },
+      { label: "Ma trận đề", to: "/quan-tri/ma-tran-de" },
+      { label: "Sinh đề thi", to: "/quan-tri/sinh-de" },
+      { label: "Danh sách đề thi", to: "/quan-tri/de-thi" },
     ],
   },
   {
     tieuDe: "Tổ chức kỳ thi",
     icon: "calendar",
     muc: [
-      { label: "Quản lý kỳ thi", to: "/admin/exams" },
-      { label: "Gán đề và thí sinh", to: "/admin/exam-assignments" },
-      { label: "Theo dõi thi", to: "/admin/exam-monitoring" },
+      { label: "Quản lý kỳ thi", to: "/quan-tri/ky-thi" },
+      { label: "Gán đề và thí sinh", to: "/quan-tri/phan-cong-thi" },
+      { label: "Theo dõi thi", to: "/quan-tri/theo-doi-thi" },
     ],
   },
   {
     tieuDe: "Quản lý và báo cáo",
     icon: "users",
     muc: [
-      { label: "Thí sinh", to: "/admin/candidates" },
-      { label: "Báo cáo kết quả", to: "/admin/reports" },
+      { label: "Thí sinh", to: "/quan-tri/thi-sinh" },
+      { label: "Báo cáo kết quả", to: "/quan-tri/bao-cao" },
     ],
   },
 ];
@@ -85,11 +85,10 @@ export default function BoCucQuanTri() {
     <div className="admin-shell">
       <header className="cand-header">
         <div className="cand-topbar">
-          <Link aria-label="CampusExam — về trang tổng quan" className="cand-brand" to="/admin">
+          <Link aria-label="CampusExam — về trang tổng quan" className="cand-brand" to="/quan-tri">
             <LogoCampusExam className="cand-logo" nen="toi" size={36} />
             <span className="cand-brand-text">
               <strong>Campus<em className="brand-exam">Exam</em></strong>
-              <span>Hệ thống tổ chức thi trắc nghiệm</span>
             </span>
           </Link>
 
@@ -104,7 +103,7 @@ export default function BoCucQuanTri() {
 
         <nav aria-label="Điều hướng quản trị" className="cand-navbar">
           <ul ref={navRef}>
-            <li><NavLink end to="/admin"><BieuTuong name="dashboard" size={16} /> Tổng quan</NavLink></li>
+            <li><NavLink end to="/quan-tri"><BieuTuong name="dashboard" size={16} /> Tổng quan</NavLink></li>
             {nhomMenu.map((nhom) => {
               const id = `menu-${nhom.muc[0].to.split("/").pop()}`;
               const mo = nhomMo === nhom.tieuDe;

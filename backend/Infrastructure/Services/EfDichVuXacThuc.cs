@@ -171,19 +171,6 @@ public sealed class EfDichVuXacThuc(
         await dbContext.SaveChangesAsync(cancellationToken);
     }
 
-    public async Task<TaiKhoanHienTaiDto?> LayTaiKhoanAsync(int mtk, CancellationToken cancellationToken)
-    {
-        var taiKhoan = await dbContext.TaiKhoans.AsNoTracking()
-            .SingleOrDefaultAsync(x => x.MaTK == mtk, cancellationToken);
-        if (taiKhoan is null)
-        {
-            return null;
-        }
-
-        var thiSinh = await TimThiSinhAsync(taiKhoan, cancellationToken);
-        return ToDto(taiKhoan, thiSinh);
-    }
-
     public async Task<DoiMatKhauResult> DoiMatKhauAsync(
         int mtk,
         DoiMatKhauRequest request,
@@ -303,7 +290,7 @@ public sealed class EfDichVuXacThuc(
         return (new PhienDaCap(accessToken, hetHan, refreshToken, phien.HetHan, ghiNho, dto), phien.MaPhien);
     }
 
-    /// <summary>Cặp tên đăng nhập (chữ thường) + IP dùng làm khóa đếm lần sai (D-AUTH-KHOA-01).</summary>
+    /// <summary>Cặp tên đăng nhập (chữ thường) + IP dùng làm khóa đếm lần sai.</summary>
     private readonly record struct KhoaCap(string TenDN, string DiaChiIP)
     {
         public KhoaCap(string tenDN, NguCanhYeuCau nguCanh)
